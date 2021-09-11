@@ -4,20 +4,21 @@ import unittest
 
 
 class RulesTestCase(unittest.TestCase):
-    def test_when_player_one_wins_is_done_return_one(self):
+    def test_has_winner_opponent_wins(self):
         value = [[0, 0], [0, 1]]
-        act = rules.is_done(value)
-        self.assertEqual(1, act)
+        act = rules.has_winner(value)
+        self.assertEqual(env.Players.opponent, act)
 
-    def test_when_player_two_wins_is_done_return_two(self):
+    def test_has_winner_when_agent_wins(self):
         value = [[1, 0], [0, 0]]
-        act = rules.is_done(value)
-        self.assertEqual(2, act)
+        act = rules.has_winner(value)
+        self.assertEqual(env.Players.agent, act)
 
-    def test_when_there_is_no_winner_is_done_returns_zero(self):
+    def test_has_winner_when_there_is_no_winner(self):
         value = [[1, 0], [0, 1]]
-        act = rules.is_done(value)
-        self.assertEqual(0, act)
+        act = rules.has_winner(value)
+        self.assertFalse(act)
+        self.assertNotEqual(act, env.Players.agent)
 
     def test_can_swap_returns_true_if_one_hand_is_empty_and_the_other_has_and_even_number(self):
         value = [0, 2]

@@ -1,21 +1,26 @@
 # rules the govern the game of sticks
 # see https://en.wikipedia.org/wiki/Chopsticks_(hand_game)
+from environment.env import Players, Hands
+from copy import deepcopy
 
-def is_done(state):
+
+# Be careful using this Players.agent is 0 and hence "falsy" when evaluating the return value of has_winner
+# look for specific values not truthy or falsy values.
+def has_winner(state):
     # in is the current state of the game two dimension array of two integers each
-    if state[0][0] == 0 and state[0][1] == 0:
-        return 1
+    if state[Players.agent][Hands.left] == 0 and state[Players.agent][Hands.right] == 0:
+        return Players.opponent
 
-    if state[1][0] == 0 and state[1][1] == 0:
-        return 2
+    if state[Players.opponent][Hands.left] == 0 and state[Players.opponent][Hands.right] == 0:
+        return Players.agent
 
-    return 0
+    return None
 
 
 # inputs: an array with two integer elements
 def can_swap(player_state):
     # a player can only swap if one hand is at zero and the other is even
-    val = player_state[:]  # make a copy of player_state object reference
+    val = deepcopy(player_state)  # make a copy of player_state object reference
     val.sort()
     if val[0] == 0 and not val[1] % 2:
         return True

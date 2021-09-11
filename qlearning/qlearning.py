@@ -25,10 +25,12 @@ def main():
 
     rewards_all_episodes = []
 
+    agent_player_index = 0
+
     # Q-learning algorithm
     for episode in range(num_episodes):
         # initialize new episode params
-        state = env.reset()
+        state = env.reset()  # state is the index in the env.state_table
         done = False
         rewards_current_episode = 0
 
@@ -42,19 +44,18 @@ def main():
             if exploration_rate_threshold > exploration_rate:
                 action = np.argmax(q_table[state, :])
             else:
-                action = env.action_space.sample()
+                action = env.select_random_action(state, agent_player_index)
 
             new_state, reward, done, info = env.step(action)
             # Update Q-table for Q(s,a)
             q_table[state, action] = q_table[state, action] * (1 - learning_rate) + \
-                                     learning_rate * (reward + discount_rate * np.max(q_table[new_state, :]))
+                learning_rate * (reward + discount_rate * np.max(q_table[new_state, :]))
 
             state = new_state
             rewards_current_episode += reward
 
             if done:
                 break
-
 
         # Exploration rate decay
         exploration_rate = min_exploration_rate + \
@@ -70,7 +71,6 @@ def main():
     for r in rewards_per_thousand_episodes:
         print(count, ": ", str(sum(r / 1000)))
         count += 1000
-
 
 
 if __name__ == '__main__':
