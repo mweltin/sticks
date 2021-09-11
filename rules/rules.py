@@ -12,10 +12,12 @@ def is_done(state):
     return 0
 
 
-def can_swap(state):
+# inputs: an array with two integer elements
+def can_swap(player_state):
     # a player can only swap if one hand is at zero and the other is even
-    state.sort()
-    if state[0] == 0 and not state[1] % 2:
+    val = player_state[:]  # make a copy of player_state object reference
+    val.sort()
+    if val[0] == 0 and not val[1] % 2:
         return True
 
     return False
@@ -27,11 +29,39 @@ def swap(state):
     return [state[1] / 2, state[1] / 2]
 
 
-def take_turn(state, active_player, active_player_hand, opponent_hand, take_swap_action=False):
+def get_opponent_player_index(active_player_index):
+    if active_player_index:
+        return 0
+    return 1
+
+
+# state 2 d array enumerating each players hands
+# index of the active player
+def take_turn(state, active_player_index, active_player_hand, opponent_hand, take_swap_action=False):
     if take_swap_action:
-        state[active_player] = swap(state[active_player])
+        state[active_player_index] = swap(state[active_player_index])
     else:
-        state[not active_player][opponent_hand] = state[not active_player][opponent_hand] + state[active_player][
-            active_player_hand] % 5
+        opponent_player_index = get_opponent_player_index(active_player_index)
+        state[opponent_player_index][opponent_hand] = (state[opponent_player_index][opponent_hand] + \
+                                                       state[active_player_index][active_player_hand]) % 5
 
     return state
+
+
+# state = 2d array of representing the state of the game
+# player_index indicates who is the active player i.e. the one swapping or attacking
+# returns a dictionary of possible moves
+def get_valid_actions(state, active_player):
+    ret_val = []
+    if can_swap(state[active_player]):
+        ret_val.append("swap")
+    opponent_player_index = get_opponent_player_index(active_player)
+    if state[active_player][1] > 0 and state[opponent_player_index][1] > 0:
+        ret_val.append("right_right")
+    if state[active_player][1] > 0 and state[opponent_player_index][0] > 0:
+        ret_val.append("right_left")
+    if state[active_player][0] > 0 and state[opponent_player_index][1] > 0:
+        ret_val.append("left_right")
+    if state[active_player][0] > 0 and state[opponent_player_index][0] > 0:
+        ret_val.append("left_left")
+    return ret_val
