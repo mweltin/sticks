@@ -4,6 +4,7 @@ import unittest
 
 
 class RulesTestCase(unittest.TestCase):
+
     def test_has_winner_opponent_wins(self):
         value = [[0, 0], [0, 1]]
         act = rules.has_winner(value)
@@ -125,81 +126,82 @@ class RulesTestCase(unittest.TestCase):
         state = [[4, 0], [1, 1]]
         active_player_index = 0
         valid_moves = rules.get_valid_actions(state, active_player_index)
-        self.assertIn('swap', valid_moves)
+        self.assertIn(env.action_table.index([env.Actions.SWAP]), valid_moves)
 
         state = [[4, 1], [1, 1]]
         active_player_index = 0
         valid_moves = rules.get_valid_actions(state, active_player_index)
-        self.assertNotIn('swap', valid_moves)
+        self.assertNotIn(env.action_table.index([env.Actions.SWAP]), valid_moves)
 
     def test_get_valid_actions_identifies_when_right_right_is_valid(self):
         state = [[4, 1], [1, 1]]
         active_player_index = 0
         valid_moves = rules.get_valid_actions(state, active_player_index)
-        self.assertTrue('right_right', valid_moves)
+        self.assertTrue(env.action_table.index([env.Actions.RIGHT, env.Actions.RIGHT]), valid_moves)
 
     def test_get_valid_actions_identifies_when_right_right_is_not_valid(self):
         state = [[4, 1], [1, 0]]
         active_player_index = 0
         valid_moves = rules.get_valid_actions(state, active_player_index)
-        self.assertNotIn('right_right', valid_moves)
+        self.assertNotIn(env.action_table.index([env.Actions.RIGHT, env.Actions.RIGHT]), valid_moves)
 
         state = [[4, 0], [1, 1]]
         active_player_index = 0
         valid_moves = rules.get_valid_actions(state, active_player_index)
-        self.assertNotIn('right_right', valid_moves)
+        self.assertNotIn(env.action_table.index([env.Actions.RIGHT, env.Actions.RIGHT]), valid_moves)
 
     def test_get_valid_actions_identifies_when_right_left_is_valid(self):
         state = [[4, 1], [1, 1]]
         active_player_index = 0
         valid_moves = rules.get_valid_actions(state, active_player_index)
-        self.assertIn('right_left', valid_moves)
+        self.assertIn(env.action_table.index([env.Actions.RIGHT, env.Actions.LEFT]), valid_moves)
 
     def test_get_valid_actions_identifies_when_right_left_is_not_valid(self):
         state = [[4, 0], [1, 1]]
         active_player_index = 0
         valid_moves = rules.get_valid_actions(state, active_player_index)
-        self.assertNotIn('right_left', valid_moves)
+        self.assertNotIn(env.action_table.index([env.Actions.RIGHT, env.Actions.LEFT]), valid_moves)
 
         state = [[4, 1], [0, 1]]
         active_player_index = 0
         valid_moves = rules.get_valid_actions(state, active_player_index)
-        self.assertNotIn('right_left', valid_moves)
+        self.assertNotIn(env.action_table.index([env.Actions.RIGHT, env.Actions.LEFT]), valid_moves)
 
     def test_get_valid_actions_identifies_when_left_left_is_valid(self):
         state = [[4, 1], [1, 1]]
         active_player_index = 0
         valid_moves = rules.get_valid_actions(state, active_player_index)
-        self.assertIn('left_left', valid_moves)
+        self.assertIn(env.action_table.index([env.Actions.LEFT, env.Actions.LEFT]), valid_moves)
 
     def test_get_valid_actions_identifies_when_left_left_is_not_valid(self):
         state = [[4, 1], [0, 1]]
         active_player_index = 0
         valid_moves = rules.get_valid_actions(state, active_player_index)
-        self.assertNotIn('left_left', valid_moves)
+        self.assertNotIn(env.action_table.index([env.Actions.LEFT, env.Actions.LEFT]), valid_moves)
 
         state = [[0, 1], [1, 1]]
         active_player_index = 0
         valid_moves = rules.get_valid_actions(state, active_player_index)
-        self.assertNotIn('left_left', valid_moves)
+        self.assertNotIn(env.action_table.index([env.Actions.LEFT, env.Actions.LEFT]), valid_moves)
 
     def test_get_valid_actions_identifies_when_left_right_is_valid(self):
         state = [[4, 1], [1, 1]]
         active_player_index = 0
         valid_moves = rules.get_valid_actions(state, active_player_index)
-        self.assertIn('left_right', valid_moves)
+        self.assertIn(env.action_table.index([env.Actions.LEFT, env.Actions.RIGHT]), valid_moves)
 
     def test_get_valid_actions_identifies_when_left_right_is_not_valid(self):
         state = [[4, 1], [3, 0]]
         active_player_index = 0
         valid_moves = rules.get_valid_actions(state, active_player_index)
-        self.assertNotIn('left_right', valid_moves)
+        self.assertNotIn(env.action_table.index([env.Actions.LEFT, env.Actions.RIGHT]), valid_moves)
 
         state = [[0, 2], [1, 1]]
         active_player_index = 0
         valid_moves = rules.get_valid_actions(state, active_player_index)
-        self.assertNotIn('left_right', valid_moves)
+        self.assertNotIn(env.action_table.index([env.Actions.LEFT, env.Actions.RIGHT]), valid_moves)
 
 
 if __name__ == '__main__':
+    unittest.TestLoader.sortTestMethodsUsing = None
     unittest.main()

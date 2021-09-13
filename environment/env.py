@@ -13,12 +13,6 @@ for i in range(5):
 state_table.pop()
 
 
-class Actions(IntEnum):
-    LEFT = 0
-    RIGHT = 1
-    SWAP = 2
-
-
 class Players(IntEnum):
     agent = 0
     opponent = 1
@@ -27,6 +21,12 @@ class Players(IntEnum):
 class Hands(IntEnum):
     left = 0
     right = 1
+
+
+class Actions(IntEnum):
+    LEFT = 0
+    RIGHT = 1
+    SWAP = 2
 
 
 # A player can perform one of these actions swap,
@@ -41,8 +41,6 @@ action_table = [
     [Actions.RIGHT, Actions.RIGHT],
     [Actions.RIGHT, Actions.LEFT]
 ]
-action_space = len(action_table)  # 5
-state_space = len(state_table)  # 624
 
 
 def reset():

@@ -1,6 +1,7 @@
 # rules the govern the game of sticks
 # see https://en.wikipedia.org/wiki/Chopsticks_(hand_game)
-from environment.env import Players, Hands
+import environment.env
+from environment.env import Players, Hands, Actions, action_table
 from copy import deepcopy
 
 
@@ -42,15 +43,44 @@ def get_opponent_player_index(active_player_index):
 
 # state 2 d array enumerating each players hands
 # index of the active player
-def take_turn(state, active_player_index, active_player_hand, opponent_hand, take_swap_action=False):
-    if take_swap_action:
-        state[active_player_index] = swap(state[active_player_index])
+def take_turn(state, active_player_index, action):
+    take_swap = False
+    opponent_player_index = None
+    opponent_hand = None
+    active_player_hand = None
+
+    if action[0] == Actions.SWAP:
+        take_swap = True
     else:
         opponent_player_index = get_opponent_player_index(active_player_index)
+        if action[active_player_index] == Hands.left:
+            active_player_hand = 0
+        else:
+            active_player_hand = 1
+
+        if action[opponent_player_index] == Hands.left:
+            opponent_hand = 0
+        else:
+            opponent_hand = 0
+
+    if take_swap:
+        state[active_player_index] = swap(state[active_player_index])
+    else:
         state[opponent_player_index][opponent_hand] = (state[opponent_player_index][opponent_hand] + \
                                                        state[active_player_index][active_player_hand]) % 5
-
     return state
+
+
+# return a list of [new_state_idx, reward, done, info]
+def step(state_idx, player_idx, action_idx):
+    done = False
+    action = environment.env.action_table[action_idx]
+    state = environment.env.state_table[state_idx]
+    new_state_idx = take_turn(state, player_idx, action)
+    if has_winner(environment.env.state_table[new_state_idx]) is not None:
+        done = True
+    reward = environment.env.get_reward(environment.env.state_table[new_state_idx])
+    return [new_state_idx, reward, done, {'info': None}]
 
 
 # state = 2d array of representing the state of the game
@@ -59,14 +89,14 @@ def take_turn(state, active_player_index, active_player_hand, opponent_hand, tak
 def get_valid_actions(state, active_player):
     ret_val = []
     if can_swap(state[active_player]):
-        ret_val.append("swap")
+        ret_val.append(action_table.index([Actions.SWAP]))
     opponent_player_index = get_opponent_player_index(active_player)
     if state[active_player][1] > 0 and state[opponent_player_index][1] > 0:
-        ret_val.append("right_right")
+        ret_val.append(action_table.index([Actions.RIGHT, Actions.RIGHT]))
     if state[active_player][1] > 0 and state[opponent_player_index][0] > 0:
-        ret_val.append("right_left")
+        ret_val.append(action_table.index([Actions.RIGHT, Actions.LEFT]))
     if state[active_player][0] > 0 and state[opponent_player_index][1] > 0:
-        ret_val.append("left_right")
+        ret_val.append(action_table.index([Actions.LEFT, Actions.RIGHT]))
     if state[active_player][0] > 0 and state[opponent_player_index][0] > 0:
-        ret_val.append("left_left")
+        ret_val.append(action_table.index([Actions.LEFT, Actions.LEFT]))
     return ret_val

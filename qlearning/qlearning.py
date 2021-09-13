@@ -8,8 +8,8 @@ import environment.env as env
 
 
 def main():
-    action_space_size = env.action_space
-    state_space_size = env.state_space
+    action_space_size = len(env.action_table)
+    state_space_size = len(env.state_table)
 
     q_table = np.zeros((state_space_size, action_space_size))
     num_episodes = 10000
@@ -25,12 +25,10 @@ def main():
 
     rewards_all_episodes = []
 
-    agent_player_index = 0
-
     # Q-learning algorithm
     for episode in range(num_episodes):
         # initialize new episode params
-        state = env.reset()  # state is the index in the env.state_table
+        state_idx = env.reset()  # state is the index in the env.state_table
         done = False
         rewards_current_episode = 0
 
@@ -42,21 +40,28 @@ def main():
             # Add new reward
             exploration_rate_threshold = random.uniform(0, 1)
             if exploration_rate_threshold > exploration_rate:
-                action = np.argmax(q_table[state, :])
+                action = np.argmax(q_table[state_idx, :])
             else:
-                action = env.select_random_action(state, agent_player_index)
+                action = env.select_random_action(state_idx, env.Players.agent)
 
-            new_state, reward, done, info = env.step(action)
+            new_state_idx, reward, done, info = env.step(state_idx, env.Players.agent, action)
             # Update Q-table for Q(s,a)
-            q_table[state, action] = q_table[state, action] * (1 - learning_rate) + \
-                learning_rate * (reward + discount_rate * np.max(q_table[new_state, :]))
+            q_table[state_idx, action] = q_table[state_idx, action] * (1 - learning_rate) + \
+                learning_rate * (reward + discount_rate * np.max(q_table[new_state_idx, :]))
 
-            state = new_state
+            state_idx = new_state_idx
             rewards_current_episode += reward
 
             if done:
                 break
 
+            #opponets turn
+            action = env.select_random_action(state_idx)
+            new_state_idx, reward, done, info = env.step(state_idx, env.Players.opponent, action)
+            state_idx = new_state_idx
+
+            if done:
+                break
         # Exploration rate decay
         exploration_rate = min_exploration_rate + \
                            (max_exploration_rate - min_exploration_rate) * np.exp(-exploration_decay_rate * episode)
