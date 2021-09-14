@@ -94,7 +94,7 @@ def will_win_in_two_steps(state):
 def step(state_idx, player_idx, action_idx):
     done = False
     action = action_table[action_idx]
-    state = state_table[state_idx]
+    state = deepcopy(state_table[state_idx])
     new_state = rules.take_turn(state, player_idx, action)
     if rules.has_winner(new_state) is not None:
         done = True
