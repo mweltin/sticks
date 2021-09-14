@@ -12,8 +12,8 @@ def main():
     state_space_size = len(env.state_table)
 
     q_table = np.zeros((state_space_size, action_space_size))
-    num_episodes = 10000
-    max_steps_per_episode = 100
+    num_episodes = 10000000
+    max_steps_per_episode = 100000
 
     learning_rate = 0.1
     discount_rate = 0.99
@@ -56,7 +56,7 @@ def main():
                 break
 
             #opponets turn
-            action = env.select_random_action(state_idx)
+            action = env.select_random_action(state_idx, 1)
             new_state_idx, reward, done, info = env.step(state_idx, env.Players.opponent, action)
             state_idx = new_state_idx
 

@@ -49,6 +49,9 @@ def reset():
 
 def select_random_action(state_index, player_index):
     possible_action = rules.get_valid_actions(state_table[state_index], player_index)
+    # if we only have one option just return that. Otherwise randint will throw an exception
+    if len(possible_action) == 1:
+        return possible_action[0]
     action_index = random.randint(0, len(possible_action) - 1)
     return possible_action[action_index]
 
@@ -87,5 +90,17 @@ def will_win_in_two_steps(state):
     return False
 
 
+# return a list of [new_state_idx, reward, done, info]
+def step(state_idx, player_idx, action_idx):
+    done = False
+    action = action_table[action_idx]
+    state = state_table[state_idx]
+    new_state = rules.take_turn(state, player_idx, action)
+    if rules.has_winner(new_state) is not None:
+        done = True
+    reward = get_reward(new_state)
+    return [state_table.index(new_state), reward, done, {'info': None}]
+
+
 if __name__ == '__main__':
-    main()
+    print("did you mean to import the environment file")

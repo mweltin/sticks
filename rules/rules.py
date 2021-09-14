@@ -1,7 +1,6 @@
 # rules the govern the game of sticks
 # see https://en.wikipedia.org/wiki/Chopsticks_(hand_game)
-import environment.env
-from environment.env import Players, Hands, Actions, action_table
+import environment.env as env
 from copy import deepcopy
 
 
@@ -9,11 +8,11 @@ from copy import deepcopy
 # look for specific values not truthy or falsy values.
 def has_winner(state):
     # in is the current state of the game two dimension array of two integers each
-    if state[Players.agent][Hands.left] == 0 and state[Players.agent][Hands.right] == 0:
-        return Players.opponent
+    if state[env.Players.agent][env.Hands.left] == 0 and state[env.Players.agent][env.Hands.right] == 0:
+        return env.Players.opponent
 
-    if state[Players.opponent][Hands.left] == 0 and state[Players.opponent][Hands.right] == 0:
-        return Players.agent
+    if state[env.Players.opponent][env.Hands.left] == 0 and state[env.Players.opponent][env.Hands.right] == 0:
+        return env.Players.agent
 
     return None
 
@@ -41,7 +40,7 @@ def get_opponent_player_index(active_player_index):
     return 1
 
 
-# state 2 d array enumerating each players hands
+# state 2 d array enumerating each Players env.Hands
 # index of the active player
 def take_turn(state, active_player_index, action):
     take_swap = False
@@ -49,19 +48,19 @@ def take_turn(state, active_player_index, action):
     opponent_hand = None
     active_player_hand = None
 
-    if action[0] == Actions.SWAP:
+    if action[0] == env.Actions.SWAP:
         take_swap = True
     else:
         opponent_player_index = get_opponent_player_index(active_player_index)
-        if action[active_player_index] == Hands.left:
+        if action[0] == env.Hands.left:
             active_player_hand = 0
         else:
             active_player_hand = 1
 
-        if action[opponent_player_index] == Hands.left:
+        if action[1] == env.Hands.left:
             opponent_hand = 0
         else:
-            opponent_hand = 0
+            opponent_hand = 1
 
     if take_swap:
         state[active_player_index] = swap(state[active_player_index])
@@ -71,16 +70,7 @@ def take_turn(state, active_player_index, action):
     return state
 
 
-# return a list of [new_state_idx, reward, done, info]
-def step(state_idx, player_idx, action_idx):
-    done = False
-    action = environment.env.action_table[action_idx]
-    state = environment.env.state_table[state_idx]
-    new_state_idx = take_turn(state, player_idx, action)
-    if has_winner(environment.env.state_table[new_state_idx]) is not None:
-        done = True
-    reward = environment.env.get_reward(environment.env.state_table[new_state_idx])
-    return [new_state_idx, reward, done, {'info': None}]
+
 
 
 # state = 2d array of representing the state of the game
@@ -89,14 +79,18 @@ def step(state_idx, player_idx, action_idx):
 def get_valid_actions(state, active_player):
     ret_val = []
     if can_swap(state[active_player]):
-        ret_val.append(action_table.index([Actions.SWAP]))
+        ret_val.append(env.action_table.index([env.Actions.SWAP]))
     opponent_player_index = get_opponent_player_index(active_player)
     if state[active_player][1] > 0 and state[opponent_player_index][1] > 0:
-        ret_val.append(action_table.index([Actions.RIGHT, Actions.RIGHT]))
+        ret_val.append(env.action_table.index([env.Actions.RIGHT, env.Actions.RIGHT]))
     if state[active_player][1] > 0 and state[opponent_player_index][0] > 0:
-        ret_val.append(action_table.index([Actions.RIGHT, Actions.LEFT]))
+        ret_val.append(env.action_table.index([env.Actions.RIGHT, env.Actions.LEFT]))
     if state[active_player][0] > 0 and state[opponent_player_index][1] > 0:
-        ret_val.append(action_table.index([Actions.LEFT, Actions.RIGHT]))
+        ret_val.append(env.action_table.index([env.Actions.LEFT, env.Actions.RIGHT]))
     if state[active_player][0] > 0 and state[opponent_player_index][0] > 0:
-        ret_val.append(action_table.index([Actions.LEFT, Actions.LEFT]))
+        ret_val.append(env.action_table.index([env.Actions.LEFT, env.Actions.LEFT]))
     return ret_val
+
+
+if __name__ == '__main__':
+    print("did you mean to import the rules file")

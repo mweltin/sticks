@@ -13,7 +13,7 @@ class EnvironmentTestCase(unittest.TestCase):
         state_index = env.reset()  # only four actions are allowed in this state
         active_player_index = 0
         action = env.select_random_action(state_index, active_player_index)
-        self.assertIn(action, ['right_right', 'right_left', 'left_right', 'left_left'])
+        self.assertIn(action, [3, 4, 2, 1])
 
     def test_will_lose_next_step(self):
         state = [[0, 1], [4, 0]]
@@ -46,7 +46,6 @@ class EnvironmentTestCase(unittest.TestCase):
         state_agent_is_winner = [[0, 0], [4, 0]]
         reward = env.get_reward(state_agent_is_winner)
         self.assertEqual(-100, reward)
-
 
     def test_reward_when_agent_is_close_to_winning(self):
         state_agent_is_winner = [[3, 0], [1, 0]]

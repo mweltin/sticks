@@ -53,73 +53,84 @@ class RulesTestCase(unittest.TestCase):
     def test_take_turn_allows_for_swap(self):
         state = [[0, 4], [1, 1]]
         active_player_index = 0
-        new_state = rules.take_turn(state, active_player_index, 1, 1, True)
+        action = env.action_table[0]
+        new_state = rules.take_turn(state, active_player_index, action)
         self.assertEqual([2, 2], new_state[active_player_index])
 
     def test_take_turn_handles_left_to_left_for_both_players(self):
         state = [[2, 1], [1, 2]]
         expected_state = [[2, 1], [3, 2]]
         active_player_index = 0
-        new_state = rules.take_turn(state, active_player_index, env.Actions.LEFT, env.Actions.LEFT)
+        action = env.action_table[1]
+        new_state = rules.take_turn(state, active_player_index, action)
         self.assertEqual(expected_state, new_state)
 
         state = [[2, 1], [1, 2]]
         expected_state = [[3, 1], [1, 2]]
         active_player_index = 1
-        new_state = rules.take_turn(state, active_player_index, env.Actions.LEFT, env.Actions.LEFT)
+        action = env.action_table[1]
+        new_state = rules.take_turn(state, active_player_index, action)
         self.assertEqual(expected_state, new_state)
 
     def test_take_turn_handles_left_to_right_for_both_players(self):
         state = [[2, 1], [1, 2]]
         expected_state = [[2, 1], [1, 4]]
         active_player_index = 0
-        new_state = rules.take_turn(state, active_player_index, env.Actions.LEFT, env.Actions.RIGHT)
+        action = env.action_table[2]
+        new_state = rules.take_turn(state, active_player_index, action)
         self.assertEqual(expected_state, new_state)
 
         state = [[2, 1], [1, 2]]
         expected_state = [[2, 2], [1, 2]]
         active_player_index = 1
-        new_state = rules.take_turn(state, active_player_index, env.Actions.LEFT, env.Actions.RIGHT)
+        action = env.action_table[2]
+        new_state = rules.take_turn(state, active_player_index, action)
         self.assertEqual(expected_state, new_state)
 
     def test_take_turn_handles_right_to_left_for_both_players(self):
         state = [[2, 1], [1, 2]]
         expected_state = [[2, 1], [2, 2]]
         active_player_index = 0
-        new_state = rules.take_turn(state, active_player_index, env.Actions.RIGHT, env.Actions.LEFT)
+        action = env.action_table[4]
+        new_state = rules.take_turn(state, active_player_index, action)
         self.assertEqual(expected_state, new_state)
 
         state = [[2, 1], [1, 2]]
         expected_state = [[4, 1], [1, 2]]
         active_player_index = 1
-        new_state = rules.take_turn(state, active_player_index, env.Actions.RIGHT, env.Actions.LEFT)
+        action = env.action_table[4]
+        new_state = rules.take_turn(state, active_player_index, action)
         self.assertEqual(expected_state, new_state)
 
     def test_take_turn_handles_right_to_right_for_both_players(self):
         state = [[2, 1], [1, 2]]
         expected_state = [[2, 1], [1, 3]]
         active_player_index = 0
-        new_state = rules.take_turn(state, active_player_index, env.Actions.RIGHT, env.Actions.RIGHT)
+        action = env.action_table[3]
+        new_state = rules.take_turn(state, active_player_index, action)
         self.assertEqual(expected_state, new_state)
 
         state = [[2, 1], [1, 2]]
         expected_state = [[2, 3], [1, 2]]
         active_player_index = 1
-        new_state = rules.take_turn(state, active_player_index, env.Actions.RIGHT, env.Actions.RIGHT)
+        action = env.action_table[3]
+        new_state = rules.take_turn(state, active_player_index, action)
         self.assertEqual(expected_state, new_state)
 
     def test_take_turn_handles_case_when_outcome_is_above_five(self):
         state = [[4, 1], [1, 4]]
         expected_state = [[4, 1], [1, 3]]
         active_player_index = 0
-        new_state = rules.take_turn(state, active_player_index, env.Actions.LEFT, env.Actions.RIGHT)
+        action = env.action_table[2]
+        new_state = rules.take_turn(state, active_player_index, action)
         self.assertEqual(expected_state, new_state)
 
     def test_take_turn_handles_case_when_outcome_is_equal_five(self):
         state = [[4, 1], [1, 1]]
         expected_state = [[4, 1], [1, 0]]
         active_player_index = 0
-        new_state = rules.take_turn(state, active_player_index, env.Actions.LEFT, env.Actions.RIGHT)
+        action = env.action_table[2]
+        new_state = rules.take_turn(state, active_player_index, action)
         self.assertEqual(expected_state, new_state)
 
     def test_get_valid_actions_identifies_when_swap_is_valid(self):
