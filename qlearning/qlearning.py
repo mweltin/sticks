@@ -6,7 +6,6 @@ import numpy as np
 import random
 import environment.env as env
 import rules.rules as rules
-import os
 
 
 def main():
@@ -14,7 +13,7 @@ def main():
     state_space_size = len(env.state_table)
 
     q_table = np.zeros((state_space_size, action_space_size))
-    num_episodes = 100000
+    num_episodes = 10000
     max_steps_per_episode = 1000
 
     learning_rate = 0.1
@@ -53,7 +52,7 @@ def main():
             new_state_idx, reward, done, info = env.step(state_idx, env.Players.agent, action)
             # Update Q-table for Q(s,a)
             q_table[state_idx, action] = q_table[state_idx, action] * (1 - learning_rate) + \
-                learning_rate * (reward + discount_rate * np.max(q_table[new_state_idx, :]))
+                                         learning_rate * (reward + discount_rate * np.max(q_table[new_state_idx, :]))
 
             state_idx = new_state_idx
             rewards_current_episode += reward
@@ -61,7 +60,7 @@ def main():
             if done:
                 break
 
-            #opponets turn
+            # opponets turn
             action = env.select_random_action(state_idx, 1)
             new_state_idx, reward, done, info = env.step(state_idx, env.Players.opponent, action)
             state_idx = new_state_idx
@@ -73,7 +72,6 @@ def main():
                            (max_exploration_rate - min_exploration_rate) * np.exp(-exploration_decay_rate * episode)
         # Add current episode reward to total rewards list
         rewards_all_episodes.append(rewards_current_episode)
-        print(episode)
 
     # Calculate and print the average reward per thousand episodes
     rewards_per_thousand_episodes = np.split(np.array(rewards_all_episodes), num_episodes / 1000)
@@ -84,6 +82,10 @@ def main():
         print(count, ": ", str(sum(r / 1000)))
         count += 1000
 
+    np.savetxt("q_table.csv",
+               q_table,
+               delimiter=", ",
+               fmt='% s')
 
 
 if __name__ == '__main__':
