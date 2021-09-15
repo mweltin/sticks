@@ -31,7 +31,7 @@ def can_swap(player_state):
 def swap(state):
     # perform the swap action.
     state.sort()
-    return [state[1] / 2, state[1] / 2]
+    return [int(state[1] / 2), int(state[1] / 2)]
 
 
 def get_opponent_player_index(active_player_index):

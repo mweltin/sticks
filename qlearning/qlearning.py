@@ -7,6 +7,7 @@ import random
 import environment.env as env
 import rules.rules as rules
 
+random.seed(789786)
 
 def main():
     action_space_size = len(env.action_table)
@@ -14,8 +15,8 @@ def main():
 
     q_table = np.zeros((state_space_size, action_space_size))
     env.eliminate_invalid_actions(q_table)
-    num_episodes = 10000
-    max_steps_per_episode = 1000
+    num_episodes = 60000
+    max_steps_per_episode = 50
 
     learning_rate = 0.1
     discount_rate = 0.99
@@ -42,24 +43,25 @@ def main():
             # Add new reward
             exploration_rate_threshold = random.uniform(0, 1)
             if exploration_rate_threshold > exploration_rate:
-                action = np.nanargmax(q_table[state_idx, :])
-                # deal with the fact that sometimes a swap is not a legal action
-                # Another possible solution would be to see the q_table with -1 for states where swap is not allowed.
-                if action == 0 and not rules.can_swap(env.state_table[state_idx]):
-                    action = random.randint(1, 4)
+                try:
+                    action = np.nanargmax(q_table[state_idx])
+                except ValueError as e:
+                    i = 1
             else:
                 action = env.select_random_action(state_idx, env.Players.agent)
 
             new_state_idx, reward, done, info = env.step(state_idx, env.Players.agent, action)
             # Update Q-table for Q(s,a)
-            q_table[state_idx, action] = q_table[state_idx, action] * (1 - learning_rate) + \
-                                         learning_rate * (reward + discount_rate * np.max(q_table[new_state_idx, :]))
+
+            if done:
+                rewards_current_episode += reward
+                break
+
+            q_table[state_idx][action] = q_table[state_idx][action] * (1 - learning_rate) + \
+                learning_rate * (reward + discount_rate * np.nanargmax(q_table[new_state_idx]))
 
             state_idx = new_state_idx
             rewards_current_episode += reward
-
-            if done:
-                break
 
             # opponets turn
             action = env.select_random_action(state_idx, 1)
@@ -83,11 +85,20 @@ def main():
         print(count, ": ", str(sum(r / 1000)))
         count += 1000
 
+    retval = []
+    for idx , value in enumerate(q_table):
+        temp = [*env.state_table[idx][0],  *env.state_table[idx][1],  *value]
+        retval.append(temp)
+
+    np.savetxt("state_q_table.csv",
+               retval,
+               delimiter=", ",
+               fmt='% s')
+
     np.savetxt("q_table.csv",
                q_table,
                delimiter=", ",
                fmt='% s')
-
 
 if __name__ == '__main__':
     main()
