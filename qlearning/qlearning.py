@@ -13,6 +13,7 @@ def main():
     state_space_size = len(env.state_table)
 
     q_table = np.zeros((state_space_size, action_space_size))
+    env.eliminate_invalid_actions(q_table)
     num_episodes = 10000
     max_steps_per_episode = 1000
 
@@ -41,7 +42,7 @@ def main():
             # Add new reward
             exploration_rate_threshold = random.uniform(0, 1)
             if exploration_rate_threshold > exploration_rate:
-                action = np.argmax(q_table[state_idx, :])
+                action = np.nanargmax(q_table[state_idx, :])
                 # deal with the fact that sometimes a swap is not a legal action
                 # Another possible solution would be to see the q_table with -1 for states where swap is not allowed.
                 if action == 0 and not rules.can_swap(env.state_table[state_idx]):

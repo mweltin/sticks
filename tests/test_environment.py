@@ -1,6 +1,7 @@
 import rules.rules as rules
 import environment.env as env
 import unittest
+import numpy as np
 
 
 class EnvironmentTestCase(unittest.TestCase):
@@ -61,3 +62,4 @@ class EnvironmentTestCase(unittest.TestCase):
         state_agent_is_winner = [[1, 2], [3, 1]]
         reward = env.get_reward(state_agent_is_winner)
         self.assertEqual(-1, reward)
+

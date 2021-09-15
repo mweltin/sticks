@@ -3,48 +3,17 @@ import random
 import rules.rules as rules
 from copy import deepcopy
 
-state_table = []
-for i in range(5):
-    for x in range(5):
-        for y in range(5):
-            for z in range(5):
-                state_table.append([[i, x], [y, z]])
-# first state [[0,0],[0,0]] is not a valid state so get rid of it
-state_table.pop()
-
-
-class Players(IntEnum):
-    agent = 0
-    opponent = 1
-
-
-class Hands(IntEnum):
-    left = 0
-    right = 1
-
-
-class Actions(IntEnum):
-    LEFT = 0
-    RIGHT = 1
-    SWAP = 2
-
-
-# A player can perform one of these actions swap,
-# attack with left hand to opponents right hand
-# attack with left hand to opponents left hand
-# attack with right hand to opponents left hand
-# attack with right hand to opponents right hand
-action_table = [
-    [Actions.SWAP],
-    [Actions.LEFT, Actions.LEFT],
-    [Actions.LEFT, Actions.RIGHT],
-    [Actions.RIGHT, Actions.RIGHT],
-    [Actions.RIGHT, Actions.LEFT]
-]
-
 
 def reset():
-    return 156  # starting state [[1,1],[1,1]]
+    return 155  # starting state [[1,1],[1,1]]
+
+# redesign for test ability
+def eliminate_invalid_actions(q_table):
+    for idx, array in enumerate(state_table):
+        valid_actions = rules.get_valid_actions(array, 0)
+        for atidx, val in enumerate(q_table[idx]):
+            if atidx not in valid_actions:
+                q_table[idx][atidx] = None
 
 
 def select_random_action(state_index, player_index):
@@ -101,6 +70,45 @@ def step(state_idx, player_idx, action_idx):
     reward = get_reward(new_state)
     return [state_table.index(new_state), reward, done, {'info': None}]
 
+
+state_table = []
+for i in range(5):
+    for x in range(5):
+        for y in range(5):
+            for z in range(5):
+                state_table.append([[i, x], [y, z]])
+# first state [[0,0],[0,0]] is not a valid state so get rid of it
+state_table.pop(0)
+
+
+class Players(IntEnum):
+    agent = 0
+    opponent = 1
+
+
+class Hands(IntEnum):
+    left = 0
+    right = 1
+
+
+class Actions(IntEnum):
+    LEFT = 0
+    RIGHT = 1
+    SWAP = 2
+
+
+# A player can perform one of these actions swap,
+# attack with left hand to opponents right hand
+# attack with left hand to opponents left hand
+# attack with right hand to opponents left hand
+# attack with right hand to opponents right hand
+action_table = [
+    [Actions.SWAP],
+    [Actions.LEFT, Actions.LEFT],
+    [Actions.LEFT, Actions.RIGHT],
+    [Actions.RIGHT, Actions.RIGHT],
+    [Actions.RIGHT, Actions.LEFT]
+]
 
 if __name__ == '__main__':
     print("did you mean to import the environment file")

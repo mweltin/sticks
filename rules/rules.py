@@ -22,7 +22,7 @@ def can_swap(player_state):
     # a player can only swap if one hand is at zero and the other is even
     val = deepcopy(player_state)  # make a copy of player_state object reference
     val.sort()
-    if val[0] == 0 and not val[1] % 2:
+    if val[0] == 0 and val[1] != 0 and not val[1] % 2:
         return True
 
     return False
