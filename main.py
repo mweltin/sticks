@@ -19,8 +19,7 @@ def play_sticks():
     q_table = np.genfromtxt("qlearning/q_table.csv", delimiter=",")
     state_idx = env.reset()
 
-    user_goes_first = input(
-        f'Welcome to sticks. Would you like to go first? (y/n)')  # Press Ctrl+F8 to toggle the breakpoint.
+    user_goes_first = input(f'Welcome to sticks. Would you like to go first? (y/n)')  # Press Ctrl+F8 to toggle the breakpoint.
     if user_goes_first == 'y':
         active_player_idx = 1
     else:
