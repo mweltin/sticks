@@ -65,12 +65,9 @@ def take_turn(state, active_player_index, action):
     if take_swap:
         state[active_player_index] = swap(state[active_player_index])
     else:
-        state[opponent_player_index][opponent_hand] = (state[opponent_player_index][opponent_hand] + \
+        state[opponent_player_index][opponent_hand] = (state[opponent_player_index][opponent_hand] +
                                                        state[active_player_index][active_player_hand]) % 5
     return state
-
-
-
 
 
 # state = 2d array of representing the state of the game

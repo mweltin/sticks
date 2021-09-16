@@ -5,9 +5,9 @@ Author: Cool Dude
 import numpy as np
 import random
 import environment.env as env
-import rules.rules as rules
 
 random.seed(789786)
+
 
 def main():
     action_space_size = len(env.action_table)
@@ -43,10 +43,7 @@ def main():
             # Add new reward
             exploration_rate_threshold = random.uniform(0, 1)
             if exploration_rate_threshold > exploration_rate:
-                try:
-                    action = np.nanargmax(q_table[state_idx])
-                except ValueError as e:
-                    i = 1
+                action = np.nanargmax(q_table[state_idx])
             else:
                 action = env.select_random_action(state_idx, env.Players.agent)
 
@@ -72,7 +69,7 @@ def main():
                 break
         # Exploration rate decay
         exploration_rate = min_exploration_rate + \
-                           (max_exploration_rate - min_exploration_rate) * np.exp(-exploration_decay_rate * episode)
+            (max_exploration_rate - min_exploration_rate) * np.exp(-exploration_decay_rate * episode)
         # Add current episode reward to total rewards list
         rewards_all_episodes.append(rewards_current_episode)
 
@@ -86,8 +83,8 @@ def main():
         count += 1000
 
     retval = []
-    for idx , value in enumerate(q_table):
-        temp = [*env.state_table[idx][0],  *env.state_table[idx][1],  *value]
+    for idx, value in enumerate(q_table):
+        temp = [*env.state_table[idx][0], *env.state_table[idx][1], *value]
         retval.append(temp)
 
     np.savetxt("state_q_table.csv",
@@ -99,6 +96,7 @@ def main():
                q_table,
                delimiter=", ",
                fmt='% s')
+
 
 if __name__ == '__main__':
     main()
