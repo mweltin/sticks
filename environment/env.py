@@ -7,6 +7,7 @@ from copy import deepcopy
 def reset():
     return 155  # starting state [[1,1],[1,1]]
 
+
 # redesign for test ability
 def eliminate_invalid_actions(q_table):
     for idx, array in enumerate(state_table):
