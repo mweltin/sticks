@@ -1,6 +1,6 @@
 """
-My short cool script
-Author: Cool Dude
+Implementation of a Q-Learning algorithm to learn to game of sticks
+Author: Markus Weltin
 """
 import numpy as np
 import random

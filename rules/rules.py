@@ -1,5 +1,3 @@
-# rules the govern the game of sticks
-# see https://en.wikipedia.org/wiki/Chopsticks_(hand_game)
 import environment.env as env
 from copy import deepcopy
 

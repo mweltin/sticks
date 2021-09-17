@@ -8,7 +8,6 @@ def reset():
     return state_table.index([[1, 1], [1, 1]])
 
 
-# redesign for test ability
 def eliminate_invalid_actions(states, q_table):
     for idx, array in enumerate(states):
         valid_actions = rules.get_valid_actions(array, 0)
