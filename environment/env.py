@@ -5,12 +5,12 @@ from copy import deepcopy
 
 
 def reset():
-    return 155  # starting state [[1,1],[1,1]]
+    return state_table.index([[1, 1], [1, 1]])
 
 
 # redesign for test ability
-def eliminate_invalid_actions(q_table):
-    for idx, array in enumerate(state_table):
+def eliminate_invalid_actions(states, q_table):
+    for idx, array in enumerate(states):
         valid_actions = rules.get_valid_actions(array, 0)
         for atidx, val in enumerate(q_table[idx]):
             if atidx not in valid_actions:
@@ -19,7 +19,6 @@ def eliminate_invalid_actions(q_table):
 
 def select_random_action(state_index, player_index):
     possible_action = rules.get_valid_actions(state_table[state_index], player_index)
-    # if we only have one option just return that. Otherwise randint will throw an exception
     if len(possible_action) == 1:
         return possible_action[0]
     action_index = random.randint(0, len(possible_action) - 1)

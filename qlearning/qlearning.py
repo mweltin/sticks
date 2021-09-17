@@ -14,7 +14,7 @@ def main():
     state_space_size = len(env.state_table)
 
     q_table = np.zeros((state_space_size, action_space_size))
-    env.eliminate_invalid_actions(q_table)
+    env.eliminate_invalid_actions(env.state_table, q_table)
     num_episodes = 60000
     max_steps_per_episode = 50
 

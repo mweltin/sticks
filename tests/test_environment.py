@@ -1,3 +1,4 @@
+import numpy as np
 import environment.env as env
 import unittest
 
@@ -7,7 +8,6 @@ class EnvironmentTestCase(unittest.TestCase):
         reset_index = env.reset()
         self.assertEqual([[1, 1], [1, 1]], env.state_table[reset_index])
 
-    # todo research unit testing stocastic functions
     def test_select_random_action(self):
         state_index = env.reset()  # only four actions are allowed in this state
         active_player_index = 0
@@ -60,3 +60,21 @@ class EnvironmentTestCase(unittest.TestCase):
         state_agent_is_winner = [[1, 2], [3, 1]]
         reward = env.get_reward(state_agent_is_winner)
         self.assertEqual(-1, reward)
+
+    def test_select_random_action_when_only_one_valid_action_exists(self):
+        test_state = [[1, 0], [1, 0]]
+        state_index = env.state_table.index(test_state)
+        action = env.select_random_action(state_index, 0)
+        self.assertEqual(1, action)
+
+    def test_select_random_action_when_only_swap_and_one_other_action_exists(self):
+        test_state = [[4, 0], [1, 0]]
+        state_index = env.state_table.index(test_state)
+        action = env.select_random_action(state_index, 0)
+        self.assertIn(action, [1, 0])
+
+    def test_eliminate_invalid_actions(self):
+        q_table = [[0, 0, 0, 0, 0]]
+        state = [[[1, 0], [1, 0]]]
+        env.eliminate_invalid_actions(state, q_table)
+        self.assertEqual([[None, 0, None, None, None]], q_table)
