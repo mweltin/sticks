@@ -41,3 +41,14 @@ $ python -m unittest
 For code coverage run coverage and then reports
 $ coverage run -m unittest
 $ coverage report
+
+### Docker
+Build it yourself
+
+```docker build -t {add your tag name}```
+
+run it
+
+```docker run -d -p 8000:8000 --name sticks {your tag}```
+
+Grab it from dockerhub (not up yet) mweltin/sticks:latest

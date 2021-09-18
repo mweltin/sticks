@@ -6,8 +6,6 @@ import numpy as np
 import random
 import environment.env as env
 
-random.seed(789786)
-
 
 def main():
     action_space_size = len(env.action_table)
