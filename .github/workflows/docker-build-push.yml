@@ -1,6 +1,6 @@
 # If a tag is pushed to the main branch with the format v#.#.# then build a docker image and push to docker hub
 
-name: Build docker ${GITHUB_REF/refs\/tags\//}
+name: Build docker image
 
 # Controls when the workflow will run
 on:
