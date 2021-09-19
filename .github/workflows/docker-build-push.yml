@@ -34,7 +34,7 @@ jobs:
         with:
           image: repo/image
           tags: ${{ secrets.MW_DOCKER_USER }}/sticks:${{ steps.get_version.outputs.VERSION }}
-          registry: ${{ secrets.MW_DOCKER_USER }}/sticks
+          registry: docker.io
           dockerfile: Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
