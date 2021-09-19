@@ -5,6 +5,7 @@ FROM ubuntu:20.04
 RUN apt-get update -y
 RUN apt-get install python3 -y
 RUN apt-get install pip -y
+RUN apt-install django -y
 
 # setup environment variable  
 ENV APP_DIR=/sticks  
@@ -28,7 +29,7 @@ ENV PYTHONUNBUFFERED 1
 
 # copy whole project to your docker home directory. COPY . $DockerHOME  
 # run this command to install all dependencies  
-# RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt
 
 EXPOSE 8000
 
