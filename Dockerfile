@@ -22,12 +22,9 @@ RUN ls -R /run/secrets
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# install dependencies  
-RUN python -m pip install
-
 # copy whole project to your docker home directory. COPY . $DockerHOME  
 # run this command to install all dependencies  
-RUN pip install -r requirements.txt  
+# RUN pip install -r requirements.txt
 
 EXPOSE 8000
 
