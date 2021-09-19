@@ -8,9 +8,6 @@ ENV APP_DIR=/sticks
 # set work directory  
 RUN mkdir -p $APP_DIR
 
-RUN apt install pip
-RUN python --version
-
 COPY ./website $APP_DIR 
 
 # where your code lives  
@@ -18,11 +15,16 @@ WORKDIR $APP_DIR
 
 RUN --mount=type=secret,id=MW_DJANGO_SECRET_KEY,dst=/run/secrets/MW_DJANGO_SECRET_KEY export MW_DJANGO_SECRET_KEY=$(cat/run/secrets/MW_DJANGO_SECRET_KEY)
 RUN echo really
+RUN echo $MW_DJANGO_SECRET_KEY
 RUN ls -R /run/secrets
 
 # set environment variables  
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1  
+
+RUN apt-get update && apt-get install -y
+RUN apt install pip
+RUN python --version
 
 # install dependencies  
 RUN pip install --upgrade pip  
