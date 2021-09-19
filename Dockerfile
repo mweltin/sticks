@@ -4,7 +4,7 @@ FROM ubuntu:20.04
 
 RUN apt-get update -y
 RUN apt-get install python3 -y
-RUN python -m pip install --upgrade pip
+RUN python3 -m pip install --upgrade pip
 
 # setup environment variable  
 ENV APP_DIR=/sticks  
@@ -32,4 +32,4 @@ ENV PYTHONUNBUFFERED 1
 
 EXPOSE 8000
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
