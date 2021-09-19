@@ -1,4 +1,5 @@
-# base image  
+# base image
+# syntax = docker/dockerfile:1.0-experimental
 FROM python:3.8
 
 # setup environment variable  
@@ -12,7 +13,7 @@ COPY ./website $APP_DIR
 # where your code lives  
 WORKDIR $APP_DIR
 
-# RUN --mount=type=secret,id=MW_DJANGO_SECRET_KEY export MW_DJANGO_SECRET_KEY=$(cat /run/secrets/MW_DJANGO_SECRET_KEY)
+RUN --mount=type=secret,id=MW_DJANGO_SECRET_KEY export MW_DJANGO_SECRET_KEY=$(cat /run/secrets/MW_DJANGO_SECRET_KEY)
 
 # set environment variables  
 ENV PYTHONDONTWRITEBYTECODE 1

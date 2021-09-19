@@ -35,3 +35,5 @@ jobs:
           push: true
           tags: ${{ secrets.MW_DOCKER_USER }}/sticks:${{ steps.get_version.outputs.VERSION }}
           build-args: MW_DJANGO_SECRET_KEY=${{ secrets.MW_DJANGO_SECRET_KEY }}
+          secrets: |
+            "MW_DJANGO_SECRET_KEY=${{ secrets.MW_DJANGO_SECRET_KEY }}"
