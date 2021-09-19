@@ -1,9 +1,7 @@
 # base image  
 FROM python:3.8   
 
-RUN --mount=type=secret,id=MW_DJANGO_SECRET_KEY
-
-ENV MW_DJANGO_SECRET_KEY=$(cat /run/secrets/MW_DJANGO_SECRET_KEY)
+RUN --mount=type=secret,id=MW_DJANGO_SECRET_KEY export MW_DJANGO_SECRET_KEY=$(cat /run/secrets/MW_DJANGO_SECRET_KEY)
 
 # setup environment variable  
 ENV APP_DIR=/sticks  
