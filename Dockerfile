@@ -12,11 +12,9 @@ COPY ./website $APP_DIR
 # where your code lives  
 WORKDIR $APP_DIR
 
-ENV DOCKER_BUILDKIT=1
-
 RUN --mount=type=secret,id=MW_DJANGO_SECRET_KEY,dst=/run/secrets/MW_DJANGO_SECRET_KEY
 RUN echo really
-RUN cat /run/secrets/MW_DJANGO_SECRET_KEY
+RUN echo $MW_DJANGO_SECRET_KEY
 
 # set environment variables  
 ENV PYTHONDONTWRITEBYTECODE 1
