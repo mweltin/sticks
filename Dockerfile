@@ -1,6 +1,6 @@
 # syntax = docker/dockerfile:1.0-experimental
 # FROM python:3.8
-FROM ubuntu-latest
+FROM ubuntu:xenial-20210804
 
 # setup environment variable  
 ENV APP_DIR=/sticks  
