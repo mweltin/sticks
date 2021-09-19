@@ -16,6 +16,9 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
+      - name: set env
+        env:
+          MW_DJANGO_SECRET_KEY ${{ secrets.MW_DJANGO_SECRET_KEY }}
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
