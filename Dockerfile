@@ -20,11 +20,7 @@ RUN ls -R /run/secrets
 
 # set environment variables  
 ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1  
-
-RUN apt-get update && apt-get install -y
-
-RUN apt install python -y
+ENV PYTHONUNBUFFERED 1
 
 # install dependencies  
 RUN python -m pip install
