@@ -36,3 +36,5 @@ jobs:
 #          tags: ${{ secrets.MW_DOCKER_USER }}/sticks:${{ steps.get_version.outputs.VERSION }}
           tags: v1
           build-args: MW_DJANGO_SECRET_KEY=${{ secrets.MW_DJANGO_SECRET_KEY }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
