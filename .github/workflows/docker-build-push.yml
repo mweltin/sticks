@@ -33,5 +33,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ${{ secrets.MW_DOCKER_USER }}/sticks:${{ steps.get_version.outputs.VERSION }}
+#          tags: ${{ secrets.MW_DOCKER_USER }}/sticks:${{ steps.get_version.outputs.VERSION }}
+          tags: v1
           build-args: MW_DJANGO_SECRET_KEY=${{ secrets.MW_DJANGO_SECRET_KEY }}
