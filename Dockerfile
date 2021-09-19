@@ -12,7 +12,7 @@ COPY ./website $APP_DIR
 # where your code lives  
 WORKDIR $APP_DIR
 
-RUN --mount=type=secret,id=MW_DJANGO_SECRET_KEY
+RUN --mount=type=secret,id=MW_DJANGO_SECRET_KEY,dst=/run/secrets/MW_DJANGO_SECRET_KEY
 RUN echo really
 RUN cat /run/secrets/MW_DJANGO_SECRET_KEY
 
