@@ -12,7 +12,8 @@ COPY ./website $APP_DIR
 # where your code lives  
 WORKDIR $APP_DIR
 
-RUN --mount=type=secret,id=MW_DJANGO_SECRET_KEY export MW_DJANGO_SECRET_KEY=heyHEY
+RUN --mount=type=secret,id=MW_DJANGO_SECRET_KEY,dst=/.djangosecret
+RUN export MW_DJANGO_SECRET_KEY=$(cat /.djangosecret)
 
 # set environment variables  
 ENV PYTHONDONTWRITEBYTECODE 1
