@@ -5,7 +5,6 @@ FROM ubuntu:20.04
 RUN apt-get update -y
 RUN apt-get install python3 -y
 RUN apt-get install pip -y
-RUN apt-install django -y
 
 # setup environment variable  
 ENV APP_DIR=/sticks  
