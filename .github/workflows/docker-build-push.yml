@@ -35,7 +35,7 @@ jobs:
           image: ${{ secrets.MW_DOCKER_USER }}/sticks
           tags: ${{ secrets.MW_DOCKER_USER }}/sticks:${{ steps.get_version.outputs.VERSION }}
           registry: docker.io
-          dockerfile: ../Dockerfile
+          dockerfile: ../../Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           buildArgs: MW_DJANGO_SECRET_KEY=${{ secrets.MW_DJANGO_SECRET_KEY }}
