@@ -1,5 +1,6 @@
 # syntax = docker/dockerfile:1.0-experimental
-FROM python:3.8
+# FROM python:3.8
+FROM ubuntu-latest
 
 # setup environment variable  
 ENV APP_DIR=/sticks  
@@ -14,7 +15,7 @@ WORKDIR $APP_DIR
 
 RUN --mount=type=secret,id=MW_DJANGO_SECRET_KEY,dst=/run/secrets/MW_DJANGO_SECRET_KEY
 RUN echo really
-RUN echo $MW_DJANGO_SECRET_KEY
+ENV MW_DJANGO_SECRET_KEY=$MW_DJANGO_SECRET_KEY
 
 # set environment variables  
 ENV PYTHONDONTWRITEBYTECODE 1
