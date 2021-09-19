@@ -1,6 +1,6 @@
 # syntax = docker/dockerfile:1.0-experimental
 # FROM python:3.8
-FROM ubuntu:xenial-20210804
+FROM ubuntu:20.04
 
 # setup environment variable  
 ENV APP_DIR=/sticks  
@@ -24,7 +24,7 @@ ENV PYTHONUNBUFFERED 1
 
 RUN apt-get update && apt-get install -y
 
-RUN python --version
+RUN apt install python -y
 
 # install dependencies  
 RUN python -m pip install
