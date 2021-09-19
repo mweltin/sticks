@@ -2,6 +2,10 @@
 # FROM python:3.8
 FROM ubuntu:20.04
 
+RUN apt-get update -y
+RUN apt-get install python3 -y
+RUN python -m pip install --upgrade pip
+
 # setup environment variable  
 ENV APP_DIR=/sticks  
 
