@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # in local dev this is set in pycharm run configuration its also a github secrete
-SECRET_KEY = os.environ['MW_DJANGO_SECRET_KEY']
+SECRET_KEY = "django-insecure-6azaiupm-8ymgye1-f&wj8!880&ds7!39)7cit!7_psej7k-@$"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
