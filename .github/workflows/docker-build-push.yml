@@ -30,13 +30,8 @@ jobs:
           password: ${{ secrets.MW_DOCKER_HUB_ACCESS_TOKEN }}
       - name: Build and push
         id: docker_build
-        uses: mr-smithers-excellent/docker-build-push@v5
+        uses: docker/build-push-action@v2
         with:
-          image: ${{ secrets.MW_DOCKER_USER }}/sticks
+          push: true
           tags: ${{ secrets.MW_DOCKER_USER }}/sticks:${{ steps.get_version.outputs.VERSION }}
-          registry: docker.io
-          dockerfile: ../../Dockerfile
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          buildArgs: MW_DJANGO_SECRET_KEY=${{ secrets.MW_DJANGO_SECRET_KEY }}
-
+          build-args: MW_DJANGO_SECRET_KEY=${{ secrets.MW_DJANGO_SECRET_KEY }}
