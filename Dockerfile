@@ -15,7 +15,7 @@ WORKDIR $APP_DIR
 
 RUN --mount=type=secret,id=MW_DJANGO_SECRET_KEY,dst=/run/secrets/MW_DJANGO_SECRET_KEY
 RUN echo really
-ENV MW_DJANGO_SECRET_KEY=$MW_DJANGO_SECRET_KEY
+RUN cat /run/secrets/MW_DJANGO_SECRET_KEY
 
 # set environment variables  
 ENV PYTHONDONTWRITEBYTECODE 1
