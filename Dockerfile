@@ -4,7 +4,7 @@ FROM ubuntu:20.04
 
 RUN apt-get update -y
 RUN apt-get install python3 -y
-RUN apt-get install pip3 -y
+RUN apt-get install pip -y
 
 # setup environment variable  
 ENV APP_DIR=/sticks  
