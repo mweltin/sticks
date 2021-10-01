@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# angular app
+website/sticks/static/angular/
+website/frontend/node_modules/
