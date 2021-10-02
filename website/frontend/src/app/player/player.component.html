@@ -1,2 +1,8 @@
-<app-hand orientation="left"></app-hand>
-<app-hand orientation="right"></app-hand>
+<div>
+    <app-hand orientation="left" (handClicked)="handClickedHandler($event)"></app-hand>
+    <app-hand orientation="right" (handClicked)="handClickedHandler($event)"></app-hand>
+</div>
+<div>
+    <button (click)="swap()">Swap</button>
+</div>
+

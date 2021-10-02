@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter   } from '@angular/core';
 import { throwError } from "rxjs";
 @Component({
   selector: 'app-hand',
@@ -8,11 +8,16 @@ import { throwError } from "rxjs";
 export class HandComponent implements OnInit {
 
   imgSrc: String = "/angular/app/assets/one-a-l.png";
+  fingers: number = 1;
 
   @Input()
   orientation: string = '';
 
+  @Output() 
+  handClicked: EventEmitter<string> = new EventEmitter();
+
   constructor() { 
+    
   }
 
   ngOnInit(): void {
@@ -35,7 +40,7 @@ export class HandComponent implements OnInit {
   }
 
   handClick(){
-    alert("has been clicked");
+    this.handClicked.emit(this.orientation);
   }
 
 }
