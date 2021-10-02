@@ -1,2 +1,14 @@
-<app-player playerType="human"></app-player>
-<app-player playerType="qlearning"></app-player>
+<app-player 
+    playerType="qlearning" 
+    [RFingers]=HRFingers 
+    [LFingers]=HLFingers
+    (playerAction)="playerActionHandler($event)"
+>
+</app-player>
+<app-player 
+    playerType="human"
+    [RFingers]=QRFingers 
+    [LFingers]=QLFingers
+    (playerAction)="playerActionHandler($event)"
+>
+</app-player>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input  } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, SimpleChange  } from '@angular/core';
 
 @Component({
   selector: 'app-player',
@@ -9,9 +9,16 @@ export class PlayerComponent implements OnInit {
 
   @Input()
   playerType: string = '';
-
+  
+  @Input()
   LFingers: number = 1;
+
+  @Input()
   RFingers: number = 1;
+
+  @Output() 
+  playerAction: EventEmitter<Object> = new EventEmitter();
+  
   constructor() { }
 
   ngOnInit(): void {
@@ -23,16 +30,26 @@ export class PlayerComponent implements OnInit {
   }
 
   handClickedHandler(hand: string) {
-    console.log(this.playerType+"'s "+ hand + " has been clicked");
-    if(hand == "right")
-    {
-      this.RFingers = ++this.RFingers % 5;
-    }
+    
+      this.playerAction.emit(
+        { 
+          'playerType': this.playerType, 
+          'state': [this.LFingers, this.RFingers],
+          'activeHand': hand
+        }
+      );
+ 
 
-    if(hand == "left")
-    {
-      this.LFingers = ++this.LFingers % 5;
-    }
+    // console.log(this.playerType+"'s "+ hand + " has been clicked");
+    // if(hand == "right")
+    // {
+    //   this.RFingers = ++this.RFingers % 5;
+    // }
+
+    // if(hand == "left")
+    // {
+    //   this.LFingers = ++this.LFingers % 5;
+    // }
     
   }
 }

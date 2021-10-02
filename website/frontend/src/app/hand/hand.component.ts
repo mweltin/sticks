@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange, SimpleChanges   } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges   } from '@angular/core';
 import { throwError } from "rxjs";
 @Component({
   selector: 'app-hand',
@@ -14,6 +14,7 @@ export class HandComponent implements OnInit, OnChanges{
 
   @Input()
   orientation: string = '';
+  
   @Input()
   fingers: number = 1;
 
