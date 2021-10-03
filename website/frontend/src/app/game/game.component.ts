@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TurnService } from '../turn.service';
 
 @Component({
   selector: 'app-game',
@@ -15,9 +16,7 @@ export class GameComponent implements OnInit {
   HLFingers: number = 1;
   HRFingers: number = 1;
 
-  constructor() { 
-
-  }
+  constructor( private turnSrv: TurnService) { }
 
   ngOnInit(): void {
     this.whoesTurnIsIt = 'human';
@@ -25,11 +24,16 @@ export class GameComponent implements OnInit {
 
   playerActionHandler( playerAction:object )
   {
-    console.log("why does thsi work "+ playerAction);
-    this.QLFingers = Math.round( Math.random() *100) % 5;
-    this.QRFingers = Math.round( Math.random() *100) % 5;
-    this.HLFingers = Math.round( Math.random() *100) % 5;
-    this.HRFingers = Math.round( Math.random() *100) % 5;
+    this.turnSrv.takeATurn(playerAction).subscribe(
+      (res: any) => {
+        console.log("turn service returned an object " + res)
+      },
+      (error: any) => 
+      {
+        console.log(error)
+      }
+    );
   }
+
 
 }
