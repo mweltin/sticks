@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, SimpleChange  } from '@angular/core';
+import { PlayerAction } from '../player-action';
 
 @Component({
   selector: 'app-player',
@@ -21,6 +22,13 @@ export class PlayerComponent implements OnInit {
 
   @Output() 
   swapAction: EventEmitter<Object> = new EventEmitter();
+
+  send:PlayerAction =  { 
+    playerType: '', 
+    playerState: [],
+    activeHand: ''
+  };
+
   constructor() { }
 
   ngOnInit(): void {
@@ -32,13 +40,12 @@ export class PlayerComponent implements OnInit {
   }
 
   handClickedHandler(hand: string) {
-    
-      this.playerAction.emit(
-        { 
-          'playerType': this.playerType, 
-          'state': [this.LFingers, this.RFingers],
-          'activeHand': hand
-        }
-      );
+      this.send = { 
+        playerType: this.playerType, 
+        playerState: [this.LFingers, this.RFingers],
+        activeHand: hand
+      };
+
+      this.playerAction.emit( this.send );
   }
 }

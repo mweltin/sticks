@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TurnService } from '../turn.service';
+import { ActionQueue } from '../action-queue';
+import { PlayerAction } from '../player-action';
 
 @Component({
   selector: 'app-game',
@@ -11,12 +13,24 @@ export class GameComponent implements OnInit {
   // [[human left, human right][qlearning left, qlearning right]]
   state: number[][] = [[1,1], [1,1]];
   whoesTurnIsIt: string = '';
-  actionQueue: object[] = [];
   QLFingers: number = 1;
   QRFingers: number = 1;
   HLFingers: number = 1;
   HRFingers: number = 1;
   message: string = '';
+  event: PlayerAction = { playerState: [], playerType:'',activeHand:'' };
+  actionQueue: ActionQueue =     {
+    human:  {    
+      playerState: [],
+      activeHand: '',
+      playerType: ''
+    },
+    qlearning: {    
+      playerState: [],  
+      activeHand: '',
+      playerType: ''
+    }
+  };;
 
   constructor( private turnSrv: TurnService) { }
 
@@ -24,16 +38,31 @@ export class GameComponent implements OnInit {
     this.whoesTurnIsIt = '';
   }
 
-  playerActionHandler( playerAction:object )
+  playerActionHandler( playerAction:PlayerAction )
   {
-    this.actionQueue.push(playerAction);
-    if( this.actionQueue.length == 2 ){
-      this.actionQueue.push({'activePlayer': this.whoesTurnIsIt});
-      this.turnSrv.takeATurn(playerAction).subscribe(
+    if(playerAction.playerType == 'qlearning'){
+      this.actionQueue.qlearning = playerAction;
+    }
+    if(playerAction.playerType == 'human'){
+      this.actionQueue.human = playerAction;
+    }
+    if( this.actionQueue.human.playerType != '' && this.actionQueue.qlearning.playerType != '' ){
+      this.turnSrv.takeATurn(this.actionQueue).subscribe(
         (res: any) => {
           console.log("turn service returned an object " + res);
           this.changeActivePlayer();
-          this.actionQueue = [];
+          this.actionQueue = {
+            human:  {    
+              playerState: [],
+              activeHand: '',
+              playerType: ''
+            },
+            qlearning: {    
+              playerState: [],  
+              activeHand: '',
+              playerType: ''
+            }
+          };
         },
         (error: any) => 
           console.log(error)
@@ -52,7 +81,6 @@ export class GameComponent implements OnInit {
 
   swapActionHandler(message: string){
     console.log(message);
-    this.actionQueue = [];
     this.changeActivePlayer();
   }
 
@@ -64,4 +92,5 @@ export class GameComponent implements OnInit {
       this.whoesTurnIsIt = 'human';
     }
   }
+
 }

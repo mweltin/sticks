@@ -31,6 +31,7 @@ def index(request):
 @csrf_exempt
 def turn(request):
     data = json.loads(request.body)
+
     state_index = env.state_table.index(data['state'])
     '''
         action_table = [
