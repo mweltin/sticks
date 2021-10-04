@@ -18,7 +18,9 @@ export class PlayerComponent implements OnInit {
 
   @Output() 
   playerAction: EventEmitter<Object> = new EventEmitter();
-  
+
+  @Output() 
+  swapAction: EventEmitter<Object> = new EventEmitter();
   constructor() { }
 
   ngOnInit(): void {
@@ -26,7 +28,7 @@ export class PlayerComponent implements OnInit {
   }
 
   swap() {
-    alert("perform swap action for " + this.playerType +"." );
+    this.swapAction.emit("perform swap action for " + this.playerType +"." );
   }
 
   handClickedHandler(hand: string) {
@@ -38,18 +40,5 @@ export class PlayerComponent implements OnInit {
           'activeHand': hand
         }
       );
- 
-
-    // console.log(this.playerType+"'s "+ hand + " has been clicked");
-    // if(hand == "right")
-    // {
-    //   this.RFingers = ++this.RFingers % 5;
-    // }
-
-    // if(hand == "left")
-    // {
-    //   this.LFingers = ++this.LFingers % 5;
-    // }
-    
   }
 }

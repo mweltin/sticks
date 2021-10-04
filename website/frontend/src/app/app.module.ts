@@ -9,6 +9,7 @@ import { HandComponent } from './hand/hand.component';
 import { PlayerComponent } from './player/player.component';
 import { GameComponent } from './game/game.component';
 import { TurnService } from './turn.service';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { TurnService } from './turn.service';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    NgbModule
   ],
   providers: [
     TurnService

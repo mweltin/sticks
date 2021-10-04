@@ -11,29 +11,57 @@ export class GameComponent implements OnInit {
   // [[human left, human right][qlearning left, qlearning right]]
   state: number[][] = [[1,1], [1,1]];
   whoesTurnIsIt: string = '';
+  actionQueue: object[] = [];
   QLFingers: number = 1;
   QRFingers: number = 1;
   HLFingers: number = 1;
   HRFingers: number = 1;
+  message: string = '';
 
   constructor( private turnSrv: TurnService) { }
 
   ngOnInit(): void {
-    this.whoesTurnIsIt = 'human';
+    this.whoesTurnIsIt = '';
   }
 
   playerActionHandler( playerAction:object )
   {
-    this.turnSrv.takeATurn(playerAction).subscribe(
-      (res: any) => {
-        console.log("turn service returned an object " + res)
-      },
-      (error: any) => 
-      {
-        console.log(error)
-      }
-    );
+    this.actionQueue.push(playerAction);
+    if( this.actionQueue.length == 2 ){
+      this.actionQueue.push({'activePlayer': this.whoesTurnIsIt});
+      this.turnSrv.takeATurn(playerAction).subscribe(
+        (res: any) => {
+          console.log("turn service returned an object " + res);
+          this.changeActivePlayer();
+          this.actionQueue = [];
+        },
+        (error: any) => 
+          console.log(error)
+      );
+    }
   }
 
+  whoGoesFirst(player : string){
+    if( player == 'human' ){
+      this.whoesTurnIsIt = 'human';
+    } 
+    if (player == 'qlearning'){
+      this.whoesTurnIsIt = 'qlearning';
+    }
+  }
 
+  swapActionHandler(message: string){
+    console.log(message);
+    this.actionQueue = [];
+    this.changeActivePlayer();
+  }
+
+  changeActivePlayer(){
+    if(this.whoesTurnIsIt == 'human')
+    {
+      this.whoesTurnIsIt = 'qlearning';
+    } else {
+      this.whoesTurnIsIt = 'human';
+    }
+  }
 }

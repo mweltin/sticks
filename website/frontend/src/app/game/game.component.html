@@ -1,14 +1,25 @@
-<app-player 
-    playerType="qlearning" 
-    [RFingers]=HRFingers 
-    [LFingers]=HLFingers
-    (playerAction)="playerActionHandler($event)"
->
-</app-player>
-<app-player 
-    playerType="human"
-    [RFingers]=QRFingers 
-    [LFingers]=QLFingers
-    (playerAction)="playerActionHandler($event)"
->
-</app-player>
+<div class="container">
+    <div class="row">
+        <div class="col-10">
+            <div id=ßplying_field>
+                <app-player playerType="qlearning" [RFingers]=HRFingers [LFingers]=HLFingers
+                    (playerAction)="playerActionHandler($event)"
+                    (swapAction)="swapActionHandler(message)"
+                >
+                </app-player>
+                <app-player playerType="human" [RFingers]=QRFingers [LFingers]=QLFingers
+                    (playerAction)="playerActionHandler($event)"
+                    (swapAction)="swapActionHandler(message)"
+                >
+                </app-player>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <div id=meta_data>
+                <button class="btn btn-success" (click)="whoGoesFirst('human')" [disabled]="whoesTurnIsIt !== '' ">I go First</button>
+                <button class="btn btn-info" (click)="whoGoesFirst('qlearning')" [disabled]="whoesTurnIsIt !== '' ">AI Goes First</button>
+            </div>
+        </div>
+    </div>
+</div>
