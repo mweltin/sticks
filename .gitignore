@@ -131,3 +131,6 @@ dmypy.json
 # angular app
 website/sticks/static/angular/
 website/frontend/node_modules/
+
+sticksvenv  
+*.code-workspace
