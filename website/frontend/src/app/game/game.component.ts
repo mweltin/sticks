@@ -18,8 +18,8 @@ export class GameComponent implements OnInit {
   HLFingers: number = 1;
   HRFingers: number = 1;
   message: string = '';
-  event: PlayerAction = { playerState: [], playerType:'',activeHand:'' };
   actionQueue: ActionQueue =     {
+    activePlayer: '',
     human:  {    
       playerState: [],
       activeHand: '',
@@ -38,20 +38,28 @@ export class GameComponent implements OnInit {
     this.whoesTurnIsIt = '';
   }
 
-  playerActionHandler( playerAction:PlayerAction )
+  playerActionHandler( action:PlayerAction )
   {
-    if(playerAction.playerType == 'qlearning'){
-      this.actionQueue.qlearning = playerAction;
+    if(action.playerType == 'qlearning'){
+      this.actionQueue.qlearning = action;
     }
-    if(playerAction.playerType == 'human'){
-      this.actionQueue.human = playerAction;
+    if(action.playerType == 'human'){
+      this.actionQueue.human = action;
     }
     if( this.actionQueue.human.playerType != '' && this.actionQueue.qlearning.playerType != '' ){
+      this.actionQueue.activePlayer = this.whoesTurnIsIt;
       this.turnSrv.takeATurn(this.actionQueue).subscribe(
         (res: any) => {
           console.log("turn service returned an object " + res);
           this.changeActivePlayer();
+
+          this.HLFingers = res.state[0][0];
+          this.HRFingers = res.state[0][1];
+          this.QLFingers = res.state[1][0];
+          this.QRFingers = res.state[1][1];
+
           this.actionQueue = {
+            activePlayer: '',
             human:  {    
               playerState: [],
               activeHand: '',
@@ -63,6 +71,9 @@ export class GameComponent implements OnInit {
               playerType: ''
             }
           };
+          setTimeout(() => {
+            this.show = false
+         }, 250)
         },
         (error: any) => 
           console.log(error)

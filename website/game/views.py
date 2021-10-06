@@ -31,23 +31,42 @@ def index(request):
 @csrf_exempt
 def turn(request):
     data = json.loads(request.body)
+    data = data['turnData']
+    state = [data['human']['playerState'], data['qlearning']['playerState']]
+    state_index = env.state_table.index(state)
+    if(data['activePlayer'] == 'human'):
+        active_player_index = 0
 
-    state_index = env.state_table.index(data['state'])
-    '''
-        action_table = [
-        [Actions.SWAP],
-        [Actions.LEFT, Actions.LEFT],
-        [Actions.LEFT, Actions.RIGHT],
-        [Actions.RIGHT, Actions.RIGHT],
-        [Actions.RIGHT, Actions.LEFT]
-    ]
-    '''
-    if data['playerType'] == 'human':
+    if (data['activePlayer'] == 'qlearning'):
+        active_player_index = 1
+
+    action_index = env.action_table.index( getActionArray(data) )
+
+    if data['activePlayer'] == 'human':
         # def step(state_idx, player_idx, action_idx):
-        new_state = env.step(state_index, 0, [1, 1])
+        new_state = env.step(state_index, 0, action_index)
     else:
-        with open('qlearning/q_table.csv', mode='r')as file:
+        with open('../../../qlearning/q_table.csv', mode='r') as file:
             q_table = csv.reader(file)
 
-        new_state = env.step(state_index, 1, [1, 1])
-    return JsonResponse(new_state, safe=False)
+    retval = env.step(state_index, 1, action_index)
+    returnVal = {
+        'state' : env.state_table[retval[0]],
+        'hasWinner': retval[2]
+    }
+    return JsonResponse(returnVal, safe=False)
+
+
+def getActionArray( data ):
+    retval = []
+    if data['human']['activeHand'] == 'right':
+        retval.insert(0, 1)
+    else:
+         retval.insert(0, 0)
+
+    if data['qlearning']['activeHand'] == 'right':
+        retval.insert(1, 1)
+    else:
+        retval.insert(1, 0)
+
+    return retval

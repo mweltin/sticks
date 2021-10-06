@@ -18,16 +18,10 @@ export class PlayerComponent implements OnInit {
   RFingers: number = 1;
 
   @Output() 
-  playerAction: EventEmitter<Object> = new EventEmitter();
+  playerActionAtr: EventEmitter<PlayerAction> = new EventEmitter();
 
   @Output() 
   swapAction: EventEmitter<Object> = new EventEmitter();
-
-  send:PlayerAction =  { 
-    playerType: '', 
-    playerState: [],
-    activeHand: ''
-  };
 
   constructor() { }
 
@@ -40,12 +34,12 @@ export class PlayerComponent implements OnInit {
   }
 
   handClickedHandler(hand: string) {
-      this.send = { 
+      let send = { 
         playerType: this.playerType, 
         playerState: [this.LFingers, this.RFingers],
         activeHand: hand
       };
 
-      this.playerAction.emit( this.send );
+      this.playerActionAtr.emit( send );
   }
 }
