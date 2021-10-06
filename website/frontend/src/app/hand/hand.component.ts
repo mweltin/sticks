@@ -16,6 +16,9 @@ export class HandComponent implements OnInit, OnChanges{
   orientation: string = '';
   
   @Input()
+  flip: Boolean = false;
+
+  @Input()
   fingers: number = 1;
 
   @Output() 

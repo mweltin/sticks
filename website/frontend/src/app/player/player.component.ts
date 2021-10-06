@@ -17,6 +17,9 @@ export class PlayerComponent implements OnInit {
   @Input()
   RFingers: number = 1;
 
+  @Input()
+  flip: Boolean = false;
+
   @Output() 
   playerActionAtr: EventEmitter<PlayerAction> = new EventEmitter();
 

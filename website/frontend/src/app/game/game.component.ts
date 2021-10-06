@@ -52,28 +52,8 @@ export class GameComponent implements OnInit {
         (res: any) => {
           console.log("turn service returned an object " + res);
           this.changeActivePlayer();
-
-          this.HLFingers = res.state[0][0];
-          this.HRFingers = res.state[0][1];
-          this.QLFingers = res.state[1][0];
-          this.QRFingers = res.state[1][1];
-
-          this.actionQueue = {
-            activePlayer: '',
-            human:  {    
-              playerState: [],
-              activeHand: '',
-              playerType: ''
-            },
-            qlearning: {    
-              playerState: [],  
-              activeHand: '',
-              playerType: ''
-            }
-          };
-          setTimeout(() => {
-            this.show = false
-         }, 250)
+          this.updateHands(res);
+          this.clearActionQueue();
         },
         (error: any) => 
           console.log(error)
@@ -104,4 +84,26 @@ export class GameComponent implements OnInit {
     }
   }
 
+  clearActionQueue(){
+    this.actionQueue = {
+      activePlayer: '',
+      human:  {    
+        playerState: [],
+        activeHand: '',
+        playerType: ''
+      },
+      qlearning: {    
+        playerState: [],  
+        activeHand: '',
+        playerType: ''
+      }
+    };
+  }
+
+  updateHands(res: any){
+    this.HLFingers = res.state[0][0];
+    this.HRFingers = res.state[0][1];
+    this.QLFingers = res.state[1][0];
+    this.QRFingers = res.state[1][1];
+  }
 }

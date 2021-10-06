@@ -3,11 +3,16 @@
         orientation="left" 
         (handClicked)="handClickedHandler($event)"
         [fingers]=LFingers
+        [flip]=flip
     >
     </app-hand>
-    <app-hand orientation="right"         
+    <app-hand 
+    orientation="right"         
     (handClicked)="handClickedHandler($event)"
-    [fingers]=RFingers></app-hand>
+    [fingers]=RFingers
+    [flip]=flip
+    >
+</app-hand>
 </div>
 <div>
     <button (click)="swap()">Swap</button>

@@ -2,3 +2,10 @@ img {
     height: 20em;
     width: 15em;
 }
+
+.flip {
+    border-width: 10px;
+    border-color: rgb(252, 4, 4);
+    border-style: solid;
+    transform: rotateX(180deg);
+}

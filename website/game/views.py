@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from django.template import loader
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
+import os
 import json
 import csv
 
@@ -46,7 +48,8 @@ def turn(request):
         # def step(state_idx, player_idx, action_idx):
         new_state = env.step(state_index, 0, action_index)
     else:
-        with open('../../../qlearning/q_table.csv', mode='r') as file:
+        file_path = os.path.join(settings.FILES_DIR, 'q_table.csv')
+        with open(file_path, mode='r') as file:
             q_table = csv.reader(file)
 
     retval = env.step(state_index, 1, action_index)
