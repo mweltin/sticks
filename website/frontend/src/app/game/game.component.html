@@ -3,15 +3,18 @@
         <div class="col-10">
             <div id=plying_field>
                 <app-player 
-                    playerType="qlearning" 
-                    [RFingers]=HRFingers 
-                    [LFingers]=HLFingers
+                    playerType="qlearning"
+                    [RFingers]=QRFingers 
+                    [LFingers]=QLFingers 
                     [flip]=true
                     (playerActionAtr)="playerActionHandler($event)"
                     (swapAction)="swapActionHandler(message)"
                 >
                 </app-player>
-                <app-player playerType="human" [RFingers]=QRFingers [LFingers]=QLFingers
+                <app-player 
+                    playerType="human" 
+                    [RFingers]=HRFingers 
+                    [LFingers]=HLFingers
                     (playerActionAtr)="playerActionHandler($event)"
                     (swapAction)="swapActionHandler(message)"
                 >

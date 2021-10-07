@@ -38,8 +38,27 @@ export class GameComponent implements OnInit {
     this.whoesTurnIsIt = '';
   }
 
+  aiTakeTurn(){
+    this.actionQueue.activePlayer = this.whoesTurnIsIt;
+    this.actionQueue.human.playerState = [this.HLFingers, this.HRFingers];
+    this.actionQueue.qlearning.playerState = [this.QLFingers, this.QRFingers];
+      this.turnSrv.takeATurn(this.actionQueue).subscribe(
+        (res: any) => {
+          console.log("turn service returned an object " + res);
+          this.changeActivePlayer();
+          this.updateHands(res);
+          this.clearActionQueue();
+        },
+        (error: any) => 
+          console.log(error)
+      );
+  }
+
   playerActionHandler( action:PlayerAction )
   {
+    if(this.whoesTurnIsIt == 'qlearning'){
+      return;
+    }
     if(action.playerType == 'qlearning'){
       this.actionQueue.qlearning = action;
     }
@@ -67,6 +86,11 @@ export class GameComponent implements OnInit {
     } 
     if (player == 'qlearning'){
       this.whoesTurnIsIt = 'qlearning';
+      //@todo make UI elements not clickable 
+      //pause for a sec to make it look like the AI is thinking
+      setTimeout(() => {
+        this.aiTakeTurn();
+      }, 1000);
     }
   }
 
@@ -79,6 +103,9 @@ export class GameComponent implements OnInit {
     if(this.whoesTurnIsIt == 'human')
     {
       this.whoesTurnIsIt = 'qlearning';
+      setTimeout(() => {
+        this.aiTakeTurn();
+      }, 1000);
     } else {
       this.whoesTurnIsIt = 'human';
     }

@@ -7,6 +7,7 @@ from django.conf import settings
 import os
 import json
 import csv
+import numpy as np
 
 # importing sys
 import sys
@@ -32,40 +33,40 @@ def index(request):
 
 @csrf_exempt
 def turn(request):
+    active_player_index = None
+    action_index = None
     data = json.loads(request.body)
     data = data['turnData']
     state = [data['human']['playerState'], data['qlearning']['playerState']]
     state_index = env.state_table.index(state)
-    if(data['activePlayer'] == 'human'):
+    if (data['activePlayer'] == 'human'):
         active_player_index = 0
+        action_index = env.action_table.index(getActionArray(data))
 
     if (data['activePlayer'] == 'qlearning'):
         active_player_index = 1
 
-    action_index = env.action_table.index( getActionArray(data) )
-
-    if data['activePlayer'] == 'human':
-        # def step(state_idx, player_idx, action_idx):
-        new_state = env.step(state_index, 0, action_index)
-    else:
+    if data['activePlayer'] == 'qlearning':
         file_path = os.path.join(settings.FILES_DIR, 'q_table.csv')
         with open(file_path, mode='r') as file:
-            q_table = csv.reader(file)
+            q_table = list(csv.reader(file, quoting=csv.QUOTE_NONNUMERIC))
 
-    retval = env.step(state_index, 1, action_index)
+        action_index = np.nanargmax(q_table[state_index])
+
+    retval = env.step(state_index, active_player_index, action_index)
     returnVal = {
-        'state' : env.state_table[retval[0]],
+        'state': env.state_table[retval[0]],
         'hasWinner': retval[2]
     }
     return JsonResponse(returnVal, safe=False)
 
 
-def getActionArray( data ):
+def getActionArray(data):
     retval = []
     if data['human']['activeHand'] == 'right':
         retval.insert(0, 1)
     else:
-         retval.insert(0, 0)
+        retval.insert(0, 0)
 
     if data['qlearning']['activeHand'] == 'right':
         retval.insert(1, 1)
