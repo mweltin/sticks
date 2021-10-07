@@ -7,7 +7,7 @@
     >
     </app-hand>
     <div class="col-2 align-self-center">
-        <button class="btn btn-info" (click)="swap()" [disabled]="!canSwap()">Swap</button>
+        <button class="btn btn-info" (click)="swap()" [disabled]="!canSwap()" [hidden]="playerType=='qlearning'">Swap</button>
     </div>
     <app-hand class="col-5 pull-left"
     orientation="right"         
