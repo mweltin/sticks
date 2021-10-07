@@ -24,7 +24,7 @@ export class PlayerComponent implements OnInit {
   playerActionAtr: EventEmitter<PlayerAction> = new EventEmitter();
 
   @Output() 
-  swapAction: EventEmitter<Object> = new EventEmitter();
+  swapAction: EventEmitter<any> = new EventEmitter();
 
   constructor() { }
 
@@ -33,7 +33,10 @@ export class PlayerComponent implements OnInit {
   }
 
   swap() {
-    this.swapAction.emit("perform swap action for " + this.playerType +"." );
+    let hand = [this.LFingers, this.RFingers];
+    hand.sort();
+    let temp = hand[0] / 2; 
+    this.swapAction.emit({'playerType':this.playerType, 'value':temp});
   }
 
   handClickedHandler(hand: string) {
@@ -44,5 +47,12 @@ export class PlayerComponent implements OnInit {
       };
 
       this.playerActionAtr.emit( send );
+  }
+
+  canSwap(): Boolean {
+    if( ( this.LFingers == 0 &&  ! (this.RFingers % 2)) || (this.RFingers == 0 && ! (this.LFingers % 2))){
+        return true;
+    }
+    return false;
   }
 }

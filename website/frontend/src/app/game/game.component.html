@@ -8,7 +8,7 @@
                     [LFingers]=QLFingers 
                     [flip]=true
                     (playerActionAtr)="playerActionHandler($event)"
-                    (swapAction)="swapActionHandler(message)"
+                    (swapAction)="swapActionHandler($event)"
                 >
                 </app-player>
                 <app-player 
@@ -16,7 +16,7 @@
                     [RFingers]=HRFingers 
                     [LFingers]=HLFingers
                     (playerActionAtr)="playerActionHandler($event)"
-                    (swapAction)="swapActionHandler(message)"
+                    (swapAction)="swapActionHandler($event)"
                 >
                 </app-player>
             </div>

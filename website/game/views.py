@@ -60,6 +60,16 @@ def turn(request):
     }
     return JsonResponse(returnVal, safe=False)
 
+@csrf_exempt
+def swap(request):
+    data = json.loads(request.body)
+    data = data['turnData']
+    if (data['activePlayer'] == 'human'):
+        state = data['human']['playerState']
+    if (data['activePlayer'] == 'qlearning'):
+        state = data['qlearning']['playerState']
+    state = rules.swap(state)
+    return JsonResponse(state, safe=False)
 
 def getActionArray(data):
     retval = []

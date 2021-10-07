@@ -17,7 +17,6 @@ export class GameComponent implements OnInit {
   QRFingers: number = 1;
   HLFingers: number = 1;
   HRFingers: number = 1;
-  message: string = '';
   actionQueue: ActionQueue =     {
     activePlayer: '',
     human:  {    
@@ -56,7 +55,7 @@ export class GameComponent implements OnInit {
 
   playerActionHandler( action:PlayerAction )
   {
-    if(this.whoesTurnIsIt == 'qlearning'){
+    if(this.whoesTurnIsIt == 'qlearning' || this.whoesTurnIsIt == ''){
       return;
     }
     if(action.playerType == 'qlearning'){
@@ -70,6 +69,9 @@ export class GameComponent implements OnInit {
       this.turnSrv.takeATurn(this.actionQueue).subscribe(
         (res: any) => {
           console.log("turn service returned an object " + res);
+          if(res.hasWinner == true){
+            alert(this.whoesTurnIsIt +   " has won!" + "Refresh browser to play again. ");
+          }
           this.changeActivePlayer();
           this.updateHands(res);
           this.clearActionQueue();
@@ -94,8 +96,15 @@ export class GameComponent implements OnInit {
     }
   }
 
-  swapActionHandler(message: string){
-    console.log(message);
+  swapActionHandler(message:any){
+    console.log(message.playerType + "  " + message.value);
+    if(message.playerType = 'human'){
+      this.HLFingers = message.value;
+      this.HRFingers = message.value;
+    } else {
+      this.QLFingers = message.value;
+      this.QRFingers = message.value;
+    }
     this.changeActivePlayer();
   }
 

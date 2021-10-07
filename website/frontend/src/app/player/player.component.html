@@ -1,20 +1,21 @@
-<div>
-    <app-hand 
+<div class="row">
+    <app-hand class="col-5 pull-right"
         orientation="left" 
         (handClicked)="handClickedHandler($event)"
         [fingers]=LFingers
         [flip]=flip
     >
     </app-hand>
-    <app-hand 
+    <div class="col-2 align-self-center">
+        <button class="btn btn-info" (click)="swap()" [disabled]="!canSwap()">Swap</button>
+    </div>
+    <app-hand class="col-5 pull-left"
     orientation="right"         
     (handClicked)="handClickedHandler($event)"
     [fingers]=RFingers
     [flip]=flip
     >
-</app-hand>
+    </app-hand>
 </div>
-<div>
-    <button (click)="swap()">Swap</button>
-</div>
+
 
