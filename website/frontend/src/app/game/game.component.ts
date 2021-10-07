@@ -43,7 +43,7 @@ export class GameComponent implements OnInit {
     this.actionQueue.qlearning.playerState = [this.QLFingers, this.QRFingers];
       this.turnSrv.takeATurn(this.actionQueue).subscribe(
         (res: any) => {
-          console.log("turn service returned an object " + res);
+          console.log("turn service returned an object " + JSON.stringify(res));
           this.changeActivePlayer();
           this.updateHands(res);
           this.clearActionQueue();
@@ -68,7 +68,7 @@ export class GameComponent implements OnInit {
       this.actionQueue.activePlayer = this.whoesTurnIsIt;
       this.turnSrv.takeATurn(this.actionQueue).subscribe(
         (res: any) => {
-          console.log("turn service returned an object " + res);
+          console.log("turn service returned an object " + JSON.stringify(res));
           if(res.hasWinner == true){
             alert(this.whoesTurnIsIt +   " has won!" + "Refresh browser to play again. ");
           }

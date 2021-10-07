@@ -35,7 +35,7 @@ export class PlayerComponent implements OnInit {
   swap() {
     let hand = [this.LFingers, this.RFingers];
     hand.sort();
-    let temp = hand[0] / 2; 
+    let temp = hand[1] / 2; 
     this.swapAction.emit({'playerType':this.playerType, 'value':temp});
   }
 
