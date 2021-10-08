@@ -134,3 +134,4 @@ website/frontend/node_modules/
 
 sticksvenv  
 *.code-workspace
+.DS_Store

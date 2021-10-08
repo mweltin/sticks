@@ -23,7 +23,9 @@ Enter into the repository and install the requirements.
 
 ### Q-learning
 To run the Q-Learning algorithm enter into sticks/qlearning directory and run the following command
+
 ```python qlearning.py```
+
 The output from this program is a file called q_table.csv.  This file holds the information the algorithm "learned"
 
 ### Playing the game
@@ -36,11 +38,13 @@ Then follow the instructions in the console.  Yes the UI is horrible, but I'm wo
 
 ### Unit tests
 To run tests use unittest from the tests directory
-$ python -m unittest
+
+```$ python -m unittest discover -s ./tests```
 
 For code coverage run coverage and then reports
-$ coverage run -m unittest
-$ coverage report
+
+```$ coverage run -m unittest discover -s ./tests  ```
+```$ coverage report```
 
 ### Docker
 Build it yourself
