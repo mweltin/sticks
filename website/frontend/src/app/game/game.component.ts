@@ -10,14 +10,25 @@ import { PlayerAction } from '../player-action';
 })
 export class GameComponent implements OnInit {
 
-  // [[human left, human right][qlearning left, qlearning right]]
-  state: number[][] = [[1,1], [1,1]];
-  whoesTurnIsIt: string = '';
-  QLFingers: number = 1;
-  QRFingers: number = 1;
-  HLFingers: number = 1;
-  HRFingers: number = 1;
-  actionQueue: ActionQueue =     {
+  // Initialzise all properties to empty values
+
+  // [[ai left, ai right][human left, human right]] this convention comes from the python side
+  state: number[][] = [[0,0], [0,0]]; 
+  
+  // this holds the value of the active player either 'human' or 'qlearning'
+  whoseTurnIsIt: string = '';
+  
+  // These are the inputs to the player component and by extension the hand component
+  QLFingers: number = 0;
+  QRFingers: number = 0;
+  HLFingers: number = 0;
+  HRFingers: number = 0;
+
+  // Action queue is an object that gets passed to the web backend and defines what a the 
+  // desired action is.  The swap action takes place client site.  Hence this object is only 
+  // sent to the server when the human player is touching the hand of the qlearning player. 
+  // the human.activeHand is the hand the human will use to touch the qleaning's activeHand.
+  actionQueue: ActionQueue = {
     activePlayer: '',
     human:  {    
       playerState: [],
@@ -31,22 +42,26 @@ export class GameComponent implements OnInit {
     }
   };;
 
-  constructor( private turnSrv: TurnService) { }
+  constructor( private turnSrv: TurnService) { 
+
+  }
 
   ngOnInit(): void {
-    this.whoesTurnIsIt = '';
+    // now that we are an actual component set the initial state. 
+    this.whoseTurnIsIt = '';
+    this.QLFingers = 1;
+    this.QRFingers = 1;
+    this.HLFingers = 1;
+    this.HRFingers = 1;
   }
 
   aiTakeTurn(){
-    this.actionQueue.activePlayer = this.whoesTurnIsIt;
+    this.actionQueue.activePlayer = this.whoseTurnIsIt;
     this.actionQueue.human.playerState = [this.HLFingers, this.HRFingers];
     this.actionQueue.qlearning.playerState = [this.QLFingers, this.QRFingers];
       this.turnSrv.takeATurn(this.actionQueue).subscribe(
         (res: any) => {
-          console.log("turn service returned an object " + JSON.stringify(res));
-          this.changeActivePlayer();
-          this.updateHands(res);
-          this.clearActionQueue();
+          this.processTurnSrvResults(res);
         },
         (error: any) => 
           console.log(error)
@@ -55,26 +70,25 @@ export class GameComponent implements OnInit {
 
   playerActionHandler( action:PlayerAction )
   {
-    if(this.whoesTurnIsIt == 'qlearning' || this.whoesTurnIsIt == ''){
+    // click all you want we are not doing anything until it is your turn. 
+    if(this.whoseTurnIsIt == 'qlearning' || this.whoseTurnIsIt == ''){
       return;
     }
+
+    // you can click hands in any order and even change your mind (sort of).  
     if(action.playerType == 'qlearning'){
       this.actionQueue.qlearning = action;
     }
     if(action.playerType == 'human'){
       this.actionQueue.human = action;
     }
+
+    // As soon as both human and qlearning actions are set we submit to the backend. 
     if( this.actionQueue.human.playerType != '' && this.actionQueue.qlearning.playerType != '' ){
-      this.actionQueue.activePlayer = this.whoesTurnIsIt;
+      this.actionQueue.activePlayer = this.whoseTurnIsIt;
       this.turnSrv.takeATurn(this.actionQueue).subscribe(
         (res: any) => {
-          console.log("turn service returned an object " + JSON.stringify(res));
-          if(res.hasWinner == true){
-            alert(this.whoesTurnIsIt +   " has won!" + "Refresh browser to play again. ");
-          }
-          this.changeActivePlayer();
-          this.updateHands(res);
-          this.clearActionQueue();
+          this.processTurnSrvResults(res);
         },
         (error: any) => 
           console.log(error)
@@ -82,13 +96,24 @@ export class GameComponent implements OnInit {
     }
   }
 
+  processTurnSrvResults(res: any){
+    console.log("turn service returned an object " + JSON.stringify(res));
+    if(res.hasWinner == true){
+      alert(this.whoseTurnIsIt +   " has won!" + "Refresh browser to play again. ");
+    }
+    this.updateHands(res);
+    this.clearActionQueue();
+    this.changeActivePlayer();
+  }
+  
+  // When the app loads two buttons 
   whoGoesFirst(player : string){
     if( player == 'human' ){
-      this.whoesTurnIsIt = 'human';
+      this.whoseTurnIsIt = 'human';
     } 
     if (player == 'qlearning'){
-      this.whoesTurnIsIt = 'qlearning';
-      //@todo make UI elements not clickable 
+      this.whoseTurnIsIt = 'qlearning';
+
       //pause for a sec to make it look like the AI is thinking
       setTimeout(() => {
         this.aiTakeTurn();
@@ -96,6 +121,7 @@ export class GameComponent implements OnInit {
     }
   }
 
+  // the backend is stateless so it's easier to just do the swap client site.
   swapActionHandler(message:any){
     console.log(message.playerType + "  " + message.value);
     if(message.playerType = 'human'){
@@ -108,15 +134,17 @@ export class GameComponent implements OnInit {
     this.changeActivePlayer();
   }
 
+  // sets the active player.  When the active player switches to the qlearning AI it also 
+  // takes it's turn. 
   changeActivePlayer(){
-    if(this.whoesTurnIsIt == 'human')
+    if(this.whoseTurnIsIt == 'human')
     {
-      this.whoesTurnIsIt = 'qlearning';
+      this.whoseTurnIsIt = 'qlearning';
       setTimeout(() => {
         this.aiTakeTurn();
       }, 1000);
     } else {
-      this.whoesTurnIsIt = 'human';
+      this.whoseTurnIsIt = 'human';
     }
   }
 
@@ -137,9 +165,9 @@ export class GameComponent implements OnInit {
   }
 
   updateHands(res: any){
-    this.HLFingers = res.state[0][0];
-    this.HRFingers = res.state[0][1];
-    this.QLFingers = res.state[1][0];
-    this.QRFingers = res.state[1][1];
+    this.HLFingers = res.state[1][0];
+    this.HRFingers = res.state[1][1];
+    this.QLFingers = res.state[0][0];
+    this.QRFingers = res.state[0][1];
   }
 }

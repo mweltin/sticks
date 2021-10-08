@@ -37,14 +37,14 @@ def turn(request):
     action_index = None
     data = json.loads(request.body)
     data = data['turnData']
-    state = [data['human']['playerState'], data['qlearning']['playerState']]
+    state = [data['qlearning']['playerState'], data['human']['playerState']]  # order is important
     state_index = env.state_table.index(state)
     if (data['activePlayer'] == 'human'):
-        active_player_index = 0
+        active_player_index = 1
         action_index = env.action_table.index(getActionArray(data))
 
     if (data['activePlayer'] == 'qlearning'):
-        active_player_index = 1
+        active_player_index = 0
 
     if data['activePlayer'] == 'qlearning':
         file_path = os.path.join(settings.FILES_DIR, 'q_table.csv')
@@ -60,6 +60,7 @@ def turn(request):
     }
     return JsonResponse(returnVal, safe=False)
 
+
 @csrf_exempt
 def swap(request):
     data = json.loads(request.body)
@@ -70,6 +71,12 @@ def swap(request):
         state = data['qlearning']['playerState']
     state = rules.swap(state)
     return JsonResponse(state, safe=False)
+
+
+"""
+This is only called by the human player hence the human hand action is always at index zero.
+"""
+
 
 def getActionArray(data):
     retval = []

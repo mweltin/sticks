@@ -22,12 +22,12 @@
             </div>
         </div>
 
-        <div class="col-2" [hidden]="whoesTurnIsIt !== ''">
+        <div class="col-2" [hidden]="whoseTurnIsIt !== ''">
             <div id=meta_data>
                 <button class="btn btn-success" (click)="whoGoesFirst('human')" >I go First</button>
                 <button class="btn btn-info" (click)="whoGoesFirst('qlearning')" >AI Goes First</button>
             </div>
         </div>
-        <div [hidden]="whoesTurnIsIt == ''">It is {{this.whoesTurnIsIt}}'s turn.</div>
+        <div [hidden]="whoseTurnIsIt == ''">It is {{this.whoseTurnIsIt}}'s turn.</div>
     </div>
 </div>
