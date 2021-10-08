@@ -20,7 +20,7 @@ def eliminate_invalid_actions(state, q_table):
     function will set the value of each invalid action action in the q_table to NAN.  This will ensure that when the
     Q-learning algorithm is deciding which action to take it will avoid invalid actions.
 
-    :param state: the state_table a 2D array of all possible states (i.e. valid combinations of player hands)
+    :param state: The state_table a 2D array of all possible states (i.e. valid combinations of player hands)
     :param q_table: A matrix (2d python list) with dimensions Stats X Actions
     :return:
     """
@@ -47,7 +47,6 @@ def select_random_action(state_index, player_index):
     return possible_action[action_index]
 
 
-# these are only from the perspective of the agent
 def get_reward(state):
     """
     get_reward: The reward system is used by the AI to help it learn.  The Belman equation is trying to maximize it's

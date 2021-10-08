@@ -2,10 +2,15 @@ import environment.env as env
 from copy import deepcopy
 
 
-# Be careful using this Players.agent is 0 and hence "falsy" when evaluating the return value of has_winner
-# look for specific values not truthy or falsy values.
+
 def has_winner(state):
-    # in is the current state of the game two dimension array of two integers each
+    """
+    has_winner: Determine if someone has won the game. Be careful using this Players.agent is 0 and hence "falsy" when
+    evaluating the return value of has_winner look for specific values not truthy or falsy values.
+
+    :param state: Current state of the game (i.e. the fingers on each hand of each player).
+    :return: 0 if IA has won, 1 if the human player has won.  (rules.Players Enum return value)
+    """
     if state[env.Players.agent][env.Hands.left] == 0 and state[env.Players.agent][env.Hands.right] == 0:
         return env.Players.opponent
 
@@ -15,8 +20,15 @@ def has_winner(state):
     return None
 
 
-# inputs: an array with two integer elements
+
 def can_swap(player_state):
+    """
+    can_swap given a single player's state, this is used to decide if a swap is a legal move for them. If a player has
+    zero fingers on one hand and an even number of fingers on the other they are allowed to perform a swap.
+
+    :param player_state: 1D array (list) of the player that is being evaluated.
+    :return: True if the play can swap or False otherwise.
+    """
     # a player can only swap if one hand is at zero and the other is even
     val = deepcopy(player_state)  # make a copy of player_state object reference
     val.sort()
@@ -27,12 +39,23 @@ def can_swap(player_state):
 
 
 def swap(state):
-    # perform the swap action.
+    """
+    swap: Perform the swap action.
+
+    :param state: 1D array (list) of the current players hand.
+    :return: new 1D array after performing the swap
+    """
     state.sort()
     return [int(state[1] / 2), int(state[1] / 2)]
 
 
 def get_opponent_player_index(active_player_index):
+    """
+    get_opponent_player_index: Gets the env.Players Enum value of the non active player.
+
+    :param active_player_index: env.Players Enum of the active player
+    :return: The env.Players Enum of the inactive player.
+    """
     if active_player_index:
         return 0
     return 1
@@ -41,6 +64,17 @@ def get_opponent_player_index(active_player_index):
 # state 2 d array enumerating each Players env.Hands
 # index of the active player
 def take_turn(state, active_player_index, action):
+    """
+    take_turn: This function updates the either the players hand in the case of the swap or the opponents hand
+    in the case of a non-swap action.
+
+    :param state: Current state of the game (i.e. the fingers on each hand of each player).
+    :param active_player_index: env.Players Enum of the active whoe is taking their turn.
+    :param action: A list of env.Actions Enums indicating the action to take.  The list will have one element in
+        the case of a swap, or two elements to indicate which player hand is acting on which hand of their opponent.
+    :return: The new state of the active player in the case of a swap, or the new state fo the opponent in the
+        case of a non-swap action.
+    """
     take_swap = False
     opponent_player_index = None
     opponent_hand = None
@@ -68,10 +102,15 @@ def take_turn(state, active_player_index, action):
     return state
 
 
-# state = 2d array of representing the state of the game
-# player_index indicates who is the active player i.e. the one swapping or attacking
-# returns a dictionary of possible moves
 def get_valid_actions(state, active_player):
+    """
+    get_valid_actions: Some actions are invalid depending on the state of the game.  For example a player can not use
+        a hand that has zero fingers to tap an opponents hand, of perform a swap action if their non zero hand has
+        and odd number of fingers.
+    :param state: Current state of the game (i.e. the fingers on each hand of each player).
+    :param active_player: env.Players Enum of the active player 0 for AI, 1 for human
+    :return: A list of action_table indices for each valid action that the active_player can take.
+    """
     ret_val = []
     if can_swap(state[active_player]):
         ret_val.append(env.action_table.index([env.Actions.SWAP]))
