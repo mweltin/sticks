@@ -23,6 +23,7 @@ Enter into the repository root directory and install the requirred python pages 
 (Optional) Next enter into the website/frontend directory and build the angular app with the following commands.
 
 ```npm install```
+
 ```ng build```
 
 ## Alterenate installation 
