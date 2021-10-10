@@ -73,5 +73,3 @@ Build it yourself
 run it
 
 ```docker run -d -p 8000:8000 --name sticks {your tag}```
-
-Grab it from dockerhub (not up yet) mweltin/sticks:latest
