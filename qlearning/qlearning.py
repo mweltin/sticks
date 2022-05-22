@@ -11,14 +11,23 @@ def main():
     action_space_size = len(env.action_table)
     state_space_size = len(env.state_table)
 
+    ''' initialize q-table with all zeros, i.e. no knowledge'''
     q_table = np.zeros((state_space_size, action_space_size))
     env.eliminate_invalid_actions(env.state_table, q_table)
+
+    '''how many games to play'''
     num_episodes = 60000
+    ''' how many turns to take in a game before starting a new game. '''
     max_steps_per_episode = 50
 
+    '''learning rate how quickly the agent abandons the previous q value in the 
+        qtable for a new q value for a give (state, action) pair.  
+        The higher the learning rate the quicker the agent will adopt the new
+        q value. '''
     learning_rate = 0.1
     discount_rate = 0.99
 
+    '''The following values control the exploration / exploitation of the agent'''
     exploration_rate = 1
     max_exploration_rate = 1
     min_exploration_rate = 0.01
