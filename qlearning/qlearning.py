@@ -72,13 +72,12 @@ def main(
                 break
 
             q_table[state_idx][action] = q_table[state_idx][action] * (1 - _learning_rate) + \
-                                         _learning_rate * (
-                                                 reward + _discount_rate * np.nanargmax(q_table[new_state_idx]))
+                _learning_rate * (reward + _discount_rate * np.nanargmax(q_table[new_state_idx]))
 
             state_idx = new_state_idx
             rewards_current_episode += reward
 
-            # opponets turn
+            # opponents turn
             action = env.select_random_action(state_idx, 1)
             new_state_idx, reward, done, info = env.step(state_idx, env.Players.opponent, action)
             state_idx = new_state_idx
@@ -87,7 +86,7 @@ def main(
                 break
         # Exploration rate decay
         exploration_rate = _min_exploration_rate + \
-                           (max_exploration_rate - _min_exploration_rate) * np.exp(-_exploration_decay_rate * episode)
+            (max_exploration_rate - _min_exploration_rate) * np.exp(-_exploration_decay_rate * episode)
         # Add current episode reward to total rewards list
         rewards_all_episodes.append(rewards_current_episode)
 

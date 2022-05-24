@@ -33,8 +33,10 @@ If you are familar with docker, and can run linux based images grab the latest v
 ### Q-learning
 To run the Q-Learning algorithm enter into sticks/qlearning directory.  Verify that the sticks root directory is in
 your PYTHONPATH environment variable.
+
 ```export PYTHONPATH={ABSOLUTE PATH TO}/sticks```
-Then run the following command
+T
+hen run the following command
 ```python qlearning.py```
 
 The output from this program is a file called q_table.csv.  This file holds the information the algorithm "learned"

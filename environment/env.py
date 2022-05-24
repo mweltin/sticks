@@ -17,7 +17,7 @@ def eliminate_invalid_actions(state, q_table):
     """
     eliminate_invalid_actions: For certain states certain actions are not allowed.  The 'swap' action for example is not
     allowed when both hands have a value, or one hand is zero but the other hand has an odd number of fingers.  This
-    function will set the value of each invalid action action in the q_table to NAN.  This will ensure that when the
+    function will set the value of each invalid action in the q_table to NAN.  This will ensure that when the
     Q-learning algorithm is deciding which action to take it will avoid invalid actions.
 
     :param state: The state_table a 2D array of all possible states (i.e. valid combinations of player hands)
