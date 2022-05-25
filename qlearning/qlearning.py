@@ -44,6 +44,8 @@ def main(
     _exploration_decay_rate = exploration_decay_rate
 
     rewards_all_episodes = []
+    '''used to decide when to save a q table always save last table and highest reward table'''
+    max_reward = 0
 
     # Q-learning algorithm
     for episode in range(_num_episodes):
@@ -72,7 +74,8 @@ def main(
                 break
 
             q_table[state_idx][action] = q_table[state_idx][action] * (1 - _learning_rate) + \
-                _learning_rate * (reward + _discount_rate * np.nanargmax(q_table[new_state_idx]))
+                                         _learning_rate * (
+                                                 reward + _discount_rate * np.nanargmax(q_table[new_state_idx]))
 
             state_idx = new_state_idx
             rewards_current_episode += reward
@@ -86,9 +89,12 @@ def main(
                 break
         # Exploration rate decay
         exploration_rate = _min_exploration_rate + \
-            (max_exploration_rate - _min_exploration_rate) * np.exp(-_exploration_decay_rate * episode)
+                           (max_exploration_rate - _min_exploration_rate) * np.exp(-_exploration_decay_rate * episode)
         # Add current episode reward to total rewards list
         rewards_all_episodes.append(rewards_current_episode)
+        if rewards_current_episode > max_reward:
+            max_reward = rewards_current_episode
+            save_output(q_table, prefix='max_reward')
 
     # Calculate and print the average reward per thousand episodes
     rewards_per_thousand_episodes = np.split(np.array(rewards_all_episodes), _num_episodes / 1000)
@@ -104,13 +110,26 @@ def main(
         temp = [*env.state_table[idx][0], *env.state_table[idx][1], *value]
         retval.append(temp)
 
-    np.savetxt("state_q_table.csv",
+    save_output(retval)
+
+
+def save_output(input_table, prefix=None):
+    file_name = "q_table"
+    if prefix:
+        file_name = file_name + "_" + str(prefix)
+
+    retval = [['P L', 'P R', 'O L', 'O R', 'swap', 'L L', 'L R', 'R R', 'R L']]
+    for idx, value in enumerate(input_table):
+        temp = [*env.state_table[idx][0], *env.state_table[idx][1], *value]
+        retval.append(temp)
+
+    np.savetxt("state_" + file_name + ".csv",
                retval,
                delimiter=", ",
                fmt='% s')
 
-    np.savetxt("q_table.csv",
-               q_table,
+    np.savetxt(file_name + ".csv",
+               input_table,
                delimiter=", ",
                fmt='% s')
 
