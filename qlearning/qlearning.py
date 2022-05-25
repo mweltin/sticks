@@ -118,7 +118,7 @@ def save_output(input_table, prefix=None):
     if prefix:
         file_name = file_name + "_" + str(prefix)
 
-    retval = [['P L', 'P R', 'O L', 'O R', 'swap', 'L L', 'L R', 'R R', 'R L']]
+    retval = []
     for idx, value in enumerate(input_table):
         temp = [*env.state_table[idx][0], *env.state_table[idx][1], *value]
         retval.append(temp)
@@ -126,7 +126,8 @@ def save_output(input_table, prefix=None):
     np.savetxt("state_" + file_name + ".csv",
                retval,
                delimiter=", ",
-               fmt='% s')
+               fmt='% s',
+               header='P L, P R, O L, O R, swap, L L, L R, R R, R L')
 
     np.savetxt(file_name + ".csv",
                input_table,
