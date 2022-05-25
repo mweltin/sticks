@@ -26,8 +26,8 @@ Enter into the repository root directory and install the requirred python pages 
 
 ```ng build```
 
-## Alterenate installation 
-If you are familar with docker, and can run linux based images grab the latest version on [dockerhub/sticks](https://hub.docker.com/repository/docker/mweltin/sticks)
+## Alternate installation 
+If you are familiar with docker, and can run linux based images grab the latest version on [dockerhub/sticks](https://hub.docker.com/repository/docker/mweltin/sticks)
 
 
 ### Q-learning
