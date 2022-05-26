@@ -105,12 +105,7 @@ def main(
         print(count, ": ", str(sum(r / 1000)))
         count += 1000
 
-    retval = []
-    for idx, value in enumerate(q_table):
-        temp = [*env.state_table[idx][0], *env.state_table[idx][1], *value]
-        retval.append(temp)
-
-    save_output(retval)
+    save_output(q_table)
 
 
 def save_output(input_table, prefix=None):
