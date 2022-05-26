@@ -11,8 +11,8 @@ parser = argparse.ArgumentParser(description='Process some integers.')
 
 
 def main(
-        num_episodes=60000,
-        max_steps_per_episode=50,
+        num_episodes=10000,
+        max_steps_per_episode=75,
         learning_rate=0.1,
         discount_rate=0.99,
         min_exploration_rate=0.01,
