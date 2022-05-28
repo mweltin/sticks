@@ -9,11 +9,20 @@ import { TurnService } from "../turn.service";
 export class HistoryComponent implements OnInit {
 
   history: string[] = [];
+  buffer: string[] = [];
 
   constructor(private turnSrv: TurnService) { }
 
   ngOnInit(): void {
-    this.turnSrv.currentPlay.subscribe(msg => { if(msg.length) { this.history.push(msg) } } );
+    this.turnSrv.currentPlay.subscribe(
+      msg => {
+        if (msg.length) {
+          this.buffer.push(msg);
+          this.history = this.buffer.slice().reverse()
+        }
+      }
+    )
   }
+
 
 }
