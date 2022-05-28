@@ -11,22 +11,18 @@ import {stringify} from "@angular/compiler/src/util";
 export class TurnService {
 
    private currentPlayMessage = new BehaviorSubject('');
-   currentPlay = this.currentPlayMessage.asObservable();
+   public currentPlay = this.currentPlayMessage.asObservable();
 
   constructor(private http: HttpClient) { }
 
   private turnEndpoint = '/turn';
 
   takeATurn(turnData: ActionQueue){
-    let play = this.http.post(this.turnEndpoint, {turnData});
-    this.updatePlayMessage('sdfsdf')
-    return play
+    return this.http.post(this.turnEndpoint, {turnData});
   }
 
-  updatePlayMessage(message: string) {
+  public updatePlayMessage(message: string) {
     this.currentPlayMessage.next(message)
   }
+
 }
-
-
-

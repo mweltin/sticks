@@ -98,12 +98,13 @@ export class GameComponent implements OnInit {
 
   processTurnSrvResults(res: any){
     console.log("turn service returned an object " + JSON.stringify(res));
-    if(res.hasWinner == true){
-      alert(this.whoseTurnIsIt +   " has won!" + "Refresh browser to play again. ");
-    }
+    this.turnSrv.updatePlayMessage(JSON.stringify(res))
     this.updateHands(res);
     this.clearActionQueue();
     this.changeActivePlayer();
+    if(res.hasWinner == true){
+      alert(this.whoseTurnIsIt +   " has won!" + "Refresh browser to play again. ");
+    }
   }
 
   // When the app loads two buttons
@@ -123,6 +124,7 @@ export class GameComponent implements OnInit {
 
   // the backend is stateless so it's easier to just do the swap client site.
   swapActionHandler(message:any){
+    this.turnSrv.updatePlayMessage("took a swap")
     console.log(message.playerType + "  " + message.value);
     if(message.playerType = 'human'){
       this.HLFingers = message.value;

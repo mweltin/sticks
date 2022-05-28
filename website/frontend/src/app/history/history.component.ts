@@ -13,7 +13,7 @@ export class HistoryComponent implements OnInit {
   constructor(private turnSrv: TurnService) { }
 
   ngOnInit(): void {
-    this.turnSrv.currentPlay.subscribe(msg => this.history.push(msg) );
+    this.turnSrv.currentPlay.subscribe(msg => { if(msg.length) { this.history.push(msg) } } );
   }
 
 }
