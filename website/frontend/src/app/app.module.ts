@@ -10,13 +10,15 @@ import { PlayerComponent } from './player/player.component';
 import { GameComponent } from './game/game.component';
 import { TurnService } from './turn.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { HistoryComponent } from './history/history.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HandComponent,
     PlayerComponent,
-    GameComponent
+    GameComponent,
+    HistoryComponent
   ],
   imports: [
     BrowserModule,

@@ -2,7 +2,6 @@ import environment.env as env
 from copy import deepcopy
 
 
-
 def has_winner(state):
     """
     has_winner: Determine if someone has won the game. Be careful using this Players.agent is 0 and hence "falsy" when
@@ -18,7 +17,6 @@ def has_winner(state):
         return env.Players.agent
 
     return None
-
 
 
 def can_swap(player_state):

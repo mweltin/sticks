@@ -2,18 +2,18 @@
     <div class="row">
         <div class="col-10">
             <div id=plying_field>
-                <app-player 
+                <app-player
                     playerType="qlearning"
-                    [RFingers]=QRFingers 
-                    [LFingers]=QLFingers 
+                    [RFingers]=QRFingers
+                    [LFingers]=QLFingers
                     [flip]=true
                     (playerActionAtr)="playerActionHandler($event)"
                     (swapAction)="swapActionHandler($event)"
                 >
                 </app-player>
-                <app-player 
-                    playerType="human" 
-                    [RFingers]=HRFingers 
+                <app-player
+                    playerType="human"
+                    [RFingers]=HRFingers
                     [LFingers]=HLFingers
                     (playerActionAtr)="playerActionHandler($event)"
                     (swapAction)="swapActionHandler($event)"
@@ -28,6 +28,9 @@
                 <button class="btn btn-info" (click)="whoGoesFirst('qlearning')" >AI Goes First</button>
             </div>
         </div>
-        <div [hidden]="whoseTurnIsIt == ''">It is {{this.whoseTurnIsIt}}'s turn.</div>
+        <div class="col-2" [hidden]="whoseTurnIsIt == ''">
+            <div>It is {{this.whoseTurnIsIt}}'s turn.</div>
+            <app-history></app-history>
+        </div>
     </div>
 </div>
