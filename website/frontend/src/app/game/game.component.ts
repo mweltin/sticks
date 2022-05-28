@@ -59,6 +59,7 @@ export class GameComponent implements OnInit {
     this.actionQueue.activePlayer = this.whoseTurnIsIt;
     this.actionQueue.human.playerState = [this.HLFingers, this.HRFingers];
     this.actionQueue.qlearning.playerState = [this.QLFingers, this.QRFingers];
+
       this.turnSrv.takeATurn(this.actionQueue).subscribe(
         (res: any) => {
           this.processTurnSrvResults(res);
@@ -86,6 +87,7 @@ export class GameComponent implements OnInit {
     // As soon as both human and qlearning actions are set we submit to the backend.
     if( this.actionQueue.human.playerType != '' && this.actionQueue.qlearning.playerType != '' ){
       this.actionQueue.activePlayer = this.whoseTurnIsIt;
+
       this.turnSrv.takeATurn(this.actionQueue).subscribe(
         (res: any) => {
           this.processTurnSrvResults(res);
@@ -98,7 +100,6 @@ export class GameComponent implements OnInit {
 
   processTurnSrvResults(res: any){
     console.log("turn service returned an object " + JSON.stringify(res));
-    this.turnSrv.updatePlayMessage(JSON.stringify(res))
     this.updateHands(res);
     this.clearActionQueue();
     this.changeActivePlayer();
@@ -124,7 +125,7 @@ export class GameComponent implements OnInit {
 
   // the backend is stateless so it's easier to just do the swap client site.
   swapActionHandler(message:any){
-    this.turnSrv.updatePlayMessage("took a swap")
+    this.turnSrv.updatePlayMessage(message.playerType + " takes a swap")
     console.log(message.playerType + "  " + message.value);
     if(message.playerType = 'human'){
       this.HLFingers = message.value;
