@@ -56,7 +56,8 @@ def turn(request):
     retval = env.step(state_index, active_player_index, action_index)
     returnVal = {
         'state': env.state_table[retval[0]],
-        'hasWinner': retval[2]
+        'hasWinner': retval[2],
+        'action_taken': action_table_index_to_string(action_index, state)
     }
     return JsonResponse(returnVal, safe=False)
 
@@ -91,3 +92,23 @@ def getActionArray(data):
         retval.insert(1, 0)
 
     return retval
+
+
+'''
+From environment agent index is 0, left hand index is 0 right hand index is 1 for hands array
+'''
+
+
+def action_table_index_to_string(idx, hands):
+    if idx > 4 or idx < 0:
+        return "qlearning: ACTION NOT FOUND!"
+    if idx == 0:
+        return "qlearning: takes a swap"
+    if idx == 1:
+        return "qlearning: left (" + str(hands[0][0]) + ") to human left (" +str( hands[1][0]) + ")"
+    if idx == 2:
+        return "qlearning: left (" + str(hands[0][0]) + ") to human right (" + str(hands[1][1]) + ")"
+    if idx == 3:
+        return "qlearning: right (" + str(hands[0][1]) + ") to right (" + str(hands[1][1]) + ")"
+    if idx == 4:
+        return "qlearning: right (" + str(hands[0][1]) + ")to left (" + str(hands[1][0]) + ")"

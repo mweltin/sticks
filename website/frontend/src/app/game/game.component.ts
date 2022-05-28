@@ -10,7 +10,7 @@ import { PlayerAction } from '../player-action';
 })
 export class GameComponent implements OnInit {
 
-  // Initialzise all properties to empty values
+  // Initialize all properties to empty values
 
   // [[ai left, ai right][human left, human right]] this convention comes from the python side
   state: number[][] = [[0,0], [0,0]];
@@ -100,6 +100,9 @@ export class GameComponent implements OnInit {
 
   processTurnSrvResults(res: any){
     console.log("turn service returned an object " + JSON.stringify(res));
+    if( this.whoseTurnIsIt == 'qlearning'){
+      this.turnSrv.updatePlayMessage(res.action_taken)
+    }
     this.updateHands(res);
     this.clearActionQueue();
     this.changeActivePlayer();

@@ -18,12 +18,17 @@ export class TurnService {
   private turnEndpoint = '/turn';
 
   takeATurn(turnData: ActionQueue){
+    let human_hand_value:number
+    let qlearning_hand_value:number
+
     if( turnData.activePlayer == 'human'){
-      let human_hand_value = turnData.human.activeHand == 'left' ? turnData.human.playerState[0]: turnData.human.playerState[1]
-      let qlearning_hand_value = turnData.qlearning.activeHand == 'left' ? turnData.qlearning.playerState[0]: turnData.qlearning.playerState[1]
+      human_hand_value = turnData.human.activeHand == 'left' ? turnData.human.playerState[0]: turnData.human.playerState[1]
+      qlearning_hand_value = turnData.qlearning.activeHand == 'left' ? turnData.qlearning.playerState[0]: turnData.qlearning.playerState[1]
       this.updatePlayMessage("human: "+turnData.human.activeHand+ "("+human_hand_value+") to qlearning " + turnData.qlearning.activeHand + "("+qlearning_hand_value+")")
     }
+
     return this.http.post(this.turnEndpoint, {turnData});
+
   }
 
   public updatePlayMessage(message: string) {
