@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges   } from '@angular/core';
 import { throwError } from "rxjs";
+import { TurnService} from "../turn.service";
+
 @Component({
   selector: 'app-hand',
   templateUrl: './hand.component.html',
@@ -14,18 +16,18 @@ export class HandComponent implements OnInit, OnChanges{
 
   @Input()
   orientation: string = '';
-  
+
   @Input()
   flip: Boolean = false;
 
   @Input()
   fingers: number = 1;
 
-  @Output() 
+  @Output()
   handClicked: EventEmitter<string> = new EventEmitter();
 
-  constructor() { 
-    
+  constructor(private turnSrv: TurnService) {
+
   }
 
   ngOnChanges(changes: SimpleChanges): void
@@ -39,13 +41,13 @@ export class HandComponent implements OnInit, OnChanges{
           case 0:
             this.numberToString = "zero";
             break;
-          case 1: 
+          case 1:
             this.numberToString = "one";
             break;
           case 2:
             this.numberToString = "two";
             break;
-          case 3: 
+          case 3:
             this.numberToString = "three";
             break;
           case 4:
@@ -76,10 +78,15 @@ export class HandComponent implements OnInit, OnChanges{
         default:
           throwError("Hand orientation must be left or right.");
       }
-      
+
   }
 
   handClick(){
+    if( this.fingers == 0){
+      console.log('you can not click on a knocked out hand')
+      alert('you can on click on a knocked out hand')
+      return
+    }
     this.handClicked.emit(this.orientation);
   }
 
