@@ -6,6 +6,7 @@ import numpy as np
 import random
 import environment.env as env
 import argparse
+from os.path import exists
 
 parser = argparse.ArgumentParser(description='Process some integers.')
 
@@ -24,6 +25,7 @@ def main(
     ''' initialize q-table with all zeros, i.e. no knowledge'''
     q_table = np.zeros((state_space_size, action_space_size))
     env.eliminate_invalid_actions(env.state_table, q_table)
+    opponent_q_table = load_max_reward_q_table()
 
     '''how many games to play'''
     _num_episodes = num_episodes
@@ -81,7 +83,10 @@ def main(
             rewards_current_episode += reward
 
             # opponents turn
-            action = env.select_random_action(state_idx, 1)
+            if type(opponent_q_table) == np.ndarray:
+                action = np.nanargmax(opponent_q_table[state_idx])
+            else:
+                action = env.select_random_action(state_idx, 1)
             new_state_idx, reward, done, info = env.step(state_idx, env.Players.opponent, action)
             state_idx = new_state_idx
 
@@ -130,6 +135,15 @@ def save_output(input_table, prefix=None):
                fmt='% s')
 
 
+def load_max_reward_q_table():
+    file_exists = exists('q_table_max_reward.csv')
+    if file_exists:
+        data = np.genfromtxt('q_table_max_reward.csv', delimiter=',')
+        return data
+    else:
+        return False
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Q-algorithm arguments')
     parser.add_argument('--num_episodes', type=int, default=60000,
@@ -144,6 +158,7 @@ if __name__ == '__main__':
                         help='minimum value for exploration/exploitation ration can get')
     parser.add_argument('--exploration_decay_rate', type=float, default=0.001,
                         help='speed at which exploration rate reaches minimum exploration rate')
+
     args = parser.parse_args()
 
     main(num_episodes=args.num_episodes,
