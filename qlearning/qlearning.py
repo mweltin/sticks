@@ -122,7 +122,7 @@ def save_output(input_table, prefix=None):
                retval,
                delimiter=", ",
                fmt='% s',
-               header='P L, P R, O L, O R, swap, L L, L R, R R, R L')
+               header='AI L, AI R, O L, O R, swap, L L, L R, R R, R L')
 
     np.savetxt(file_name + ".csv",
                input_table,
