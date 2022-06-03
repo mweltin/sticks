@@ -72,7 +72,7 @@ For code coverage run coverage and then reports
 ### Docker
 Build it yourself
 
-```docker build -t {add your tag name}```
+```docker build -t {add your tag name} .```
 
 run it
 
