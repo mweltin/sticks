@@ -7,17 +7,19 @@ import random
 import environment.env as env
 import argparse
 from os.path import exists
+import matplotlib.pyplot as plt
 
 parser = argparse.ArgumentParser(description='Process some integers.')
 
 
 def main(
-        num_episodes=10000,
-        max_steps_per_episode=75,
-        learning_rate=0.1,
-        discount_rate=0.99,
-        min_exploration_rate=0.01,
-        exploration_decay_rate=0.001,
+        num_episodes,
+        max_steps_per_episode,
+        learning_rate,
+        discount_rate,
+        min_exploration_rate,
+        exploration_decay_rate,
+        use_q_table_for_actions
 ):
     action_space_size = len(env.action_table)
     state_space_size = len(env.state_table)
@@ -31,6 +33,8 @@ def main(
     _num_episodes = num_episodes
     ''' how many turns to take in a game before starting a new game. '''
     _max_steps_per_episode = max_steps_per_episode
+
+    _use_q_table_for_actions = use_q_table_for_actions
 
     '''learning rate how quickly the agent abandons the previous q value in the 
         qtable for a new q value for a give (state, action) pair.  
@@ -51,6 +55,7 @@ def main(
 
     # Q-learning algorithm
     for episode in range(_num_episodes):
+        finished_on = 'Draw'
         # initialize new episode params
         state_idx = env.reset()  # state is the index in the env.state_table
         done = False
@@ -72,6 +77,7 @@ def main(
             # Update Q-table for Q(s,a)
 
             if done:
+                finished_on = 'AI'
                 rewards_current_episode += reward
                 break
 
@@ -83,7 +89,7 @@ def main(
             rewards_current_episode += reward
 
             # opponents turn
-            if type(opponent_q_table) == np.ndarray:
+            if type(opponent_q_table) == np.ndarray and _use_q_table_for_actions == True:
                 action = np.nanargmax(opponent_q_table[state_idx])
             else:
                 action = env.select_random_action(state_idx, 1)
@@ -91,10 +97,14 @@ def main(
             state_idx = new_state_idx
 
             if done:
+                finished_on = 'Opponent'
                 break
         # Exploration rate decay
         exploration_rate = _min_exploration_rate + \
                            (max_exploration_rate - _min_exploration_rate) * np.exp(-_exploration_decay_rate * episode)
+
+        print(str(episode) + " " + str(exploration_rate) + " " + str(rewards_current_episode) + " " + str(
+            step) + " " + finished_on)
         # Add current episode reward to total rewards list
         rewards_all_episodes.append(rewards_current_episode)
         if rewards_current_episode > max_reward:
@@ -102,15 +112,18 @@ def main(
             save_output(q_table, prefix='max_reward')
 
     # Calculate and print the average reward per thousand episodes
-    rewards_per_thousand_episodes = np.split(np.array(rewards_all_episodes), _num_episodes / 1000)
-    count = 1000
+    rewards_per_thousand_episodes = np.split(np.array(rewards_all_episodes), _num_episodes / 500)
+    count = 500
 
-    print("********Average reward per thousand episodes********\n")
+    print("********Average reward per hundred episodes********\n")
+    squashed = []
     for r in rewards_per_thousand_episodes:
-        print(count, ": ", str(sum(r / 1000)))
-        count += 1000
+        print(count, ": ", str(sum(r / 500)))
+        squashed.append(sum(r/500))
+        count += 500
 
     save_output(q_table)
+    plot_it(squashed)
 
 
 def save_output(input_table, prefix=None):
@@ -144,9 +157,31 @@ def load_max_reward_q_table():
         return False
 
 
+def plot_it(data):
+    # x axis values
+    x = range(1, len(data) + 1)
+    # corresponding y axis values
+    y = data
+
+    # plotting the points
+    plt.plot(x, y)
+
+    # naming the x axis
+    plt.xlabel('Epoch')
+    # naming the y axis
+    plt.ylabel('Reward')
+
+    # giving a title to my graph
+    plt.title('Reward vs Epoch')
+
+    # function to show the plot
+    plt.show()
+    plt.savefig('../data/reward_vs_episode.png')
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Q-algorithm arguments')
-    parser.add_argument('--num_episodes', type=int, default=60000,
+    parser.add_argument('--num_episodes', type=int, default=6000,
                         help='how many games to play')
     parser.add_argument('--max_steps_per_episode', type=int, default=50,
                         help='Number of turns to take in a game before starting a new game.')
@@ -158,7 +193,9 @@ if __name__ == '__main__':
                         help='minimum value for exploration/exploitation ration can get')
     parser.add_argument('--exploration_decay_rate', type=float, default=0.001,
                         help='speed at which exploration rate reaches minimum exploration rate')
-
+    parser.add_argument('--use_q_table_for_actions', type=bool, default=False,
+                        help='If True the agent\'s opponent will use a previously saved q-table.  \
+                        if False the agent\'s opponent will pick actions at random')
     args = parser.parse_args()
 
     main(num_episodes=args.num_episodes,
@@ -166,4 +203,5 @@ if __name__ == '__main__':
          learning_rate=args.learning_rate,
          discount_rate=args.discount_rate,
          min_exploration_rate=args.min_exploration_rate,
-         exploration_decay_rate=args.exploration_decay_rate)
+         exploration_decay_rate=args.exploration_decay_rate,
+         use_q_table_for_actions=args.use_q_table_for_actions)
