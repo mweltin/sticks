@@ -58,7 +58,6 @@ def main(
         finished_on = 'Draw'
         # initialize new episode params
         state_idx = env.reset()  # state is the index in the env.state_table
-        done = False
         rewards_current_episode = 0
 
         for step in range(_max_steps_per_episode):
@@ -82,14 +81,14 @@ def main(
                 break
 
             q_table[state_idx][action] = q_table[state_idx][action] * (1 - _learning_rate) + \
-                                         _learning_rate * (
-                                                 reward + _discount_rate * np.nanargmax(q_table[new_state_idx]))
+                _learning_rate * \
+                (reward + _discount_rate * np.nanargmax(q_table[new_state_idx]))
 
             state_idx = new_state_idx
             rewards_current_episode += reward
 
             # opponents turn
-            if type(opponent_q_table) == np.ndarray and _use_q_table_for_actions == True:
+            if type(opponent_q_table) == np.ndarray and _use_q_table_for_actions is True:
                 action = np.nanargmax(opponent_q_table[state_idx])
             else:
                 action = env.select_random_action(state_idx, 1)
@@ -115,11 +114,11 @@ def main(
     rewards_per_thousand_episodes = np.split(np.array(rewards_all_episodes), _num_episodes / 500)
     count = 500
 
-    print("********Average reward per hundred episodes********\n")
+    print("********Average reward per 5 hundred episodes********\n")
     squashed = []
     for r in rewards_per_thousand_episodes:
         print(count, ": ", str(sum(r / 500)))
-        squashed.append(sum(r/500))
+        squashed.append(sum(r / 500))
         count += 500
 
     save_output(q_table)
@@ -172,11 +171,11 @@ def plot_it(data):
     plt.ylabel('Reward')
 
     # giving a title to my graph
-    plt.title('Reward vs Epoch')
+    plt.title('Average reward per 500 episodes')
 
     # function to show the plot
-    plt.show()
     plt.savefig('../data/reward_vs_episode.png')
+    plt.show()
 
 
 if __name__ == '__main__':
