@@ -38,7 +38,7 @@ jobs:
           push: true
           # tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          tags: mweltin/sticks:${{ steps.get_version.outputs.version }}
+          tags: mweltin/sticks:${{ github.event.release.tag_name }}
           build-args: MW_DJANGO_SECRET_KEY=${{ secrets.MW_DJANGO_SECRET_KEY }}
           secrets: |
             "MW_DJANGO_SECRET_KEY=${{ secrets.MW_DJANGO_SECRET_KEY }}"
