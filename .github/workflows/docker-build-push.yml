@@ -31,6 +31,9 @@ jobs:
         with:
           images: mweltin/sticks
 
+      - name: Get the tag name
+          run: echo "TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
@@ -38,7 +41,7 @@ jobs:
           push: true
           # tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          tags: mweltin/sticks:${{ github.event.release.tag_name }}
+          tags: mweltin/sticks:${{ env.TAG }}
           build-args: MW_DJANGO_SECRET_KEY=${{ secrets.MW_DJANGO_SECRET_KEY }}
           secrets: |
             "MW_DJANGO_SECRET_KEY=${{ secrets.MW_DJANGO_SECRET_KEY }}"
