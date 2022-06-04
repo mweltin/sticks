@@ -101,7 +101,7 @@ def will_win_in_two_steps(state):
     state_copy[Players.agent].sort()
     state_copy[Players.opponent].sort()
     if state_copy[Players.agent][Hands.left] == 0 == state_copy[Players.opponent][Hands.left]:
-        if state_copy[Players.agent][Hands.right] + (2 * state_copy[Players.opponent][Hands.right]) == 5:
+        if (state_copy[Players.agent][Hands.right] + (2 * state_copy[Players.opponent][Hands.right])) % 5 == 0:
             return True
     return False
 

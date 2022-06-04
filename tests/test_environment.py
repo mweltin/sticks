@@ -35,6 +35,10 @@ class EnvironmentTestCase(unittest.TestCase):
         will_win = env.will_win_in_two_steps(state)
         self.assertTrue(will_win)
 
+        state = [[0, 4], [3, 0]]
+        will_win = env.will_win_in_two_steps(state)
+        self.assertTrue(will_win)
+
     def test_reward_when_agent_won(self):
         state_agent_is_winner = [[1, 0], [0, 0]]
         reward = env.get_reward(state_agent_is_winner)
