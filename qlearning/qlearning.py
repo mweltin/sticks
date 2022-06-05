@@ -51,7 +51,12 @@ def main(
 
     rewards_all_episodes = []
     '''used to decide when to save a q table always save last table and highest reward table'''
+
+    '''flag used to trigger the saving of the current q_table that has the highest reward'''
     max_reward = 0
+    '''Agent performance dictionary used to collect episode out put performance = (wins+draws)/(total episodes)'''
+    '''Elements include "episode", "exploration rate", "reward", "turn", "winner"'''
+    performance = []
 
     # Q-learning algorithm
     for episode in range(_num_episodes):
@@ -81,8 +86,8 @@ def main(
                 break
 
             q_table[state_idx][action] = q_table[state_idx][action] * (1 - _learning_rate) + \
-                _learning_rate * \
-                (reward + _discount_rate * np.nanargmax(q_table[new_state_idx]))
+                                         _learning_rate * \
+                                         (reward + _discount_rate * np.nanargmax(q_table[new_state_idx]))
 
             state_idx = new_state_idx
             rewards_current_episode += reward
@@ -102,8 +107,8 @@ def main(
         exploration_rate = _min_exploration_rate + \
                            (max_exploration_rate - _min_exploration_rate) * np.exp(-_exploration_decay_rate * episode)
 
-        print(str(episode) + " " + str(exploration_rate) + " " + str(rewards_current_episode) + " " + str(
-            step) + " " + finished_on)
+        performance.append([episode, exploration_rate, rewards_current_episode, step, finished_on])
+
         # Add current episode reward to total rewards list
         rewards_all_episodes.append(rewards_current_episode)
         if rewards_current_episode > max_reward:
@@ -114,15 +119,16 @@ def main(
     rewards_per_thousand_episodes = np.split(np.array(rewards_all_episodes), _num_episodes / 500)
     count = 500
 
-    print("********Average reward per 5 hundred episodes********\n")
+    # print("********Average reward per 500 hundred episodes********\n")
     squashed = []
     for r in rewards_per_thousand_episodes:
-        print(count, ": ", str(sum(r / 500)))
+      #  print(count, ": ", str(sum(r / 500)))
         squashed.append(sum(r / 500))
         count += 500
 
     save_output(q_table)
     plot_it(squashed)
+    performance_output(performance)
 
 
 def save_output(input_table, prefix=None):
@@ -176,6 +182,16 @@ def plot_it(data):
     # function to show the plot
     plt.savefig('../data/reward_vs_episode.png')
     plt.show()
+
+
+def performance_output(performance_data):
+    wins = 0
+
+    for p in performance_data:
+        if p[4] == 'Draw' or p[4] == 'AI':
+            wins += 1
+
+    print('Performance:', str(wins / len(performance_data)))
 
 
 if __name__ == '__main__':
