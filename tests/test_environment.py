@@ -1,4 +1,5 @@
 import environment.env as env
+import qlearning.qlearning as qlearning
 import unittest
 
 
@@ -81,3 +82,14 @@ class EnvironmentTestCase(unittest.TestCase):
         state = [[[1, 0], [1, 0]]]
         env.eliminate_invalid_actions(state, q_table)
         self.assertEqual([[None, 0, None, None, None]], q_table)
+
+    def test_performance_output(self):
+        performance_data = []
+        # performance.append([episode, exploration_rate, rewards_current_episode, step, finished_on])
+        performance_data.append([0, 1, 1, 1, 'AI'])
+        performance_data.append([0, 1, 1, 1, 'Draw'])
+        performance_data.append([0, 1, 1, 1, 'AI'])
+        performance_data.append([0, 1, 1, 1, 'Opponent'])
+        performance_data.append([0, 1, 1, 1, 'Opponent'])
+
+        self.assertEqual(3 / 5, qlearning.performance_output(performance_data))

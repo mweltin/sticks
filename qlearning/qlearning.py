@@ -122,13 +122,14 @@ def main(
     # print("********Average reward per 500 hundred episodes********\n")
     squashed = []
     for r in rewards_per_thousand_episodes:
-      #  print(count, ": ", str(sum(r / 500)))
+        #  print(count, ": ", str(sum(r / 500)))
         squashed.append(sum(r / 500))
         count += 500
 
     save_output(q_table)
     plot_it(squashed)
-    performance_output(performance)
+
+    print('Performance:', str(performance_output(performance)))
 
 
 def save_output(input_table, prefix=None):
@@ -191,7 +192,7 @@ def performance_output(performance_data):
         if p[4] == 'Draw' or p[4] == 'AI':
             wins += 1
 
-    print('Performance:', str(wins / len(performance_data)))
+    return wins / len(performance_data)
 
 
 if __name__ == '__main__':
