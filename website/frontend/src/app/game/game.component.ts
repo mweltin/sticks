@@ -105,10 +105,10 @@ export class GameComponent implements OnInit {
     }
     this.updateHands(res);
     this.clearActionQueue();
-    this.changeActivePlayer();
     if(res.hasWinner == true){
       alert(this.whoseTurnIsIt +   " has won!" + "Refresh browser to play again. ");
     }
+    this.changeActivePlayer();
   }
 
   // When the app loads two buttons
