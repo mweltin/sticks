@@ -80,17 +80,24 @@ def main(
             new_state_idx, reward, done, info = env.step(state_idx, env.Players.agent, action)
             # Update Q-table for Q(s,a)
 
-            if done:
-                finished_on = 'AI'
-                rewards_current_episode += reward
-                break
-
-            q_table[state_idx][action] = q_table[state_idx][action] * (1 - _learning_rate) + \
-                                         _learning_rate * \
-                                         (reward + _discount_rate * np.nanargmax(q_table[new_state_idx]))
+            if not done:
+                q_table[state_idx][action] = q_table[state_idx][action] * (1 - _learning_rate) + \
+                    _learning_rate * (reward + _discount_rate * np.nanargmax(q_table[new_state_idx]))
+            else:
+                """if we are done at this point the AI has won.  Winning states have no valid moves. Therefore
+                the expression np.nanargmax(q_table[new_state_idx] results in a ValueError and the q_table does
+                not get updated.  For the state (0,1)(0,4) it doesn't matter as there is only one move.  However
+                (0,4),(0,1) there are two moves: split or right right.  Without this block, only the split move
+                would get updated in the q_table"""
+                q_table[state_idx][action] = q_table[state_idx][action] * (1 - _learning_rate) + \
+                    _learning_rate * (reward + _discount_rate)
 
             state_idx = new_state_idx
             rewards_current_episode += reward
+
+            if done:
+                finished_on = 'AI'
+                break
 
             # opponents turn
             if type(opponent_q_table) == np.ndarray and _use_q_table_for_actions is True:
