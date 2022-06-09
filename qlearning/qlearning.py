@@ -142,22 +142,22 @@ def save_output(input_table, prefix=None):
         temp = [*env.state_table[idx][0], *env.state_table[idx][1], *value]
         retval.append(temp)
 
-    np.savetxt("state_" + file_name + ".csv",
+    np.savetxt("../data/state_" + file_name + ".csv",
                retval,
                delimiter=", ",
                fmt='% s',
                header='AI L, AI R, O L, O R, swap, L L, L R, R R, R L')
 
-    np.savetxt(file_name + ".csv",
+    np.savetxt("../data/"+file_name + ".csv",
                input_table,
                delimiter=", ",
                fmt='% s')
 
 
 def load_max_reward_q_table():
-    file_exists = exists('q_table_max_reward.csv')
+    file_exists = exists('../data/q_table_max_reward.csv')
     if file_exists:
-        data = np.genfromtxt('q_table_max_reward.csv', delimiter=',')
+        data = np.genfromtxt('../data/q_table_max_reward.csv', delimiter=',')
         return data
     else:
         return False
@@ -191,6 +191,12 @@ def performance_output(performance_data):
     for p in performance_data:
         if p[4] == 'Draw' or p[4] == 'AI':
             wins += 1
+
+    np.savetxt("../data/raw_performance.csv",
+               performance_data,
+               delimiter=", ",
+               fmt='% s',
+               header='episode, exploration_rate, rewards_current_episode, step, winner')
 
     return wins / len(performance_data)
 
