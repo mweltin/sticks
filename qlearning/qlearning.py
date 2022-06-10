@@ -82,7 +82,8 @@ def main(
 
             if not done:
                 q_table[state_idx][action] = q_table[state_idx][action] * (1 - _learning_rate) + \
-                    _learning_rate * (reward + _discount_rate * np.nanargmax(q_table[new_state_idx]))
+                                             _learning_rate * (
+                                                         reward + _discount_rate * np.nanargmax(q_table[new_state_idx]))
             else:
                 """if we are done at this point the AI has won.  Winning states have no valid moves. Therefore
                 the expression np.nanargmax(q_table[new_state_idx] results in a ValueError and the q_table does
@@ -90,7 +91,7 @@ def main(
                 (0,4),(0,1) there are two moves: split or right right.  Without this block, only the split move
                 would get updated in the q_table"""
                 q_table[state_idx][action] = q_table[state_idx][action] * (1 - _learning_rate) + \
-                    _learning_rate * (reward + _discount_rate)
+                                             _learning_rate * (reward + _discount_rate)
 
             state_idx = new_state_idx
             rewards_current_episode += reward
@@ -139,6 +140,7 @@ def main(
     print('Performance:', str(calc_performance(performance)))
     performance_output(performance)
 
+
 def save_output(input_table, prefix=None):
     file_name = "q_table"
     if prefix:
@@ -155,7 +157,7 @@ def save_output(input_table, prefix=None):
                fmt='% s',
                header='AI L, AI R, O L, O R, swap, L L, L R, R R, R L')
 
-    np.savetxt("../data/"+file_name + ".csv",
+    np.savetxt("../data/" + file_name + ".csv",
                input_table,
                delimiter=", ",
                fmt='% s')

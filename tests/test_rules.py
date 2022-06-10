@@ -212,10 +212,16 @@ class RulesTestCase(unittest.TestCase):
         valid_moves = rules.get_valid_actions(state, active_player_index)
         self.assertNotIn(env.action_table.index([env.Actions.LEFT, env.Actions.RIGHT]), valid_moves)
 
-    # def test_redundant_update(self):
-    #     q_table = [6, 7, 8, 9]
-    #     q_table = rules.update_redundant_states(1, 2, 3, q_table)
-    #     self.assertTrue(False)
+    def test_redundant_update(self):
+        q_table = [
+            [['a', 'b']['c', 'd']],
+            [['a', 'b']['c', 'd']],
+            [['a', 'b']['c', 'd']],
+            [['w', 'x']['y', 'z']],
+            [['x', 'w']['y', 'z']],
+        ]
+        q_table = rules.update_redundant_states([['a', 'b']['c', 'd']], 1.5, 1, q_table)
+        self.assertTrue(False)
 
     def test_get_redundant_states_full_symmetry(self):
         state = [[1, 1], [2, 2]]

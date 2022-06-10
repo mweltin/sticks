@@ -125,9 +125,28 @@ def get_valid_actions(state, active_player):
 
 
 def update_redundant_states(state, value, action_index, q_table):
-    q_table_index = q_table.index(state)
-    if action_index == 0:
+    a = state[0][0]
+    b = state[0][1]
+    c = state[1][0]
+    d = state[1][1]
+
+    redundant_states = get_redundant_states(state)
+
+    if [[b, a], [c, d]] in redundant_states:
+        states_row_index = env.state_table.index([[b, a], [c, d]])
+        q_table[states_row_index][env.redundant_state_action_index_mapping[action_index]['[b,a],[c,d]']] = value
         pass
+
+    if [[a, b], [d, c]] in redundant_states:
+        states_row_index = env.state_table.index([[b, a], [c, d]])
+        q_table[states_row_index][env.redundant_state_action_index_mapping[action_index]['[a,b],[d,c]']] = value
+        pass
+
+    if [[b, a], [d, c]] in redundant_states:
+        states_row_index = env.state_table.index([[b, a], [c, d]])
+        q_table[states_row_index][env.redundant_state_action_index_mapping[action_index]['[b,c],[d,c]']] = value
+        pass
+
     return q_table
 
 
@@ -141,7 +160,7 @@ def get_redundant_states(state):
         """both sides are symetrical therefore 0 redundant states"""
         pass
 
-    if ( a != b and c == d ) or ( a == b and c != d ):
+    if (a != b and c == d) or (a == b and c != d):
         """ only one side is asymetrical therefore there exists only 1 redundant state"""
         if a == b:
             redundant_states.append([[a, b], [d, c]])

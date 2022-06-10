@@ -172,6 +172,7 @@ class Actions(IntEnum):
     RIGHT = 1
     SWAP = 2
 
+
 """
 Generate a list of all possible actions using the Enums defined above to make the main code easier to read
 A player can perform one of these actions swap,
@@ -186,6 +187,24 @@ action_table = [
     [Actions.LEFT, Actions.RIGHT],
     [Actions.RIGHT, Actions.RIGHT],
     [Actions.RIGHT, Actions.LEFT]
+]
+
+"""
+current state = [[a,b],[c,d]]
+from the action_table index 0 we would swap and for each redundant row the action index would not change.
+from the action_table index 1 would imply that a would tap c
+When looking at redundant state [[b,a],[c,d]] the action index for a tap c would be 4
+The table below maps the state action index to the appropriate redundant state action index.
+The index of the redundant_state_action_index_mapping mathes the action_table index id 
+redundant_state_action_index_mapping[0] -> swap 
+redundant_state_action_index_mapping[2] -> left to right
+"""
+redundant_state_action_index_mapping = [
+    {'[b,a],[c,d]': 0, '[a,b],[d,c]': 0, '[b,c],[d,c]': 0},
+    {'[b,a],[c,d]': 4, '[a,b],[d,c]': 2, '[b,c],[d,c]': 3},
+    {'[b,a],[c,d]': 3, '[a,b],[d,c]': 1, '[b,c],[d,c]': 4},
+    {'[b,a],[c,d]': 2, '[a,b],[d,c]': 4, '[b,c],[d,c]': 1},
+    {'[b,a],[c,d]': 1, '[a,b],[d,c]': 3, '[b,c],[d,c]': 2},
 ]
 
 if __name__ == '__main__':
