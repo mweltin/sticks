@@ -136,8 +136,8 @@ def main(
     save_output(q_table)
     plot_it(squashed)
 
-    print('Performance:', str(performance_output(performance)))
-
+    print('Performance:', str(calc_performance(performance)))
+    performance_output(performance)
 
 def save_output(input_table, prefix=None):
     file_name = "q_table"
@@ -192,20 +192,22 @@ def plot_it(data):
     plt.show()
 
 
-def performance_output(performance_data):
+def calc_performance(performance_data):
     wins = 0
 
     for p in performance_data:
         if p[4] == 'Draw' or p[4] == 'AI':
             wins += 1
 
+    return wins / len(performance_data)
+
+
+def performance_output(performance_data):
     np.savetxt("../data/raw_performance.csv",
                performance_data,
                delimiter=", ",
                fmt='% s',
                header='episode, exploration_rate, rewards_current_episode, step, winner')
-
-    return wins / len(performance_data)
 
 
 if __name__ == '__main__':

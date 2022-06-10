@@ -124,5 +124,37 @@ def get_valid_actions(state, active_player):
     return ret_val
 
 
+def update_redundant_states(state, value, action_index, q_table):
+    q_table_index = q_table.index(state)
+    if action_index == 0:
+        pass
+    return q_table
+
+
+def get_redundant_states(state):
+    redundant_states = []
+    a = state[0][0]
+    b = state[0][1]
+    c = state[1][0]
+    d = state[1][1]
+    if a == b and c == d:
+        """both sides are symetrical therefore 0 redundant states"""
+        pass
+
+    if ( a != b and c == d ) or ( a == b and c != d ):
+        """ only one side is asymetrical therefore there exists only 1 redundant state"""
+        if a == b:
+            redundant_states.append([[a, b], [d, c]])
+        else:
+            redundant_states.append([[b, a], [c, d]])
+
+    if a != b and c != d:
+        redundant_states.append([[b, a], [c, d]])
+        redundant_states.append([[a, b], [d, c]])
+        redundant_states.append([[b, a], [d, c]])
+
+    return redundant_states
+
+
 if __name__ == '__main__':
     print("did you mean to import the rules file")

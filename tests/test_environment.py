@@ -92,4 +92,4 @@ class EnvironmentTestCase(unittest.TestCase):
         performance_data.append([0, 1, 1, 1, 'Opponent'])
         performance_data.append([0, 1, 1, 1, 'Opponent'])
 
-        self.assertEqual(3 / 5, qlearning.performance_output(performance_data))
+        self.assertEqual(3 / 5, qlearning.calc_performance(performance_data))
