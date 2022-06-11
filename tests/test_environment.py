@@ -1,9 +1,13 @@
 import environment.env as env
 import qlearning.qlearning as qlearning
 import unittest
+from random import seed
+import numpy as np
 
 
 class EnvironmentTestCase(unittest.TestCase):
+    seed(11)  # we need a seed that will ensure we get the second index for test_pick_max_value_index_at_random_can_return_an_index_other_than_first_occurrence
+
     def test_rest_function_gives_correct_state(self):
         reset_index = env.reset()
         self.assertEqual([[1, 1], [1, 1]], env.state_table[reset_index])
@@ -93,3 +97,13 @@ class EnvironmentTestCase(unittest.TestCase):
         performance_data.append([0, 1, 1, 1, 'Opponent'])
 
         self.assertEqual(3 / 5, qlearning.calc_performance(performance_data))
+
+    def test_pick_max_value_index_at_random_can_return_an_index_other_than_first_occurrence(self):
+        action_array = [1, 2, 3, 4, 5, 6, 5, 4, 5, 6, 3, 3, 4, 5]
+        index = env.nanargmax_unbiased(action_array)
+
+        self.assertEqual(9, index)
+
+    def test_pick_max_value_index_at_random_results_in_value_error(self):
+        action_array = [np.nan, np.nan, np.nan]
+        self.assertRaises(ValueError, env.nanargmax_unbiased, action_array)

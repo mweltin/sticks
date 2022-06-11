@@ -2,6 +2,8 @@ from enum import IntEnum
 import random
 import rules.rules as rules
 from copy import deepcopy
+import numpy as np
+from random import randint
 
 
 def reset():
@@ -126,6 +128,27 @@ def step(state_idx, player_idx, action_idx):
         done = True
     reward = get_reward(new_state)
     return [state_table.index(new_state), reward, done, {'info': None}]
+
+
+def nanargmax_unbiased(action_array):
+    """
+    pick_max: The np.nanargmax introduces a selection bias.  If two or more elements have the same value the
+    np.nanargmax will always return the first value.
+
+    :param action_array the array of possible actions i.e. a row in the q_table
+    :return: the index of the largest value in action_array.  If there are two or more max values return a
+    index at random from the set of indexes that hold a max value.
+    """
+    index = np.nanargmax(action_array)
+    val = action_array[index]
+    if action_array.count(val) > 1:
+        index_list = []
+        for idx, value in enumerate(action_array):
+            if value == val:
+                index_list.append(idx)
+        index = index_list[randint(0, len(index_list) - 1)]
+
+    return index
 
 
 """

@@ -74,7 +74,7 @@ def main(
             # Add new reward
             exploration_rate_threshold = random.uniform(0, 1)
             if exploration_rate_threshold > exploration_rate:
-                action = np.nanargmax(q_table[state_idx])
+                action = env.nanargmax_unbiased(q_table[state_idx])
             else:
                 action = env.select_random_action(state_idx, env.Players.agent)
 
@@ -82,9 +82,7 @@ def main(
             # Update Q-table for Q(s,a)
 
             if not done:
-                q_table[state_idx][action] = q_table[state_idx][action] * (1 - _learning_rate) + \
-                                             _learning_rate * (
-                                                         reward + _discount_rate * np.nanargmax(q_table[new_state_idx]))
+                q_table[state_idx][action] = q_table[state_idx][action] * (1 - _learning_rate) + _learning_rate * (reward + _discount_rate * env.nanargmax_unbiased(q_table[new_state_idx]))
             else:
                 """if we are done at this point the AI has won.  Winning states have no valid moves. Therefore
                 the expression np.nanargmax(q_table[new_state_idx] results in a ValueError and the q_table does
@@ -104,7 +102,7 @@ def main(
 
             # opponents turn
             if type(opponent_q_table) == np.ndarray and _use_q_table_for_actions is True:
-                action = np.nanargmax(opponent_q_table[state_idx])
+                action = env.nanargmax_unbiased(opponent_q_table[state_idx])
             else:
                 action = env.select_random_action(state_idx, 1)
             new_state_idx, reward, done, info = env.step(state_idx, env.Players.opponent, action)
