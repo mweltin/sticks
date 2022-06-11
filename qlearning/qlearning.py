@@ -5,6 +5,7 @@ Author: Markus Weltin
 import numpy as np
 import random
 import environment.env as env
+import rules.rules as rules
 import argparse
 from os.path import exists
 import matplotlib.pyplot as plt
@@ -93,6 +94,7 @@ def main(
                 q_table[state_idx][action] = q_table[state_idx][action] * (1 - _learning_rate) + \
                                              _learning_rate * (reward + _discount_rate)
 
+            rules.update_redundant_states(env.state_table[state_idx], q_table[state_idx][action], action, q_table)
             state_idx = new_state_idx
             rewards_current_episode += reward
 
