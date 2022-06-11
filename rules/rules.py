@@ -135,17 +135,14 @@ def update_redundant_states(state, value, action_index, q_table):
     if [[b, a], [c, d]] in redundant_states:
         states_row_index = env.state_table.index([[b, a], [c, d]])
         q_table[states_row_index][env.redundant_state_action_index_mapping[action_index]['[b,a],[c,d]']] = value
-        pass
 
     if [[a, b], [d, c]] in redundant_states:
-        states_row_index = env.state_table.index([[b, a], [c, d]])
+        states_row_index = env.state_table.index([[a, b], [d, c]])
         q_table[states_row_index][env.redundant_state_action_index_mapping[action_index]['[a,b],[d,c]']] = value
-        pass
 
     if [[b, a], [d, c]] in redundant_states:
-        states_row_index = env.state_table.index([[b, a], [c, d]])
+        states_row_index = env.state_table.index([[b, a], [d, c]])
         q_table[states_row_index][env.redundant_state_action_index_mapping[action_index]['[b,c],[d,c]']] = value
-        pass
 
     return q_table
 

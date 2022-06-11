@@ -1,6 +1,7 @@
 import rules.rules as rules
 import environment.env as env
 import unittest
+import numpy as np
 
 
 class RulesTestCase(unittest.TestCase):
@@ -213,15 +214,16 @@ class RulesTestCase(unittest.TestCase):
         self.assertNotIn(env.action_table.index([env.Actions.LEFT, env.Actions.RIGHT]), valid_moves)
 
     def test_redundant_update(self):
-        q_table = [
-            [['a', 'b']['c', 'd']],
-            [['a', 'b']['c', 'd']],
-            [['a', 'b']['c', 'd']],
-            [['w', 'x']['y', 'z']],
-            [['x', 'w']['y', 'z']],
-        ]
-        q_table = rules.update_redundant_states([['a', 'b']['c', 'd']], 1.5, 1, q_table)
-        self.assertTrue(False)
+        action_space_size = len(env.action_table)
+        state_space_size = len(env.state_table)
+        q_table = np.zeros((state_space_size, action_space_size))
+        env.eliminate_invalid_actions(env.state_table, q_table)
+
+        q_table = rules.update_redundant_states([[1, 2], [3, 4]], 1.5, 1, q_table)
+
+        self.assertTrue(1.5, q_table[293])
+        self.assertTrue(1.5, q_table[197])
+        self.assertTrue(1.5, q_table[197])
 
     def test_get_redundant_states_full_symmetry(self):
         state = [[1, 1], [2, 2]]
