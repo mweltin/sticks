@@ -13,8 +13,24 @@ def print_hands_to_console(state):
     print('computer hand ' + str(state[0]))
 
 
+def build_valid_move_string(valid_moves):
+    ret_str = []
+    if 0 in valid_moves:
+        ret_str.append('0 = swap')
+    if 1 in valid_moves:
+        ret_str.append('1 = left to left')
+    if 2 in valid_moves:
+        ret_str.append('2 = left to right')
+    if 3 in valid_moves:
+        ret_str.append('3 = right to right')
+    if 4 in valid_moves:
+        ret_str.append('4 = right to left')
+
+    return 'Pick a Move: ' + ' , '.join(ret_str)
+
+
 def play_sticks():
-    q_table = np.genfromtxt("qlearning/q_table.csv", delimiter=",")
+    q_table = np.genfromtxt("data/q_table_max_reward.csv", delimiter=",")
     state_idx = env.reset()
 
     user_goes_first = input('Welcome to sticks. Would you like to go first? (y/n)')  # Press Ctrl+F8 to toggle the breakpoint.
@@ -28,9 +44,12 @@ def play_sticks():
     while has_winner is None:
         print_hands_to_console(current_state)
         if active_player_idx == 1:
-            action = input(
-                'Pick a Move:  0 = swap, 1 = left to left, 2 = left to right \n' +
-                '3 = right to right 4 = right to left \n ')
+            valid_moves = rules.get_valid_actions(current_state, active_player_idx)
+            action = input(build_valid_move_string(valid_moves))
+            while int(action) not in valid_moves:
+                if action not in valid_moves:
+                    print(str(action)+": was not a valid move.")
+                    action = input(build_valid_move_string(valid_moves))
             current_state = rules.take_turn(current_state, active_player_idx, env.action_table[int(action)])
             active_player_idx = 0
         else:
