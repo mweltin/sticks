@@ -47,7 +47,7 @@ def turn(request):
         active_player_index = 0
 
     if data['activePlayer'] == 'qlearning':
-        file_path = os.path.join(settings.FILES_DIR, 'q_table.csv')
+        file_path = os.path.join(settings.FILES_DIR, 'q_table_max_reward.csv')
         with open(file_path, mode='r') as file:
             q_table = list(csv.reader(file, quoting=csv.QUOTE_NONNUMERIC))
 
