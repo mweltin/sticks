@@ -141,7 +141,7 @@ def nanargmax_unbiased(action_array):
     """
     index = np.nanargmax(action_array)
     val = action_array[index]
-    if action_array.count(val) > 1:
+    if action_array[action_array==val].shape[0] > 1:
         index_list = []
         for idx, value in enumerate(action_array):
             if value == val:

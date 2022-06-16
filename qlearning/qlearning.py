@@ -65,6 +65,7 @@ def main(
         # initialize new episode params
         state_idx = env.reset()  # state is the index in the env.state_table
         rewards_current_episode = 0
+        agent_first = True if random.uniform(0, 1) < 0.5 else False
 
         for step in range(_max_steps_per_episode):
             # Exploration-exploitation trade-off
@@ -72,45 +73,39 @@ def main(
             # Update Q-table
             # Set new state
             # Add new reward
-            exploration_rate_threshold = random.uniform(0, 1)
-            if exploration_rate_threshold > exploration_rate:
-                action = env.nanargmax_unbiased(q_table[state_idx])
+            if agent_first:
+                q_table, done, state_idx, rewards_current_episode = agents_turn(exploration_rate, q_table, state_idx,
+                                                                                  _learning_rate, _discount_rate,
+                                                                                  rewards_current_episode)
+
+                if done:
+                    finished_on = 'AI'
+                    break
+
+                # opponents turn
+                state_idx, done = dummy_turn(opponent_q_table,_use_q_table_for_actions,state_idx)
+
+                if done:
+                    finished_on = 'Opponent'
+                    break
+
             else:
-                action = env.select_random_action(state_idx, env.Players.agent)
+                # opponents turn
+                state_idx, done = dummy_turn(opponent_q_table, _use_q_table_for_actions, state_idx)
 
-            new_state_idx, reward, done, info = env.step(state_idx, env.Players.agent, action)
-            # Update Q-table for Q(s,a)
+                if done:
+                    finished_on = 'Opponent'
+                    break
 
-            if not done:
-                q_table[state_idx][action] = q_table[state_idx][action] * (1 - _learning_rate) + _learning_rate * (reward + _discount_rate * env.nanargmax_unbiased(q_table[new_state_idx]))
-            else:
-                """if we are done at this point the AI has won.  Winning states have no valid moves. Therefore
-                the expression np.nanargmax(q_table[new_state_idx] results in a ValueError and the q_table does
-                not get updated.  For the state (0,1)(0,4) it doesn't matter as there is only one move.  However
-                (0,4),(0,1) there are two moves: split or right right.  Without this block, only the split move
-                would get updated in the q_table"""
-                q_table[state_idx][action] = q_table[state_idx][action] * (1 - _learning_rate) + \
-                                             _learning_rate * (reward + _discount_rate)
+                q_table, done, state_idx, rewards_current_episode = agents_turn(exploration_rate, q_table, state_idx,
+                                                                                _learning_rate, _discount_rate,
+                                                                                rewards_current_episode)
+                if done:
+                    finished_on = 'AI'
+                    break
 
-            rules.update_redundant_states(env.state_table[state_idx], q_table[state_idx][action], action, q_table)
-            state_idx = new_state_idx
-            rewards_current_episode += reward
 
-            if done:
-                finished_on = 'AI'
-                break
 
-            # opponents turn
-            if type(opponent_q_table) == np.ndarray and _use_q_table_for_actions is True:
-                action = env.nanargmax_unbiased(opponent_q_table[state_idx])
-            else:
-                action = env.select_random_action(state_idx, 1)
-            new_state_idx, reward, done, info = env.step(state_idx, env.Players.opponent, action)
-            state_idx = new_state_idx
-
-            if done:
-                finished_on = 'Opponent'
-                break
         # Exploration rate decay
         exploration_rate = _min_exploration_rate + \
                            (max_exploration_rate - _min_exploration_rate) * np.exp(-_exploration_decay_rate * episode)
@@ -210,6 +205,47 @@ def performance_output(performance_data):
                delimiter=", ",
                fmt='% s',
                header='episode, exploration_rate, rewards_current_episode, step, winner')
+
+
+def agents_turn(exploration_rate, q_table, state_idx, _learning_rate, _discount_rate, rewards_current_episode):
+    exploration_rate_threshold = random.uniform(0, 1)
+    if exploration_rate_threshold > exploration_rate:
+        action = env.nanargmax_unbiased(q_table[state_idx])
+    else:
+        action = env.select_random_action(state_idx, env.Players.agent)
+
+    new_state_idx, reward, done, info = env.step(state_idx, env.Players.agent, action)
+    # Update Q-table for Q(s,a)
+
+    if not done:
+        q_table[state_idx][action] = q_table[state_idx][action] * (1 - _learning_rate) + _learning_rate * (
+                reward + _discount_rate * env.nanargmax_unbiased(q_table[new_state_idx]))
+    else:
+        """if we are done at this point the AI has won.  Winning states have no valid moves. Therefore
+        the expression np.nanargmax(q_table[new_state_idx] results in a ValueError and the q_table does
+        not get updated.  For the state (0,1)(0,4) it doesn't matter as there is only one move.  However
+        (0,4),(0,1) there are two moves: split or right right.  Without this block, only the split move
+        would get updated in the q_table"""
+        q_table[state_idx][action] = q_table[state_idx][action] * (1 - _learning_rate) + \
+                                     _learning_rate * (reward + _discount_rate)
+
+    rules.update_redundant_states(env.state_table[state_idx], q_table[state_idx][action], action, q_table)
+    state_idx = new_state_idx
+    rewards_current_episode += reward
+
+    return q_table, done, state_idx, rewards_current_episode
+
+
+def dummy_turn(opponent_q_table,_use_q_table_for_actions,state_idx):
+    # opponents turn
+    if type(opponent_q_table) == np.ndarray and _use_q_table_for_actions is True:
+        action = env.nanargmax_unbiased(opponent_q_table[state_idx])
+    else:
+        action = env.select_random_action(state_idx, 1)
+    new_state_idx, reward, done, info = env.step(state_idx, env.Players.opponent, action)
+    state_idx = new_state_idx
+
+    return state_idx, done
 
 
 if __name__ == '__main__':
