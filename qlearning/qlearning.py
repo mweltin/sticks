@@ -26,7 +26,10 @@ def main(
     state_space_size = len(env.state_table)
 
     ''' initialize q-table with all zeros, i.e. no knowledge'''
-    q_table = np.zeros((state_space_size, action_space_size))
+    if exists('../data/q_table_max_reward.csv'):
+        q_table = load_max_reward_q_table()
+    else:
+        q_table = np.zeros((state_space_size, action_space_size))
     env.eliminate_invalid_actions(env.state_table, q_table)
     opponent_q_table = load_max_reward_q_table()
 
