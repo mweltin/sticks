@@ -25,11 +25,11 @@ def main(
     action_space_size = len(env.action_table)
     state_space_size = len(env.state_table)
 
-    ''' initialize q-table with all zeros, i.e. no knowledge'''
-    if exists('../data/q_table_max_reward.csv'):
-        q_table = load_max_reward_q_table()
-    else:
+    ''' initialize q-table with all zeros, i.e. no knowledge or load a previous good q-table'''
+    q_table = load_max_reward_q_table()
+    if not isinstance(q_table, np.ndarray) or not use_q_table_for_actions:
         q_table = np.zeros((state_space_size, action_space_size))
+
     env.eliminate_invalid_actions(env.state_table, q_table)
     opponent_q_table = load_max_reward_q_table()
 
@@ -266,8 +266,8 @@ if __name__ == '__main__':
     parser.add_argument('--exploration_decay_rate', type=float, default=0.001,
                         help='speed at which exploration rate reaches minimum exploration rate')
     parser.add_argument('--use_q_table_for_actions', type=bool, default=False,
-                        help='If True the agent\'s opponent will use a previously saved q-table.  \
-                        if False the agent\'s opponent will pick actions at random')
+                        help='If True the agent and opponent will use a previously saved q-table.  \
+                        if False the agent and opponent will with zeroed out q-table')
     args = parser.parse_args()
 
     main(num_episodes=args.num_episodes,
