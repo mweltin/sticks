@@ -24,7 +24,7 @@ Enter into the repository root directory and install the requirred python pages 
 
 ```npm install```
 
-```ng build```
+```./node_modules/.bin/ng build```
 
 ## Alternate installation 
 If you are familiar with docker, and can run linux based images grab the latest version on [dockerhub/sticks](https://hub.docker.com/repository/docker/mweltin/sticks)
