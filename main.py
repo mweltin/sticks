@@ -5,8 +5,6 @@ import rules.rules as rules
 import random
 from copy import deepcopy
 
-random.seed(19)
-
 
 def print_hands_to_console(state):
     print('your hand ' + str(state[1]))
