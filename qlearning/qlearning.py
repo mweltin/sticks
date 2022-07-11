@@ -22,15 +22,16 @@ def main(
         exploration_decay_rate,
         use_q_table_for_actions
 ):
+    state_table = env.get_state_table()
     action_space_size = len(env.action_table)
-    state_space_size = len(env.state_table)
-
+    state_space_size = len(state_table)
+    
     ''' initialize q-table with all zeros, i.e. no knowledge or load a previous good q-table'''
     q_table = load_max_reward_q_table()
     if not isinstance(q_table, np.ndarray) or not use_q_table_for_actions:
         q_table = np.zeros((state_space_size, action_space_size))
 
-    env.eliminate_invalid_actions(env.state_table, q_table)
+    env.eliminate_invalid_actions(state_table, q_table)
     opponent_q_table = load_max_reward_q_table()
 
     '''how many games to play'''
@@ -66,7 +67,7 @@ def main(
     for episode in range(_num_episodes):
         finished_on = 'Draw'
         # initialize new episode params
-        state_idx = env.reset()  # state is the index in the env.state_table
+        state_idx = env.reset()  # state is the index in the state_table
         rewards_current_episode = 0
         agent_first = True if random.uniform(0, 1) < 0.5 else False
 
@@ -146,7 +147,7 @@ def save_output(input_table, prefix=None):
 
     retval = []
     for idx, value in enumerate(input_table):
-        temp = [*env.state_table[idx][0], *env.state_table[idx][1], *value]
+        temp = [*state_table[idx][0], *state_table[idx][1], *value]
         retval.append(temp)
 
     np.savetxt("../data/state_" + file_name + ".csv",
@@ -232,7 +233,7 @@ def agents_turn(exploration_rate, q_table, state_idx, _learning_rate, _discount_
         q_table[state_idx][action] = q_table[state_idx][action] * (1 - _learning_rate) + \
                                      _learning_rate * (reward + _discount_rate)
 
-    rules.update_redundant_states(env.state_table[state_idx], q_table[state_idx][action], action, q_table)
+    rules.update_redundant_states(state_table[state_idx], q_table[state_idx][action], action, q_table)
     state_idx = new_state_idx
     rewards_current_episode += reward
 
