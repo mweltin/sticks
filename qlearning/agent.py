@@ -2,7 +2,7 @@ import numpy as np
 import random
 import environment.env as env
 import rules.rules as rules
-
+from agent_logger import AgentLogger
 
 class Agent:
 
@@ -89,3 +89,21 @@ class Agent:
         self.update_q_table(state_index, new_state_idx, reward, done, action)
         self.exploration_rate = self._min_exploration_rate + (self.max_exploration_rate - self._min_exploration_rate) * np.exp(-self._exploration_decay_rate * episode)
         return new_state_idx, done
+
+    def save_output(self):
+
+        retval = []
+        for idx, value in enumerate(self._q_table):
+            temp = [*env.state_table[idx][0], *env.state_table[idx][1], *value]
+            retval.append(temp)
+
+        np.savetxt("../data/state_" + self._name + ".csv",
+                   retval,
+                   delimiter=", ",
+                   fmt='% s',
+                   header='AI L, AI R, O L, O R, swap, L L, L R, R R, R L')
+
+        np.savetxt("../data/" + self._name + ".csv",
+                   self._q_table,
+                   delimiter=", ",
+                   fmt='% s')

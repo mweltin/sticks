@@ -34,7 +34,10 @@ def main(num_episodes, max_steps_per_episode):
             if done:
                 finished_on = current_agent.name
                 break
-        print(current_agent.name)
+
+    agent_1.save_output()
+    agent_2.save_output()
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Dual agent Q-algorithm arguments')

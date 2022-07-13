@@ -22,9 +22,9 @@ def main(
         exploration_decay_rate,
         use_q_table_for_actions
 ):
-    state_table = env.get_state_table()
+
     action_space_size = len(env.action_table)
-    state_space_size = len(state_table)
+    state_space_size = len(env.state_table)
     
     ''' initialize q-table with all zeros, i.e. no knowledge or load a previous good q-table'''
     q_table = load_max_reward_q_table()
