@@ -10,13 +10,14 @@ class Agent:
         self.exploration_rate = 1
         self._learning_rate = 0.1
         self.discount_rate = 0.99
-        self.min_exploration_rate = 0.01
-        self.exploration_decay_rate = 0.001
+        self._min_exploration_rate = 0.01
+        self._exploration_decay_rate = 0.001
         self._q_table = self.init_empty_q_table()
         self.state_table = env.state_table
         self._name = 'name unset'
         self.player_index = 0
         self.rewards_current_episode = 0
+        self.max_exploration_rate = 1
 
     def init_empty_q_table(self):
         action_space_size = len(env.action_table)
@@ -81,10 +82,10 @@ class Agent:
         rules.update_redundant_states(env.state_table[state_idx], self._q_table[state_idx][action], action,
                                       self._q_table)
         self.rewards_current_episode += reward
-        pass
 
-    def take_turn(self, state_index):
+    def take_turn(self, state_index, episode):
         action = self.get_action(state_index)
         new_state_idx, reward, done, info = env.step(state_index, self.player_index, action)
         self.update_q_table(state_index, new_state_idx, reward, done, action)
-        return done, new_state_idx
+        self.exploration_rate = self._min_exploration_rate + (self.max_exploration_rate - self._min_exploration_rate) * np.exp(-self._exploration_decay_rate * episode)
+        return new_state_idx, done

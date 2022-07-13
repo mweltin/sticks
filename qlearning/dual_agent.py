@@ -25,16 +25,16 @@ def main(num_episodes, max_steps_per_episode):
             agent_2.player_index = 0
 
         for step in range(max_steps_per_episode):
-            state_idx, done = current_agent.take_turn(state_idx)
+            state_idx, done = current_agent.take_turn(state_idx, episode)
             if done:
                 finished_on = current_agent.name
                 break
             current_agent = agent_1 if current_agent == agent_2 else agent_2
-            state_idx, done = current_agent.take_turn(state_idx)
+            state_idx, done = current_agent.take_turn(state_idx, episode)
             if done:
                 finished_on = current_agent.name
                 break
-
+        print(current_agent.name)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Dual agent Q-algorithm arguments')
