@@ -38,16 +38,19 @@ def main(num_episodes, max_steps_per_episode):
                 current_agent.win_counter += 1
                 break
 
-    if finished_on == 'Draw':
-        current_agent.win_counter += 0.5
-        other_agent.win_counter += 0.5
+        if finished_on == 'Draw':
+            current_agent.win_counter += 0.5
+            other_agent.win_counter += 0.5
 
-    if not episode % 100:
-        agent_1.record_wins()
-        agent_2.record_wins()
+        if not episode % 100:
+            agent_1.record_wins()
+            agent_2.record_wins()
 
     agent_1.save_output()
     agent_2.save_output()
+
+    agent_2.plot_it()
+    agent_1.plot_it()
 
 
 if __name__ == '__main__':
@@ -57,5 +60,4 @@ if __name__ == '__main__':
     parser.add_argument('--max_steps_per_episode', type=int, default=50,
                         help='Number of turns to take in a game before starting a new game.')
     args = parser.parse_args()
-    main(num_episodes=args.num_episodes,
-         max_steps_per_episode=args.max_steps_per_episode, )
+    main(args.num_episodes, args.max_steps_per_episode)

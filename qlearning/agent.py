@@ -118,11 +118,11 @@ class Agent:
         self.wins_per_freq.append(self.win_counter)
         self.win_counter = 0
 
-    def plot_it(self, data):
+    def plot_it(self):
         # x axis values
-        x = range(1, len(data) + 1)
+        x = range(1, len(self.wins_per_freq) + 1)
         # corresponding y axis values
-        y = data
+        y = self.wins_per_freq
 
         # plotting the points
         plt.plot(x, y)
