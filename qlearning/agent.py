@@ -2,7 +2,8 @@ import numpy as np
 import random
 import environment.env as env
 import rules.rules as rules
-from agent_logger import AgentLogger
+import matplotlib.pyplot as plt
+
 
 class Agent:
 
@@ -18,6 +19,8 @@ class Agent:
         self.player_index = 0
         self.rewards_current_episode = 0
         self.max_exploration_rate = 1
+        self.win_counter = 0
+        self.wins_per_freq = []
 
     def init_empty_q_table(self):
         action_space_size = len(env.action_table)
@@ -69,7 +72,8 @@ class Agent:
         if not done:
             self._q_table[state_idx][action] = self._q_table[state_idx][action] * (
                     1 - self._learning_rate) + self._learning_rate * (
-                    reward + self.discount_rate * env.nanargmax_unbiased(self._q_table[new_state_idx]))
+                                                       reward + self.discount_rate * env.nanargmax_unbiased(
+                                                   self._q_table[new_state_idx]))
         else:
             """if we are done at this point the AI has won.  Winning states have no valid moves. Therefore
             the expression np.nanargmax(q_table[new_state_idx] results in a ValueError and the q_table does
@@ -77,7 +81,7 @@ class Agent:
             (0,4),(0,1) there are two moves: split or right right.  Without this block, only the split move
             would get updated in the q_table"""
             self._q_table[state_idx][action] = self._q_table[state_idx][action] * (1 - self._learning_rate) + \
-                self._learning_rate * (reward + self.discount_rate)
+                                               self._learning_rate * (reward + self.discount_rate)
 
         rules.update_redundant_states(env.state_table[state_idx], self._q_table[state_idx][action], action,
                                       self._q_table)
@@ -87,7 +91,9 @@ class Agent:
         action = self.get_action(state_index)
         new_state_idx, reward, done, info = env.step(state_index, self.player_index, action)
         self.update_q_table(state_index, new_state_idx, reward, done, action)
-        self.exploration_rate = self._min_exploration_rate + (self.max_exploration_rate - self._min_exploration_rate) * np.exp(-self._exploration_decay_rate * episode)
+        self.exploration_rate = self._min_exploration_rate + (
+                    self.max_exploration_rate - self._min_exploration_rate) * np.exp(
+            -self._exploration_decay_rate * episode)
         return new_state_idx, done
 
     def save_output(self):
@@ -107,3 +113,28 @@ class Agent:
                    self._q_table,
                    delimiter=", ",
                    fmt='% s')
+
+    def record_wins(self):
+        self.wins_per_freq.append(self.win_counter)
+        self.win_counter = 0
+
+    def plot_it(self, data):
+        # x axis values
+        x = range(1, len(data) + 1)
+        # corresponding y axis values
+        y = data
+
+        # plotting the points
+        plt.plot(x, y)
+
+        # naming the x axis
+        plt.xlabel('Epoch')
+        # naming the y axis
+        plt.ylabel('Reward')
+
+        # giving a title to my graph
+        plt.title('Wins per 100 episodes ' + self._name)
+
+        # function to show the plot
+        plt.savefig('../data/wins_vs_episode'+self._name+'.png')
+        plt.show()

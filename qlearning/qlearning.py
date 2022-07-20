@@ -31,7 +31,7 @@ def main(
     if not isinstance(q_table, np.ndarray) or not use_q_table_for_actions:
         q_table = np.zeros((state_space_size, action_space_size))
 
-    env.eliminate_invalid_actions(state_table, q_table)
+    env.eliminate_invalid_actions(env.state_table, q_table)
     opponent_q_table = load_max_reward_q_table()
 
     '''how many games to play'''
@@ -147,7 +147,7 @@ def save_output(input_table, prefix=None):
 
     retval = []
     for idx, value in enumerate(input_table):
-        temp = [*state_table[idx][0], *state_table[idx][1], *value]
+        temp = [*env.state_table[idx][0], *env.state_table[idx][1], *value]
         retval.append(temp)
 
     np.savetxt("../data/state_" + file_name + ".csv",
@@ -233,7 +233,7 @@ def agents_turn(exploration_rate, q_table, state_idx, _learning_rate, _discount_
         q_table[state_idx][action] = q_table[state_idx][action] * (1 - _learning_rate) + \
                                      _learning_rate * (reward + _discount_rate)
 
-    rules.update_redundant_states(state_table[state_idx], q_table[state_idx][action], action, q_table)
+    rules.update_redundant_states(env.state_table[state_idx], q_table[state_idx][action], action, q_table)
     state_idx = new_state_idx
     rewards_current_episode += reward
 

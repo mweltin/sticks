@@ -16,6 +16,7 @@ def main(num_episodes, max_steps_per_episode):
         state_idx = env.reset()  # state is the index in the state_table
         rewards_current_episode = 0
         current_agent = agent_1 if random.uniform(0, 1) < 0.5 else agent_2
+        other_agent = agent_1 if current_agent == agent_2 else agent_1
 
         if current_agent == agent_1:
             agent_1.player_index = 0
@@ -28,12 +29,22 @@ def main(num_episodes, max_steps_per_episode):
             state_idx, done = current_agent.take_turn(state_idx, episode)
             if done:
                 finished_on = current_agent.name
+                current_agent.win_counter += 1
                 break
             current_agent = agent_1 if current_agent == agent_2 else agent_2
             state_idx, done = current_agent.take_turn(state_idx, episode)
             if done:
                 finished_on = current_agent.name
+                current_agent.win_counter += 1
                 break
+
+    if finished_on == 'Draw':
+        current_agent.win_counter += 0.5
+        other_agent.win_counter += 0.5
+
+    if not episode % 100:
+        agent_1.record_wins()
+        agent_2.record_wins()
 
     agent_1.save_output()
     agent_2.save_output()
