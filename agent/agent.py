@@ -65,7 +65,6 @@ class Agent:
             action = env.nanargmax_unbiased(self._q_table[state_index])
         else:
             action = env.select_random_action(state_index, self.player_index)
-
         return action
 
     def update_q_table(self, state_idx, new_state_idx, reward, done, action):

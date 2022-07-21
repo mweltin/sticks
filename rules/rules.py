@@ -63,7 +63,7 @@ def get_opponent_player_index(active_player_index):
 # index of the active player
 def take_turn(state, active_player_index, action):
     """
-    take_turn: This function updates the either the players hand in the case of the swap or the opponents hand
+    take_turn: This function updates either the players hand in the case of the swap or the opponents hand
     in the case of a non-swap action.
 
     :param state: Current state of the game (i.e. the fingers on each hand of each player).
