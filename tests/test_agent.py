@@ -1,8 +1,5 @@
-import environment.env as env
-from qlearning.agent import Agent
+from agent.agent import Agent
 import unittest
-from random import seed
-import numpy as np
 
 
 class EnvironmentTestCase(unittest.TestCase):

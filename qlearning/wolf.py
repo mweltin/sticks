@@ -79,8 +79,8 @@ def main(
             # Add new reward
             if agent_first:
                 q_table, done, state_idx, rewards_current_episode = agents_turn(exploration_rate, q_table, state_idx,
-                                                                                  _learning_rate, _discount_rate,
-                                                                                  rewards_current_episode)
+                                                                                _learning_rate, _discount_rate,
+                                                                                rewards_current_episode)
 
                 if done:
                     finished_on = 'AI'
@@ -88,7 +88,7 @@ def main(
                     break
 
                 # opponents turn
-                state_idx, done = dummy_turn(opponent_q_table,_use_q_table_for_actions,state_idx)
+                state_idx, done = dummy_turn(opponent_q_table, _use_q_table_for_actions, state_idx)
 
                 if done:
                     finished_on = 'Opponent'
@@ -111,8 +111,6 @@ def main(
                     finished_on = 'AI'
                     _learning_rate = learning_rate_win
                     break
-
-
 
         # Exploration rate decay
         exploration_rate = _min_exploration_rate + \
@@ -144,7 +142,7 @@ def main(
     performance_output(performance)
 
 
-def save_output(input_table, prefix=None):
+def save_output(input_table, prefix='wolf'):
     file_name = "q_table"
     if prefix:
         file_name = file_name + "_" + str(prefix)
@@ -244,7 +242,7 @@ def agents_turn(exploration_rate, q_table, state_idx, _learning_rate, _discount_
     return q_table, done, state_idx, rewards_current_episode
 
 
-def dummy_turn(opponent_q_table,_use_q_table_for_actions,state_idx):
+def dummy_turn(opponent_q_table, _use_q_table_for_actions, state_idx):
     # opponents turn
     if type(opponent_q_table) == np.ndarray and _use_q_table_for_actions is True:
         action = env.nanargmax_unbiased(opponent_q_table[state_idx])

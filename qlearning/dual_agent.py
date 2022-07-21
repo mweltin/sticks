@@ -1,4 +1,4 @@
-from agent import Agent
+from agent.agent import Agent
 import argparse
 import environment.env as env
 import random
