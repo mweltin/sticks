@@ -5,11 +5,25 @@ import random
 
 class Player:
 
-    def __init__(self, q_table=None, threshold=None, player_index=None, name=None):
+    def __init__(self, q_table=None, threshold=None, player_index=None, name=None, strategy=None):
         self._threshold = threshold
         self._q_table = q_table
         self._player_index = player_index
         self._name = name
+        self._strategy = strategy
+
+    def take_turn(self, state_idx):
+        if self._strategy == 'strict':
+            action = self.get_action(state_idx)
+        elif self._strategy == 'random':
+            action = self.get_random_action(state_idx)
+        elif self._strategy == 'threshold':
+            action = self.get_action_with_random_threshold(state_idx)
+        else:
+            raise StrategyNotDefined(' valid values are strict, random, or threshold')
+
+        return env.step(state_idx, self._player_index, action)
+
 
     def get_action(self, state_idx):
         return env.nanargmax_unbiased(self._q_table[state_idx])
