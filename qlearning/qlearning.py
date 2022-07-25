@@ -20,7 +20,8 @@ def main(
         discount_rate,
         min_exploration_rate,
         exploration_decay_rate,
-        use_q_table_for_actions
+        use_q_table_for_actions,
+        skip_plot,
 ):
 
     action_space_size = len(env.action_table)
@@ -134,10 +135,12 @@ def main(
         count += 500
 
     save_output(q_table)
-    plot_it(squashed)
+    if not skip_plot:
+        plot_it(squashed)
 
     print('Performance:', str(calc_performance(performance)))
     performance_output(performance)
+    
 
 
 def save_output(input_table, prefix=None):
@@ -269,6 +272,9 @@ if __name__ == '__main__':
     parser.add_argument('--use_q_table_for_actions', type=bool, default=False,
                         help='If True the agent and opponent will use a previously saved q-table.  \
                         if False the agent and opponent will with zeroed out q-table')
+    parser.add_argument('--skip_plot', type=bool, default=False,
+                        help='If True do not plot results.  Used when running qlearning algo multiple times times \
+                             from the command line')
     args = parser.parse_args()
 
     main(num_episodes=args.num_episodes,
@@ -277,4 +283,5 @@ if __name__ == '__main__':
          discount_rate=args.discount_rate,
          min_exploration_rate=args.min_exploration_rate,
          exploration_decay_rate=args.exploration_decay_rate,
-         use_q_table_for_actions=args.use_q_table_for_actions)
+         use_q_table_for_actions=args.use_q_table_for_actions,
+         skip_plot=args.skip_plot)
