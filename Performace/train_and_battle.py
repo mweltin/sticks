@@ -23,7 +23,7 @@ for i in range(number_of_training_runs):
 
 results = {}
 
-for i in range(2):
+for i in range(number_of_training_runs):
     os.system("python ../qlearning/wolf.py --skip_plot=True")
     q_table =  np.genfromtxt('../data/q_table.csv', delimiter=',')
 
@@ -38,6 +38,31 @@ for i in range(2):
 
     battle2 = Battle(dummy, wolf)
     winner = battle2.battle()
+
+for i in range(number_of_training_runs):
+    os.system("python ../qlearning/dual_agent.py --skip_plot=True")
+    q_table_1 =  np.genfromtxt('../data/agent_1.csv', delimiter=',')
+    q_table_2 =  np.genfromtxt('../data/agent_2.csv', delimiter=',')
+
+    agent_1 = Player(q_table=q_table_1, player_index=0, name='agent_1', strategy='strict')
+    agent_2 = Player(q_table=q_table_2, player_index=0, name='agent_2', strategy='strict')
+    dummy = Player(name='dummy', player_index=1, strategy='random')
+
+    battle = Battle(agent_1, dummy)
+    winner = battle.battle()
+
+    battle = Battle(agent_2, dummy)
+    winner = battle.battle()
+
+    agent_1 = Player(q_table=q_table_1, player_index=1, name='agent_1', strategy='strict')
+    agent_2 = Player(q_table=q_table_2, player_index=1, name='agent_2', strategy='strict')
+    dummy = Player(name='dummy', player_index=0, strategy='random')
+
+    battle = Battle(dummy, agent_1)
+    winner = battle.battle()
+
+    battle = Battle(dummy, agent_2)
+    winner = battle.battle()
 
 
 
