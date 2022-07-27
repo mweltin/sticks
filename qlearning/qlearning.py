@@ -23,10 +23,9 @@ def main(
         use_q_table_for_actions,
         skip_plot,
 ):
-
     action_space_size = len(env.action_table)
     state_space_size = len(env.state_table)
-    
+
     ''' initialize q-table with all zeros, i.e. no knowledge or load a previous good q-table'''
     q_table = load_max_reward_q_table()
     if not isinstance(q_table, np.ndarray) or not use_q_table_for_actions:
@@ -80,15 +79,15 @@ def main(
             # Add new reward
             if agent_first:
                 q_table, done, state_idx, rewards_current_episode = agents_turn(exploration_rate, q_table, state_idx,
-                                                                                  _learning_rate, _discount_rate,
-                                                                                  rewards_current_episode)
+                                                                                _learning_rate, _discount_rate,
+                                                                                rewards_current_episode)
 
                 if done:
                     finished_on = 'AI'
                     break
 
                 # opponents turn
-                state_idx, done = dummy_turn(opponent_q_table,_use_q_table_for_actions,state_idx)
+                state_idx, done = dummy_turn(opponent_q_table, _use_q_table_for_actions, state_idx)
 
                 if done:
                     finished_on = 'Opponent'
@@ -109,8 +108,6 @@ def main(
                     finished_on = 'AI'
                     break
 
-
-
         # Exploration rate decay
         exploration_rate = _min_exploration_rate + \
                            (max_exploration_rate - _min_exploration_rate) * np.exp(-_exploration_decay_rate * episode)
@@ -123,24 +120,31 @@ def main(
             max_reward = rewards_current_episode
             save_output(q_table, prefix='max_reward')
 
-    # Calculate and print the average reward per thousand episodes
-    rewards_per_thousand_episodes = np.split(np.array(rewards_all_episodes), _num_episodes / 500)
-    count = 500
+    # Calculate and print the average reward per x episodes
+    x = 100
+    rewards_per_x_episodes = np.split(np.array(rewards_all_episodes), _num_episodes / x)
+    count = x
 
     # print("********Average reward per 500 hundred episodes********\n")
     squashed = []
-    for r in rewards_per_thousand_episodes:
+    for r in rewards_per_x_episodes:
         #  print(count, ": ", str(sum(r / 500)))
-        squashed.append(sum(r / 500))
-        count += 500
+        squashed.append(sum(r / x))
+        count += x
 
     save_output(q_table)
+
     if not skip_plot:
-        plot_it(squashed)
+        plot_it(squashed, x)
+    else:
+        np.savetxt("../data/q_learning_perf_per_" + str(x) + ".csv",
+                   squashed,
+                   delimiter=", ",
+                   fmt='% s',
+                   header='what')
 
     print('Performance:', str(calc_performance(performance)))
     performance_output(performance)
-    
 
 
 def save_output(input_table, prefix=None):
@@ -174,7 +178,7 @@ def load_max_reward_q_table():
         return False
 
 
-def plot_it(data):
+def plot_it(data, num):
     # x axis values
     x = range(1, len(data) + 1)
     # corresponding y axis values
@@ -189,7 +193,7 @@ def plot_it(data):
     plt.ylabel('Reward')
 
     # giving a title to my graph
-    plt.title('Average reward per 500 episodes')
+    plt.title('Average reward per ' + str(num) + ' episodes')
 
     # function to show the plot
     plt.savefig('../data/reward_vs_episode.png')
@@ -243,7 +247,7 @@ def agents_turn(exploration_rate, q_table, state_idx, _learning_rate, _discount_
     return q_table, done, state_idx, rewards_current_episode
 
 
-def dummy_turn(opponent_q_table,_use_q_table_for_actions,state_idx):
+def dummy_turn(opponent_q_table, _use_q_table_for_actions, state_idx):
     # opponents turn
     if type(opponent_q_table) == np.ndarray and _use_q_table_for_actions is True:
         action = env.nanargmax_unbiased(opponent_q_table[state_idx])
