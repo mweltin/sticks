@@ -2,13 +2,8 @@
 Implementation of a Q-Learning algorithm to learn to game of sticks
 Author: Markus Weltin
 """
-import numpy as np
-import random
-import environment.env as env
-import rules.rules as rules
+from utilities.utility import *
 import argparse
-from os.path import exists
-import matplotlib.pyplot as plt
 
 parser = argparse.ArgumentParser(description='Process some integers.')
 
@@ -125,135 +120,30 @@ def main(
             max_reward = rewards_current_episode
             save_output(q_table, prefix='max_reward')
 
-    # Calculate and print the average reward per thousand episodes
-    rewards_per_thousand_episodes = np.split(np.array(rewards_all_episodes), _num_episodes / 500)
-    count = 500
+    # Calculate and print the average reward per x episodes
+    x = 100
+    rewards_per_thousand_episodes = np.split(np.array(rewards_all_episodes), _num_episodes / x)
+    count = x
 
     # print("********Average reward per 500 hundred episodes********\n")
     squashed = []
     for r in rewards_per_thousand_episodes:
         #  print(count, ": ", str(sum(r / 500)))
-        squashed.append(sum(r / 500))
-        count += 500
+        squashed.append(sum(r / x))
+        count += x
 
     save_output(q_table)
     if not skip_plot:
-        plot_it(squashed)
+        plot_it(squashed, x)
+    else:
+        np.savetxt("../data/wolf_perf_per_" + str(x) + ".csv",
+                   squashed,
+                   delimiter=", ",
+                   fmt='% s',
+                   header='what')
 
     print('Performance:', str(calc_performance(performance)))
     performance_output(performance)
-
-
-def save_output(input_table, prefix='wolf'):
-    file_name = "q_table"
-    if prefix:
-        file_name = file_name + "_" + str(prefix)
-
-    retval = []
-    for idx, value in enumerate(input_table):
-        temp = [*env.state_table[idx][0], *env.state_table[idx][1], *value]
-        retval.append(temp)
-
-    np.savetxt("../data/state_" + file_name + ".csv",
-               retval,
-               delimiter=", ",
-               fmt='% s',
-               header='AI L, AI R, O L, O R, swap, L L, L R, R R, R L')
-
-    np.savetxt("../data/" + file_name + ".csv",
-               input_table,
-               delimiter=", ",
-               fmt='% s')
-
-
-def load_max_reward_q_table():
-    file_exists = exists('../data/q_table_max_reward.csv')
-    if file_exists:
-        data = np.genfromtxt('../data/q_table_max_reward.csv', delimiter=',')
-        return data
-    else:
-        return False
-
-
-def plot_it(data):
-    # x axis values
-    x = range(1, len(data) + 1)
-    # corresponding y axis values
-    y = data
-
-    # plotting the points
-    plt.plot(x, y)
-
-    # naming the x axis
-    plt.xlabel('Epoch')
-    # naming the y axis
-    plt.ylabel('Reward')
-
-    # giving a title to my graph
-    plt.title('Average reward per 500 episodes')
-
-    # function to show the plot
-    plt.savefig('../data/reward_vs_episode.png')
-    plt.show()
-
-
-def calc_performance(performance_data):
-    wins = 0
-
-    for p in performance_data:
-        if p[4] == 'Draw' or p[4] == 'AI':
-            wins += 1
-
-    return wins / len(performance_data)
-
-
-def performance_output(performance_data):
-    np.savetxt("../data/raw_performance.csv",
-               performance_data,
-               delimiter=", ",
-               fmt='% s',
-               header='episode, exploration_rate, rewards_current_episode, step, winner')
-
-
-def agents_turn(exploration_rate, q_table, state_idx, _learning_rate, _discount_rate, rewards_current_episode):
-    exploration_rate_threshold = random.uniform(0, 1)
-    if exploration_rate_threshold > exploration_rate:
-        action = env.nanargmax_unbiased(q_table[state_idx])
-    else:
-        action = env.select_random_action(state_idx, env.Players.agent)
-
-    new_state_idx, reward, done, info = env.step(state_idx, env.Players.agent, action)
-    # Update Q-table for Q(s,a)
-
-    if not done:
-        q_table[state_idx][action] = q_table[state_idx][action] * (1 - _learning_rate) + _learning_rate * (
-                reward + _discount_rate * env.nanargmax_unbiased(q_table[new_state_idx]))
-    else:
-        """if we are done at this point the AI has won.  Winning states have no valid moves. Therefore
-        the expression np.nanargmax(q_table[new_state_idx] results in a ValueError and the q_table does
-        not get updated.  For the state (0,1)(0,4) it doesn't matter as there is only one move.  However
-        (0,4),(0,1) there are two moves: split or right right.  Without this block, only the split move
-        would get updated in the q_table"""
-        q_table[state_idx][action] = q_table[state_idx][action] * (1 - _learning_rate) + \
-                                     _learning_rate * (reward + _discount_rate)
-
-    rules.update_redundant_states(env.state_table[state_idx], q_table[state_idx][action], action, q_table)
-    state_idx = new_state_idx
-    rewards_current_episode += reward
-
-    return q_table, done, state_idx, rewards_current_episode
-
-
-def dummy_turn(opponent_q_table, _use_q_table_for_actions, state_idx):
-    # opponents turn
-    if type(opponent_q_table) == np.ndarray and _use_q_table_for_actions is True:
-        action = env.nanargmax_unbiased(opponent_q_table[state_idx])
-    else:
-        action = env.select_random_action(state_idx, 1)
-    new_state_idx, reward, done, info = env.step(state_idx, env.Players.opponent, action)
-    state_idx = new_state_idx
-
-    return state_idx, done
 
 
 if __name__ == '__main__':
