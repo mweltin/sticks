@@ -3,11 +3,12 @@ import random
 import environment.env as env
 import rules.rules as rules
 import matplotlib.pyplot as plt
+from utilities.utility import Utility
 
 
 class Agent:
 
-    def __init__(self):
+    def __init__(self, name='name not set'):
         self.exploration_rate = 1
         self._learning_rate = 0.1
         self.discount_rate = 0.99
@@ -15,12 +16,14 @@ class Agent:
         self._exploration_decay_rate = 0.001
         self._q_table = self.init_empty_q_table()
         self.state_table = env.state_table
-        self._name = 'name unset'
+        self._name = name
         self.player_index = 0
         self.rewards_current_episode = 0
         self.max_exploration_rate = 1
         self.win_counter = 0
         self.wins_per_freq = []
+        self.win_record_freq = 500
+        self.utility = Utility("../data/dual/" + self._name)
 
     def init_empty_q_table(self):
         action_space_size = len(env.action_table)
@@ -91,49 +94,16 @@ class Agent:
         new_state_idx, reward, done, info = env.step(state_index, self.player_index, action)
         self.update_q_table(state_index, new_state_idx, reward, done, action)
         self.exploration_rate = self._min_exploration_rate + (
-                    self.max_exploration_rate - self._min_exploration_rate) * np.exp(
+                self.max_exploration_rate - self._min_exploration_rate) * np.exp(
             -self._exploration_decay_rate * episode)
         return new_state_idx, done
 
     def save_output(self):
-
-        retval = []
-        for idx, value in enumerate(self._q_table):
-            temp = [*env.state_table[idx][0], *env.state_table[idx][1], *value]
-            retval.append(temp)
-
-        np.savetxt("../data/state_" + self._name + ".csv",
-                   retval,
-                   delimiter=", ",
-                   fmt='% s',
-                   header='AI L, AI R, O L, O R, swap, L L, L R, R R, R L')
-
-        np.savetxt("../data/" + self._name + ".csv",
-                   self._q_table,
-                   delimiter=", ",
-                   fmt='% s')
+        self.utility.save_output(self._q_table)
 
     def record_wins(self):
         self.wins_per_freq.append(self.win_counter)
         self.win_counter = 0
 
     def plot_it(self):
-        # x axis values
-        x = range(1, len(self.wins_per_freq) + 1)
-        # corresponding y axis values
-        y = self.wins_per_freq
-
-        # plotting the points
-        plt.plot(x, y)
-
-        # naming the x axis
-        plt.xlabel('Epoch')
-        # naming the y axis
-        plt.ylabel('Reward')
-
-        # giving a title to my graph
-        plt.title('Wins per 100 episodes ' + self._name)
-
-        # function to show the plot
-        plt.savefig('../data/wins_vs_episode'+self._name+'.png')
-        plt.show()
+        self.utility.plot_it(self.wins_per_freq, self.win_record_freq)

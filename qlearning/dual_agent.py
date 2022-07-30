@@ -5,10 +5,8 @@ import random
 
 
 def main(num_episodes, max_steps_per_episode, skip_plot):
-    agent_1 = Agent()
-    agent_1.name = 'agent_1'
-    agent_2 = Agent()
-    agent_2.name = 'agent_2'
+    agent_1 = Agent('agent_1')
+    agent_2 = Agent('agent_2')
 
     for episode in range(num_episodes):
         finished_on = 'Draw'
@@ -42,7 +40,7 @@ def main(num_episodes, max_steps_per_episode, skip_plot):
             current_agent.win_counter += 0.5
             other_agent.win_counter += 0.5
 
-        if not episode % 100:
+        if not episode % 500:
             agent_1.record_wins()
             agent_2.record_wins()
 
