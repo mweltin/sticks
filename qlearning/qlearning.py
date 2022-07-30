@@ -137,7 +137,7 @@ def main(
     if not skip_plot:
         utility.plot_it(squashed, x)
     else:
-        np.savetxt("../data/qlearning/q_learning_perf_per_" + str(x) + ".csv",
+        np.savetxt("../data/qlearning/reward_vs_episode.csv",
                    squashed,
                    delimiter=", ",
                    fmt='% s',

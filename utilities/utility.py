@@ -9,9 +9,11 @@ import rules.rules as rules
 class Utility:
 
     def __init__(self, base_directory=None):
+        if not base_directory:
+            raise
         self.base_directory = base_directory
 
-    def save_output(self, input_table, prefix='wolf'):
+    def save_output(self, input_table, prefix=None):
         file_name = "q_table"
         if prefix:
             file_name = file_name + "_" + str(prefix)
