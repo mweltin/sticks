@@ -3,7 +3,11 @@ Implementation of a Q-Learning algorithm to learn to game of sticks
 Author: Markus Weltin
 """
 import argparse
-from utilities.utility import *
+from utilities.utility import Utility
+import environment.env as env
+import numpy as np
+import random
+import rules.rules as rules
 
 parser = argparse.ArgumentParser(description='Process some integers.')
 
@@ -18,16 +22,17 @@ def main(
         use_q_table_for_actions,
         skip_plot,
 ):
+    utility = Utility("../data/qlearning")
     action_space_size = len(env.action_table)
     state_space_size = len(env.state_table)
 
     ''' initialize q-table with all zeros, i.e. no knowledge or load a previous good q-table'''
-    q_table = load_max_reward_q_table()
+    q_table = utility.load_max_reward_q_table()
     if not isinstance(q_table, np.ndarray) or not use_q_table_for_actions:
         q_table = np.zeros((state_space_size, action_space_size))
 
     env.eliminate_invalid_actions(env.state_table, q_table)
-    opponent_q_table = load_max_reward_q_table()
+    opponent_q_table = utility.load_max_reward_q_table()
 
     '''how many games to play'''
     _num_episodes = num_episodes
@@ -73,7 +78,7 @@ def main(
             # Set new state
             # Add new reward
             if agent_first:
-                q_table, done, state_idx, rewards_current_episode = agents_turn(exploration_rate, q_table, state_idx,
+                q_table, done, state_idx, rewards_current_episode = utility.agents_turn(exploration_rate, q_table, state_idx,
                                                                                 _learning_rate, _discount_rate,
                                                                                 rewards_current_episode)
 
@@ -82,7 +87,7 @@ def main(
                     break
 
                 # opponents turn
-                state_idx, done = dummy_turn(opponent_q_table, _use_q_table_for_actions, state_idx)
+                state_idx, done = utility.dummy_turn(opponent_q_table, _use_q_table_for_actions, state_idx)
 
                 if done:
                     finished_on = 'Opponent'
@@ -90,13 +95,13 @@ def main(
 
             else:
                 # opponents turn
-                state_idx, done = dummy_turn(opponent_q_table, _use_q_table_for_actions, state_idx)
+                state_idx, done = utility.dummy_turn(opponent_q_table, _use_q_table_for_actions, state_idx)
 
                 if done:
                     finished_on = 'Opponent'
                     break
 
-                q_table, done, state_idx, rewards_current_episode = agents_turn(exploration_rate, q_table, state_idx,
+                q_table, done, state_idx, rewards_current_episode = utility.agents_turn(exploration_rate, q_table, state_idx,
                                                                                 _learning_rate, _discount_rate,
                                                                                 rewards_current_episode)
                 if done:
@@ -113,7 +118,7 @@ def main(
         rewards_all_episodes.append(rewards_current_episode)
         if rewards_current_episode > max_reward:
             max_reward = rewards_current_episode
-            save_output(q_table, prefix='max_reward')
+            utility.save_output(q_table, prefix='max_reward')
 
     # Calculate and print the average reward per x episodes
     x = 100
@@ -127,19 +132,19 @@ def main(
         squashed.append(sum(r / x))
         count += x
 
-    save_output(q_table)
+    utility.save_output(q_table)
 
     if not skip_plot:
-        plot_it(squashed, x)
+        utility.plot_it(squashed, x)
     else:
-        np.savetxt("../data/q_learning_perf_per_" + str(x) + ".csv",
+        np.savetxt("../data/qlearning/q_learning_perf_per_" + str(x) + ".csv",
                    squashed,
                    delimiter=", ",
                    fmt='% s',
                    header='what')
 
-    print('Performance:', str(calc_performance(performance)))
-    performance_output(performance)
+    print('Performance:', str(utility.calc_performance(performance)))
+    utility.performance_output(performance)
 
 
 if __name__ == '__main__':
