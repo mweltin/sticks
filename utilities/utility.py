@@ -67,7 +67,7 @@ class Utility:
 
         # function to show the plot
         plt.savefig(self.base_directory + '/reward_vs_episode.png')
-        plt.show()
+        # plt.show()
 
     def save_it(self, squashed):
         np.savetxt(self.base_directory + '/reward_vs_episode.csv',

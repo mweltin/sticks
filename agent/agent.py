@@ -108,5 +108,5 @@ class Agent:
     def plot_it(self):
         self.utility.plot_it(self.wins_per_freq, self.win_record_freq)
 
-    def safe_it(self):
+    def save_it(self):
         self.utility.save_it(self.wins_per_freq)

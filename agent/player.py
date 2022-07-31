@@ -24,7 +24,6 @@ class Player:
 
         return env.step(state_idx, self._player_index, action)
 
-
     def get_action(self, state_idx):
         return env.nanargmax_unbiased(self._q_table[state_idx])
 

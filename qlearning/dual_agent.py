@@ -54,8 +54,9 @@ def main(num_episodes, max_steps_per_episode, skip_plot):
     if not skip_plot:
         agent_2.plot_it()
         agent_1.plot_it()
-
-    agent_1.save_it
+    else:
+        agent_1.save_it()
+        agent_2.save_it()
 
 
 if __name__ == '__main__':
