@@ -40,6 +40,10 @@ def main(num_episodes, max_steps_per_episode, skip_plot):
             current_agent.win_counter += 0.5
             other_agent.win_counter += 0.5
 
+        agent_1.save_output(prefix='max_reward')
+        agent_2.save_output(prefix='max_reward')
+
+        # @todo this 500 should be tied a variable in the agent class.
         if not episode % 500:
             agent_1.record_wins()
             agent_2.record_wins()
@@ -50,6 +54,8 @@ def main(num_episodes, max_steps_per_episode, skip_plot):
     if not skip_plot:
         agent_2.plot_it()
         agent_1.plot_it()
+
+    agent_1.save_it
 
 
 if __name__ == '__main__':

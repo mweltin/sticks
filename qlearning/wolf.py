@@ -140,11 +140,7 @@ def main(
     if not skip_plot:
         utility.plot_it(squashed, x)
     else:
-        np.savetxt("../data/wolf/reward_vs_episode.csv",
-                   squashed,
-                   delimiter=", ",
-                   fmt='% s',
-                   header='what')
+        utility.save_it(squashed)
 
     print('Performance:', str(utility.calc_performance(performance)))
     utility.performance_output(performance)

@@ -98,8 +98,8 @@ class Agent:
             -self._exploration_decay_rate * episode)
         return new_state_idx, done
 
-    def save_output(self):
-        self.utility.save_output(self._q_table)
+    def save_output(self, prefix=None):
+        self.utility.save_output(self._q_table, prefix)
 
     def record_wins(self):
         self.wins_per_freq.append(self.win_counter)
@@ -107,3 +107,6 @@ class Agent:
 
     def plot_it(self):
         self.utility.plot_it(self.wins_per_freq, self.win_record_freq)
+
+    def safe_it(self):
+        self.utility.save_it(self.wins_per_freq)

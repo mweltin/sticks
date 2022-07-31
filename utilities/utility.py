@@ -23,21 +23,21 @@ class Utility:
             temp = [*env.state_table[idx][0], *env.state_table[idx][1], *value]
             retval.append(temp)
 
-        np.savetxt(self.base_directory+"/state_" + file_name + ".csv",
+        np.savetxt(self.base_directory + "/state_" + file_name + ".csv",
                    retval,
                    delimiter=", ",
                    fmt='% s',
                    header='AI L, AI R, O L, O R, swap, L L, L R, R R, R L')
 
-        np.savetxt(self.base_directory+"/" + file_name + ".csv",
+        np.savetxt(self.base_directory + "/" + file_name + ".csv",
                    input_table,
                    delimiter=", ",
                    fmt='% s')
 
     def load_max_reward_q_table(self):
-        file_exists = exists(self.base_directory+"/q_table_max_reward.csv")
+        file_exists = exists(self.base_directory + "/q_table_max_reward.csv")
         if file_exists:
-            data = np.genfromtxt(self.base_directory+"/q_table_max_reward.csv", delimiter=',')
+            data = np.genfromtxt(self.base_directory + "/q_table_max_reward.csv", delimiter=',')
             return data
         else:
             return False
@@ -66,8 +66,15 @@ class Utility:
         plt.title('Average reward per ' + str(num) + ' episodes')
 
         # function to show the plot
-        plt.savefig(self.base_directory+'/reward_vs_episode.png')
+        plt.savefig(self.base_directory + '/reward_vs_episode.png')
         plt.show()
+
+    def save_it(self, squashed):
+        np.savetxt(self.base_directory + '/reward_vs_episode.csv',
+                   squashed,
+                   delimiter=", ",
+                   fmt='% s',
+                   header='reward vs episode raw data')
 
     def calc_performance(self, performance_data):
         wins = 0
@@ -79,7 +86,7 @@ class Utility:
         return wins / len(performance_data)
 
     def performance_output(self, performance_data):
-        np.savetxt(self.base_directory+"/raw_performance.csv",
+        np.savetxt(self.base_directory + "/raw_performance.csv",
                    performance_data,
                    delimiter=", ",
                    fmt='% s',
