@@ -3,7 +3,7 @@ import numpy as np
 from agent.player import Player
 from agent.battle import Battle
 
-number_of_training_runs = 2
+number_of_training_runs = 100
 
 results = {
     'qlearning':
