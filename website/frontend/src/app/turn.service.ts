@@ -16,6 +16,7 @@ export class TurnService {
   constructor(private http: HttpClient) { }
 
   private turnEndpoint = '/turn';
+  private setAlgoEndpoint = '/algorithm';
 
   takeATurn(turnData: ActionQueue){
     let human_hand_value:number
@@ -33,6 +34,10 @@ export class TurnService {
 
   public updatePlayMessage(message: string) {
     this.currentPlayMessage.next(message)
+  }
+
+  setAlgorithm(algo: string){
+    return this.http.post(this.setAlgoEndpoint, {algo});
   }
 
 }

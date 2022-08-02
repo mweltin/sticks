@@ -20,6 +20,7 @@ sys.path.append(str(path_root))
 from rules import rules
 from environment import env
 
+q_table_location = settings.FILES_DIR
 
 # Create your views here.
 
@@ -47,7 +48,7 @@ def turn(request):
         active_player_index = 0
 
     if data['activePlayer'] == 'qlearning':
-        file_path = os.path.join(settings.FILES_DIR, 'q_table_max_reward.csv')
+        file_path = os.path.join(q_table_location, 'q_table_max_reward.csv')
         with open(file_path, mode='r') as file:
             q_table = list(csv.reader(file, quoting=csv.QUOTE_NONNUMERIC))
 
@@ -73,6 +74,21 @@ def swap(request):
     state = rules.swap(state)
     return JsonResponse(state, safe=False)
 
+@csrf_exempt
+def algorithm(request):
+    data = json.loads(request.body)
+    if data['algo'] == 'qlearning':
+        q_table_location = '../data/qlearning'
+    elif data['algo'] == 'wolf':
+        q_table_location = '../data/wolf'
+    elif data['algo'] == 'dual_agent_1':
+        q_table_location = '../data/dual/agent_1'
+    elif data['algo'] == 'dual_agent_2':
+        q_table_location = '../data/dual/agent_2'
+    else:
+        q_table_location = '../data/qlearning'
+
+    return JsonResponse(q_table_location, safe=False)
 
 """
 This is only called by the human player hence the human hand action is always at index zero.

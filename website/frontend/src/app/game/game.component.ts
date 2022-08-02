@@ -17,6 +17,11 @@ export class GameComponent implements OnInit {
 
   // this holds the value of the active player either 'human' or 'qlearning'
   whoseTurnIsIt: string = '';
+  algorithmSelection: string = '';
+
+  hideSelectAlgorithm: boolean = false;
+  hideSelectWhoGoesFirst: boolean = true;
+  hideWhoesTurnIsIt: boolean = true;
 
   // These are the inputs to the player component and by extension the hand component
   QLFingers: number = 0;
@@ -113,6 +118,8 @@ export class GameComponent implements OnInit {
 
   // When the app loads two buttons
   whoGoesFirst(player : string){
+    this.hideSelectWhoGoesFirst = true;
+    this.hideWhoesTurnIsIt = false;
     if( player == 'human' ){
       this.whoseTurnIsIt = 'human';
     }
@@ -124,6 +131,18 @@ export class GameComponent implements OnInit {
         this.aiTakeTurn();
       }, 1000);
     }
+  }
+
+    selectAlgorithm(algorithm: string){
+      this.hideSelectAlgorithm = true;
+      this.hideSelectWhoGoesFirst = false;
+      this.turnSrv.setAlgorithm(algorithm).subscribe(
+        (res: any) => {
+          this.algorithmSelection = res
+        },
+        (error: any) =>
+          console.log(error)
+      );
   }
 
   // the backend is stateless so it's easier to just do the swap client site.
