@@ -128,6 +128,43 @@ for i in range(number_of_training_runs):
     winner = battle.battle()
     results['qlearning']['vs_wolf']['go_second'].append(winner)
 
+    # qlearning vs dual_1
+    battle = Battle(q_player, dual_1_player)
+    winner = battle.battle()
+    results['qlearning']['vs_dual_1']['go_first'].append(winner)
+
+    battle = Battle(dual_1_player, q_player)
+    winner = battle.battle()
+    results['qlearning']['vs_dual_1']['go_second'].append(winner)
+
+
+    # qlearning vs dual_2
+    battle = Battle(q_player, dual_2_player)
+    winner = battle.battle()
+    results['qlearning']['vs_dual_2']['go_first'].append(winner)
+
+    battle = Battle(dual_2_player, q_player)
+    winner = battle.battle()
+    results['qlearning']['vs_dual_2']['go_second'].append(winner)
+
+    # wolf vs dual_1
+    battle = Battle(wolf_player, dual_1_player)
+    winner = battle.battle()
+    results['wolf']['vs_dual_1']['go_first'].append(winner)
+
+    battle = Battle(dual_1_player, wolf_player)
+    winner = battle.battle()
+    results['wolf']['vs_dual_1']['go_second'].append(winner)
+
+    # wolf vs dual_2
+    battle = Battle(wolf_player, dual_2_player)
+    winner = battle.battle()
+    results['wolf']['vs_dual_2']['go_first'].append(winner)
+
+    battle = Battle(dual_2_player, wolf_player)
+    winner = battle.battle()
+    results['wolf']['vs_dual_2']['go_second'].append(winner)
+
 # save results  naming convention player 1 vs player 2,  player 1 always went first
 # qlearning vs dummy
 np.savetxt("../data/qlearning/battle_data/gl_vs_dummy_results.csv", results['qlearning']['vs_dummy']['go_first'],
