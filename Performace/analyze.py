@@ -1,7 +1,8 @@
 import csv
+import numpy as np
 
 
-def main(file):
+def main():
     # save results  naming convention player 1 vs player 2,  player 1 always went first
     # qlearning vs dummy
     datafiles = ["../data/qlearning/battle_data/gl_vs_dummy_results.csv",
@@ -23,18 +24,32 @@ def main(file):
                  "../data/dual/agent_2/battle_data/dual_2_vs_dummy_results.csv",
                  "../data/dual/agent_2/battle_data/dummy_vs_dual_2_results.csv",
                  ]
+    results = [['player 1', 'player 2', 'wins', 'losses', 'draws', 'performance']]
 
-    with open(file, newline='') as f:
-        reader = csv.reader(f)
-        data = list(reader)
-    temp = {}
+    for dfile in datafiles:
+        with open(dfile, newline='') as f:
+            reader = csv.reader(f)
+            data = list(reader)
 
-    for e in data[1:]:
-        if e[0] not in temp.keys():
-            temp[e[0]] = 0
-        temp[e[0]] += 1
+        players = data[0][0].split()
+        temp = {players[1]: 0, players[3]: 0, 'Draw': 0}
 
-    pass
+        for e in data[1:]:
+            if e[0] not in temp.keys():
+                raise
+            temp[e[0]] += 1
+
+        total_games = temp[players[1]] + temp[players[3]] + temp['Draw']
+        total_wins = temp[players[1]] + temp['Draw']
+        performance = round(total_wins / total_games, 4)
+        line_item = [players[1], players[3], temp[players[1]], temp[players[3]], temp['Draw'], performance]
+
+        results.append(line_item)
+
+    np.savetxt("final_results.csv",
+               results,
+               delimiter=", ",
+               fmt='% s')
 
 
 if __name__ == '__main__':

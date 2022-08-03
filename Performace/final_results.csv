@@ -1,0 +1,19 @@
+player 1, player 2, wins, losses, draws, performance
+ql_player, dummy, 5, 0, 0, 1.0
+dummy, ql_player, 5, 0, 0, 1.0
+ql_player, wolf_player, 5, 0, 0, 1.0
+ql_player, wolf_player, 0, 5, 0, 0.0
+ql_player, dual_1_player, 5, 0, 0, 1.0
+ql_player, dual_1_player, 0, 4, 1, 0.2
+ql_player, dual_2_player, 5, 0, 0, 1.0
+ql_player, dual_2_player, 0, 3, 2, 0.4
+wolf_player, dummy, 5, 0, 0, 1.0
+dummy, wolf_player, 5, 0, 0, 1.0
+wolf_player, dual_1_player, 3, 0, 2, 1.0
+dual_1_player, wolf_player, 2, 0, 3, 1.0
+wolf_player, dual_2_player, 4, 0, 1, 1.0
+dual_2_player, wolf_player, 1, 0, 4, 1.0
+dual_1_player, dummy, 5, 0, 0, 1.0
+dummy, dual_1_player, 4, 1, 0, 0.8
+dual_2_player, dummy, 3, 0, 2, 1.0
+dummy, dual_2_player, 4, 1, 0, 0.8
