@@ -3,7 +3,7 @@ import numpy as np
 from agent.player import Player
 from agent.battle import Battle
 
-number_of_training_runs = 30
+number_of_training_runs = 1
 
 results = {
     'dummy':
@@ -36,9 +36,9 @@ results = {
         },
     'dual_2':
         {
-            #            'vs_dummy': [],
-            #            'vs_qlearning': [],
-            #            'vs_wolf': [],
+            'vs_dummy': [],
+            'vs_qlearning': [],
+            'vs_wolf': [],
             'vs_dual_1': [],
         }
 }
@@ -254,9 +254,11 @@ np.savetxt("../data/wolf/battle_data/dual_2_vs_wolf_results.csv", results['dual_
 
 
 # dual 1 vs dual 2
-np.savetxt("../data/dual/dual_1/battle_data/dual_1_vs_dual_2.csv", results['dual_1']['vs_dual_2'],
+np.savetxt("../data/dual/agent_1/battle_data/dual_1_vs_dual_2.csv", results['dual_1']['vs_dual_2'],
            delimiter=", ", fmt='% s', header='dual_1_player vs dual_2_player')
 
 # dual_2 vs wolf
-np.savetxt("../data/dual/dual_2/battle_data/dual_2_vs_dual_1_results.csv", results['dual_2']['vs_dual_1'],
+np.savetxt("../data/dual/agent_2/battle_data/dual_2_vs_dual_1_results.csv", results['dual_2']['vs_dual_1'],
            delimiter=", ", fmt='% s', header='dual_2_player vs dual_1_player')
+
+print("train battle done")

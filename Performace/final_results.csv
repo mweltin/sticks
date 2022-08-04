@@ -1,19 +1,21 @@
-player 1, player 2, wins, losses, draws, performance
-ql_player, dummy, 23, 6, 1, 0.8
-dummy, ql_player, 24, 6, 0, 0.8
-ql_player, wolf_player, 25, 2, 3, 0.9333
-ql_player, wolf_player, 1, 27, 2, 0.1
-ql_player, dual_1_player, 22, 4, 4, 0.8667
-ql_player, dual_1_player, 2, 11, 17, 0.6333
-ql_player, dual_2_player, 22, 2, 6, 0.9333
-ql_player, dual_2_player, 5, 13, 12, 0.5667
-wolf_player, dummy, 22, 6, 2, 0.8
-dummy, wolf_player, 25, 5, 0, 0.8333
-wolf_player, dual_1_player, 24, 5, 1, 0.8333
-dual_1_player, wolf_player, 16, 6, 8, 0.8
-wolf_player, dual_2_player, 24, 1, 5, 0.9667
-dual_2_player, wolf_player, 14, 4, 12, 0.8667
-dual_1_player, dummy, 19, 6, 5, 0.8
-dummy, dual_1_player, 25, 4, 1, 0.8667
-dual_2_player, dummy, 22, 5, 3, 0.8333
-dummy, dual_2_player, 19, 8, 3, 0.7333
+player 1, player 2, wins, losses, draws, performance player 1, performance player 2
+ql_player, dummy, 1, 0, 0, 1.0, 0.0
+dummy, ql_player, 1, 0, 0, 1.0, 0.0
+wolf_player, dummy, 1, 0, 0, 1.0, 0.0
+dummy, wolf_player, 1, 0, 0, 1.0, 0.0
+dual_1_player, dummy, 1, 0, 0, 1.0, 0.0
+dummy, dual_1_player, 1, 0, 0, 1.0, 0.0
+dual_2_player, dummy, 1, 0, 0, 1.0, 0.0
+dummy, dual_2_player, 1, 0, 0, 1.0, 0.0
+ql_player, wolf_player, 1, 0, 0, 1.0, 0.0
+ql_player, wolf_player, 0, 1, 0, 0.0, 1.0
+ql_player, dual_1_player, 0, 0, 1, 1.0, 1.0
+dual_1_player, ql_player, 0, 0, 1, 1.0, 1.0
+ql_player, dual_2_player, 1, 0, 0, 1.0, 0.0
+dual_2_player, ql_player, 0, 0, 1, 1.0, 1.0
+wolf_player, dual_1_player, 0, 1, 0, 0.0, 1.0
+dual_1_player, wolf_player, 1, 0, 0, 1.0, 0.0
+wolf_player, dual_2_player, 1, 0, 0, 1.0, 0.0
+dual_2_player, wolf_player, 1, 0, 0, 1.0, 0.0
+dual_1_player, dual_2_player, 1, 0, 0, 1.0, 0.0
+dual_2_player, dual_1_player, 0, 0, 1, 1.0, 1.0
