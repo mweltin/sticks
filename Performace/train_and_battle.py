@@ -210,7 +210,7 @@ np.savetxt("../data/qlearning/battle_data/ql_vs_wolf_results.csv", results['qlea
 
 # wolf_player vs qlearning
 np.savetxt("../data/qlearning/battle_data/wolf_vs_ql_results.csv", results['wolf']['vs_qlearning'],
-           delimiter=", ", fmt='% s', header='ql_player vs wolf_player')
+           delimiter=", ", fmt='% s', header='wolf_player vs ql_player')
 
 
 # qlearning vs dual_1
