@@ -5,7 +5,7 @@ import numpy as np
 def main():
     # save results  naming convention player 1 vs player 2,  player 1 always went first
     # qlearning vs dummy
-    root_dir = '/Users/mweltin/data_report_results'
+    root_dir = '/Users/mweltin/AI-801/project/sticks/data'
     datafiles = [root_dir + "/qlearning/battle_data/gl_vs_dummy_results.csv",
                  root_dir + "/qlearning/battle_data/dummy_vs_ql_results.csv",
                  root_dir + "/qlearning/battle_data/ql_vs_wolf_results.csv",
