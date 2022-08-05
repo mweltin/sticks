@@ -105,7 +105,7 @@ class Utility:
 
         if not done:
             q_table[state_idx][action] = q_table[state_idx][action] + _learning_rate * (
-                    reward + _discount_rate * env.nanargmax_unbiased(q_table[new_state_idx] - q_table[state_idx][action]))
+                    reward + _discount_rate * env.nanargmax_unbiased(q_table[new_state_idx]) - q_table[state_idx][action])
         else:
             """if we are done at this point the AI has won.  Winning states have no valid moves. Therefore
             the expression np.nanargmax(q_table[new_state_idx] results in a ValueError and the q_table does
