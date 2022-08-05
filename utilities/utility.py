@@ -104,15 +104,15 @@ class Utility:
         # Update Q-table for Q(s,a)
 
         if not done:
-            q_table[state_idx][action] = q_table[state_idx][action] * (1 - _learning_rate) + _learning_rate * (
-                    reward + _discount_rate * env.nanargmax_unbiased(q_table[new_state_idx]))
+            q_table[state_idx][action] = q_table[state_idx][action] + _learning_rate * (
+                    reward + _discount_rate * env.nanargmax_unbiased(q_table[new_state_idx] - q_table[state_idx][action]))
         else:
             """if we are done at this point the AI has won.  Winning states have no valid moves. Therefore
             the expression np.nanargmax(q_table[new_state_idx] results in a ValueError and the q_table does
             not get updated.  For the state (0,1)(0,4) it doesn't matter as there is only one move.  However
             (0,4),(0,1) there are two moves: split or right right.  Without this block, only the split move
             would get updated in the q_table"""
-            q_table[state_idx][action] = q_table[state_idx][action] * (1 - _learning_rate) + \
+            q_table[state_idx][action] = q_table[state_idx][action]  + \
                                          _learning_rate * (reward + _discount_rate)
 
         rules.update_redundant_states(env.state_table[state_idx], q_table[state_idx][action], action, q_table)
