@@ -37,8 +37,8 @@ def main(num_episodes, max_steps_per_episode, skip_plot):
                 break
 
         if finished_on == 'Draw':
-            current_agent.win_counter += 0.5
-            other_agent.win_counter += 0.5
+            current_agent.win_counter += 1
+            other_agent.win_counter += 1
 
         agent_1.save_output(prefix='max_reward')
         agent_2.save_output(prefix='max_reward')
