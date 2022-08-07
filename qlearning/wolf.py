@@ -3,6 +3,8 @@ Implementation of a Q-Learning algorithm to learn to game of sticks
 Author: Markus Weltin
 """
 import argparse
+from agent.player import Player
+from agent.agent import Agent
 from utilities.utility import Utility
 import environment.env as env
 import numpy as np
@@ -22,128 +24,46 @@ def main(
         use_q_table_for_actions,
         skip_plot,
 ):
-    utility = Utility("../data/wolf")
-    action_space_size = len(env.action_table)
-    state_space_size = len(env.state_table)
+    wolf_a = Agent('wolf')
+    dummy = Player(name='agent_2', strategy='random', player_index=1)
 
-    ''' initialize q-table with all zeros, i.e. no knowledge or load a previous good q-table'''
-    q_table = utility.load_max_reward_q_table()
-    if not isinstance(q_table, np.ndarray) or not use_q_table_for_actions:
-        q_table = np.zeros((state_space_size, action_space_size))
-
-    env.eliminate_invalid_actions(env.state_table, q_table)
-    opponent_q_table = utility.load_max_reward_q_table()
-
-    '''how many games to play'''
-    _num_episodes = num_episodes
-    ''' how many turns to take in a game before starting a new game. '''
-    _max_steps_per_episode = max_steps_per_episode
-
-    _use_q_table_for_actions = use_q_table_for_actions
-
-    '''learning rate how quickly the agent abandons the previous q value in the 
-        qtable for a new q value for a give (state, action) pair.  
-        The higher the learning rate the quicker the agent will adopt the new
-        q value. '''
-    _learning_rate = learning_rate_win
-    _discount_rate = discount_rate
-
-    '''The following values control the exploration / exploitation of the agent'''
-    exploration_rate = 1
-    max_exploration_rate = 1
-    _min_exploration_rate = min_exploration_rate
-    _exploration_decay_rate = exploration_decay_rate
-
-    rewards_all_episodes = []
-    '''used to decide when to save a q table always save last table and highest reward table'''
-
-    '''flag used to trigger the saving of the current q_table that has the highest reward'''
-    max_reward = 0
-    '''Agent performance dictionary used to collect episode out put performance = (wins+draws)/(total episodes)'''
-    '''Elements include "episode", "exploration rate", "reward", "turn", "winner"'''
-    performance = []
-
-    # Q-learning algorithm
-    for episode in range(_num_episodes):
+    for episode in range(num_episodes):
         finished_on = 'Draw'
-        # initialize new episode params
-        state_idx = env.reset()  # state is the index in the env.state_table
+        state_idx = env.reset()
         rewards_current_episode = 0
         agent_first = True if random.uniform(0, 1) < 0.5 else False
 
-        for step in range(_max_steps_per_episode):
-            # Exploration-exploitation trade-off
-            # Take new action
-            # Update Q-table
-            # Set new state
-            # Add new reward
+        for step in range(max_steps_per_episode):
             if agent_first:
-                q_table, done, state_idx, rewards_current_episode = utility.agents_turn(exploration_rate, q_table, state_idx,
-                                                                                _learning_rate, _discount_rate,
-                                                                                rewards_current_episode)
-
+                state_idx, done = wolf_a.take_turn(state_idx, episode)
                 if done:
-                    finished_on = 'AI'
-                    _learning_rate = learning_rate_win
+                    finished_on = wolf_a.name
+                    wolf_a.win_counter += 1
                     break
 
-                # opponents turn
-                state_idx, done = utility.dummy_turn(opponent_q_table, _use_q_table_for_actions, state_idx)
-
+                state_idx, reward, done, info = dummy.take_turn(state_idx)
                 if done:
-                    finished_on = 'Opponent'
-                    _learning_rate = learning_rate_lose
+                    finished_on = dummy.name
                     break
-
             else:
-                # opponents turn
-                state_idx, done = utility.dummy_turn(opponent_q_table, _use_q_table_for_actions, state_idx)
-
+                state_idx, reward, done, info = dummy.take_turn(state_idx)
                 if done:
-                    finished_on = 'Opponent'
-                    _learning_rate = learning_rate_lose
+                    finished_on = dummy.name
                     break
 
-                q_table, done, state_idx, rewards_current_episode = utility.agents_turn(exploration_rate, q_table, state_idx,
-                                                                                _learning_rate, _discount_rate,
-                                                                                rewards_current_episode)
+                state_idx, done = wolf_a.take_turn(state_idx, episode)
                 if done:
-                    finished_on = 'AI'
-                    _learning_rate = learning_rate_win
+                    finished_on = wolf_a.name
+                    wolf_a.win_counter += 1
                     break
 
-        # Exploration rate decay
-        exploration_rate = _min_exploration_rate + \
-                           (max_exploration_rate - _min_exploration_rate) * np.exp(-_exploration_decay_rate * episode)
+        if finished_on == 'Draw':
+            wolf_a.win_counter += 1
 
-        performance.append([episode, exploration_rate, rewards_current_episode, step, finished_on])
+        wolf_a.save_output(prefix='max_reward')
 
-        # Add current episode reward to total rewards list
-        rewards_all_episodes.append(rewards_current_episode)
-        if rewards_current_episode > max_reward:
-            max_reward = rewards_current_episode
-            utility.save_output(q_table, prefix='max_reward')
-
-    # Calculate and print the average reward per x episodes
-    x = 100
-    rewards_per_thousand_episodes = np.split(np.array(rewards_all_episodes), _num_episodes / x)
-    count = x
-
-    # print("********Average reward per 500 hundred episodes********\n")
-    squashed = []
-    for r in rewards_per_thousand_episodes:
-        #  print(count, ": ", str(sum(r / 500)))
-        squashed.append(sum(r / x))
-        count += x
-
-    utility.save_output(q_table)
-    if not skip_plot:
-        utility.plot_it(squashed, x)
-    else:
-        utility.save_it(squashed)
-
-    print('Performance:', str(utility.calc_performance(performance)))
-    utility.performance_output(performance)
+    wolf_a.save_output()
+    wolf_a.save_it()
 
 
 if __name__ == '__main__':
