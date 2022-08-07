@@ -7,7 +7,6 @@ from utilities.utility import Utility
 from agent.player import Player
 
 
-
 class Agent(Player):
 
     def __init__(self, name='name not set'):
@@ -41,7 +40,7 @@ class Agent(Player):
 
     q_table = property(get_q_table, set_q_table)
 
-    def set_utility(self, name ):
+    def set_utility(self, name):
         del self._utility
         self._utility = Utility(name)
 
@@ -84,9 +83,9 @@ class Agent(Player):
 
     def update_q_table(self, state_idx, new_state_idx, reward, done, action):
         if not done:
-            self._q_table[state_idx][action] = self._q_table[state_idx][action]  + self._learning_rate * (
-                                                       reward + self.discount_rate * env.nanargmax_unbiased(
-                                                   self._q_table[new_state_idx]) - self._q_table[state_idx][action] )
+            self._q_table[state_idx][action] = self._q_table[state_idx][action] + self._learning_rate * (
+                    reward + self.discount_rate * env.nanargmax_unbiased(
+                self._q_table[new_state_idx]) - self._q_table[state_idx][action])
         else:
             """if we are done at this point the AI has won.  Winning states have no valid moves. Therefore
             the expression np.nanargmax(q_table[new_state_idx] results in a ValueError and the q_table does
@@ -121,3 +120,14 @@ class Agent(Player):
 
     def save_it(self):
         self._utility.save_it(self.wins_per_freq)
+
+    def set_q_table(self, max_reward=None):
+        if max_reward:
+            self._q_table = self._utility.load_max_reward_q_table()
+
+        if not isinstance( self._q_table, np.ndarray):
+            print('WARNING: max_q_table_not_found, falling back to empty q_table')
+            self._player_index = self.init_empty_q_table()
+
+    def get_q_table(self):
+        return self._q_table

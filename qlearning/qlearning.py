@@ -25,7 +25,9 @@ def main(
         skip_plot,
 ):
     qlearning = Agent('qlearning')
-    dummy = Player(name='agent_2', strategy='random', player_index=1)
+    qlearning.set_q_table(max_reward=True)
+
+    dummy = Player(name='dummy', strategy='random', player_index=1)
 
     # Q-learning algorithm
     for episode in range(num_episodes):
