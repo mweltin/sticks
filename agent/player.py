@@ -12,7 +12,7 @@ class Player:
         self._name = name
         self._strategy = strategy
 
-    def take_turn(self, state_idx):
+    def  take_turn(self, state_idx):
         if self._strategy == 'strict':
             action = self.get_action(state_idx)
         elif self._strategy == 'random':
