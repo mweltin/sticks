@@ -3,7 +3,7 @@ import numpy as np
 from agent.player import Player
 from agent.battle import Battle
 
-number_of_training_runs = 100
+number_of_training_runs = 30
 
 results = {
     'dummy':
@@ -160,98 +160,81 @@ for i in range(number_of_training_runs):
     winner = battle.battle()
     results['dual_2']['vs_dual_1'].append(winner)
 
+    print("trining run " + str(i) + " done")
+
 # save results  naming convention player 1 vs player 2,  player 1 always went first
 
 # qlearning vs dummy
 np.savetxt("../data/qlearning/battle_data/qlearning_vs_dummy_results.csv", results['qlearning']['vs_dummy'],
            delimiter=", ", fmt='% s', header='ql_player vs dummy')
 
-
 # dummy vs qlearning
 np.savetxt("../data/qlearning/battle_data/dummy_vs_qlearning_results.csv", results['dummy']['vs_qlearning'],
            delimiter=", ", fmt='% s', header='dummy vs ql_player')
-
 
 # wolf_player vs dummy
 np.savetxt("../data/wolf/battle_data/wolf_vs_dummy_results.csv", results['wolf']['vs_dummy'],
            delimiter=", ", fmt='% s', header='wolf_player vs dummy')
 
-
 # dummy vs wolf
 np.savetxt("../data/wolf/battle_data/dummy_vs_wolf_results.csv", results['dummy']['vs_wolf'],
            delimiter=", ", fmt='% s', header='dummy vs wolf_player')
-
-
 
 # dual_1 vs dummy
 np.savetxt("../data/dual/agent_1/battle_data/dual_1_vs_dummy_results.csv", results['dual_1']['vs_dummy'],
            delimiter=", ", fmt='% s', header='dual_1_player vs dummy')
 
-
 # dummy vs dual_1
 np.savetxt("../data/dual/agent_1/battle_data/dummy_vs_dual_1_results.csv", results['dummy']['vs_dual_1'],
            delimiter=", ", fmt='% s', header='dummy vs dual_1_player')
-
 
 # dual_2 vs dummy
 np.savetxt("../data/dual/agent_2/battle_data/dual_2_vs_dummy_results.csv", results['dual_2']['vs_dummy'],
            delimiter=", ", fmt='% s', header='dual_2_player vs dummy')
 
-
 # dummy vs dual_2
 np.savetxt("../data/dual/agent_2/battle_data/dummy_vs_dual_2_results.csv", results['dummy']['vs_dual_2'],
            delimiter=", ", fmt='% s', header='dummy vs dual_2_player')
-
 
 # qlearning vs wolf_player
 np.savetxt("../data/qlearning/battle_data/ql_vs_wolf_results.csv", results['qlearning']['vs_wolf'],
            delimiter=", ", fmt='% s', header='ql_player vs wolf_player')
 
-
 # wolf_player vs qlearning
 np.savetxt("../data/qlearning/battle_data/wolf_vs_ql_results.csv", results['wolf']['vs_qlearning'],
            delimiter=", ", fmt='% s', header='wolf_player vs ql_player')
-
 
 # qlearning vs dual_1
 np.savetxt("../data/qlearning/battle_data/ql_vs_dual_1_results.csv", results['qlearning']['vs_dual_1'],
            delimiter=", ", fmt='% s', header='ql_player vs dual_1_player')
 
-
 # dual_1 vs qlearning
 np.savetxt("../data/qlearning/battle_data/dual_1_vs_ql_results.csv", results['dual_1']['vs_qlearning'],
            delimiter=", ", fmt='% s', header='dual_1_player vs ql_player')
-
 
 # qlearning vs dual_2
 np.savetxt("../data/qlearning/battle_data/ql_vs_dual_2_results.csv", results['qlearning']['vs_dual_2'],
            delimiter=", ", fmt='% s', header='ql_player vs dual_2_player')
 
-
 # dual_2 vs qlearning
 np.savetxt("../data/qlearning/battle_data/dual_2_vs_ql_results.csv", results['dual_2']['vs_qlearning'],
            delimiter=", ", fmt='% s', header='dual_2_player vs ql_player')
-
 
 # wolf vs dual_1
 np.savetxt("../data/wolf/battle_data/wolf_vs_dual_1_results.csv", results['wolf']['vs_dual_1'],
            delimiter=", ", fmt='% s', header='wolf_player vs dual_1_player')
 
-
 # dual_1 vs wolf
 np.savetxt("../data/wolf/battle_data/dual_1_vs_wolf_results.csv", results['dual_1']['vs_wolf'],
            delimiter=", ", fmt='% s', header='dual_1_player vs wolf_player')
-
 
 # wolf vs dual_2
 np.savetxt("../data/wolf/battle_data/wolf_vs_dual_2_results.csv", results['wolf']['vs_dual_2'],
            delimiter=", ", fmt='% s', header='wolf_player vs dual_2_player')
 
-
 # dual_2 vs wolf
 np.savetxt("../data/wolf/battle_data/dual_2_vs_wolf_results.csv", results['dual_2']['vs_wolf'],
            delimiter=", ", fmt='% s', header='dual_2_player vs wolf_player')
-
 
 # dual 1 vs dual 2
 np.savetxt("../data/dual/agent_1/battle_data/dual_1_vs_dual_2.csv", results['dual_1']['vs_dual_2'],
@@ -262,3 +245,4 @@ np.savetxt("../data/dual/agent_2/battle_data/dual_2_vs_dual_1_results.csv", resu
            delimiter=", ", fmt='% s', header='dual_2_player vs dual_1_player')
 
 print("train battle done")
+exit()
