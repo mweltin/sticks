@@ -6,9 +6,9 @@ import random
 
 def main(num_episodes, max_steps_per_episode, skip_plot):
     agent_1 = Agent('agent_1')
-    agent_1.utility = "../dual/agent_1"
+    agent_1.utility = "../data/dual/agent_1"
     agent_2 = Agent('agent_2')
-    agent_1.utility = "../dual/agent_1"
+    agent_1.utility = "../data/dual/agent_2"
 
     for episode in range(num_episodes):
         finished_on = 'Draw'
