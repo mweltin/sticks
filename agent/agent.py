@@ -4,11 +4,14 @@ import environment.env as env
 import rules.rules as rules
 import matplotlib.pyplot as plt
 from utilities.utility import Utility
+from agent.player import Player
 
 
-class Agent:
+
+class Agent(Player):
 
     def __init__(self, name='name not set'):
+        super().__init__(self, name)
         self.exploration_rate = 1
         self._learning_rate = 0.1
         self.discount_rate = 0.99
@@ -23,7 +26,7 @@ class Agent:
         self.win_counter = 0
         self.wins_per_freq = []
         self.win_record_freq = 500
-        self.utility = Utility("../data/dual/" + self._name)
+        self._utility = Utility("../data/" + self._name)
 
     def init_empty_q_table(self):
         action_space_size = len(env.action_table)
@@ -37,6 +40,15 @@ class Agent:
         return self._q_table
 
     q_table = property(get_q_table, set_q_table)
+
+    def set_utility(self, name ):
+        del self._utility
+        self._utility = Utility(name)
+
+    def get_utility(self):
+        return self._utility
+
+    utility = property(get_utility, set_utility)
 
     def set_name(self, name):
         self._name = name
@@ -98,14 +110,14 @@ class Agent:
         return new_state_idx, done
 
     def save_output(self, prefix=None):
-        self.utility.save_output(self._q_table, prefix)
+        self._utility.save_output(self._q_table, prefix)
 
     def record_wins(self):
         self.wins_per_freq.append(self.win_counter)
         self.win_counter = 0
 
     def plot_it(self):
-        self.utility.plot_it(self.wins_per_freq, self.win_record_freq)
+        self._utility.plot_it(self.wins_per_freq, self.win_record_freq)
 
     def save_it(self):
-        self.utility.save_it(self.wins_per_freq)
+        self._utility.save_it(self.wins_per_freq)
