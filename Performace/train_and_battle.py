@@ -3,7 +3,7 @@ import numpy as np
 from agent.player import Player
 from agent.battle import Battle
 
-number_of_training_runs = 100
+number_of_training_runs = 30
 
 results = {
     'dummy':
@@ -159,6 +159,8 @@ for i in range(number_of_training_runs):
     battle = Battle(dual_2_player, dual_1_player)
     winner = battle.battle()
     results['dual_2']['vs_dual_1'].append(winner)
+
+    print(" iteration: "+str(i)+" ")
 
 # save results  naming convention player 1 vs player 2,  player 1 always went first
 
