@@ -262,3 +262,4 @@ np.savetxt("../data/dual/agent_2/battle_data/dual_2_vs_dual_1_results.csv", resu
            delimiter=", ", fmt='% s', header='dual_2_player vs dual_1_player')
 
 print("train battle done")
+exit()

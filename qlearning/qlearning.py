@@ -38,6 +38,8 @@ def main(
 
         for step in range(max_steps_per_episode):
             if agent_first:
+                dummy.player_index = 1
+                qlearning.player_index = 0
                 state_idx, done = qlearning.take_turn(state_idx, episode)
                 if done:
                     finished_on = qlearning.name
@@ -48,7 +50,10 @@ def main(
                 if done:
                     finished_on = dummy.name
                     break
+
             else:
+                dummy.player_index = 0
+                qlearning.player_index = 1
                 state_idx, reward, done, info = dummy.take_turn(state_idx)
                 if done:
                     finished_on = dummy.name

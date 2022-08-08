@@ -127,7 +127,7 @@ class Agent(Player):
 
         if not isinstance( self._q_table, np.ndarray):
             print('WARNING: max_q_table_not_found, falling back to empty q_table')
-            self._player_index = self.init_empty_q_table()
+            self._q_table = self.init_empty_q_table()
 
     def get_q_table(self):
         return self._q_table
