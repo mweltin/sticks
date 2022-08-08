@@ -25,7 +25,8 @@ def main(
         skip_plot,
 ):
     wolf_a = Agent('wolf')
-   # wolf_a.set_q_table(max_reward=True)
+    wolf_a.set_q_table(max_reward=True)
+
     dummy = Player(name='dummy', strategy='random', player_index=1)
 
     for episode in range(num_episodes):
