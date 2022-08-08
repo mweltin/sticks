@@ -25,7 +25,7 @@ def main(
         skip_plot,
 ):
     wolf_a = Agent('wolf')
-    dummy = Player(name='agent_2', strategy='random', player_index=1)
+    dummy = Player(name='dummy', strategy='random', player_index=1)
 
     for episode in range(num_episodes):
         finished_on = 'Draw'
@@ -35,6 +35,8 @@ def main(
 
         for step in range(max_steps_per_episode):
             if agent_first:
+                wolf_a.player_index = 0
+                dummy.player_index = 1
                 state_idx, done = wolf_a.take_turn(state_idx, episode)
                 if done:
                     finished_on = wolf_a.name
@@ -46,6 +48,8 @@ def main(
                     finished_on = dummy.name
                     break
             else:
+                wolf_a.player_index = 1
+                dummy.player_index = 0
                 state_idx, reward, done, info = dummy.take_turn(state_idx)
                 if done:
                     finished_on = dummy.name
