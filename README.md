@@ -49,15 +49,34 @@ start the game run the following command from the repository's root directory.
 
 Then follow the instructions in the console.
 
-### Playign the game (webased version) 
-This requires you have built the angualr app.  This was the optional step defined in the installation instructions above.  Enter into the website 
+### Playing the game (web based version) 
+This requires you have built the angular app.  This was the optional step defined in the installation instructions above.  Enter into the website 
 directory and run the following command.
 
 ```python manage.py runserver```
 
 This will launch the site at http://localhost:8000 by default
 
+### Playing the game hosted online version  
+My generous employer PATTAN has agreed to host an online version for educational and evaluation purposes.
+You can play a trained version of the game [here](http://tina.pattan.net:8001).
+In the upper right you can select a specifically trained agent.  The select if you want to go first or let the agent go 
+first.  When it is your turn, click on the hand you want to play, and then on the opponents hand you want to tap. An 
+box will pop-up when someone wins. 
 
+### Alternate git branches
+Everything you need to train and customize a q-learning, wolf or dual agent algorithm can be found in the 'main' branch.  
+However, if you want to explore an alternate reward function, different training methods, or different q-table update
+functions there are different branches for that. 
+1) main - 
+   1) This branch uses a common adjustment to the bellman equation to update the q-table.  Rather than subtracting off the current q-table value the q-table value is multiplied by 1-learning rate ![q-table update main](main-q-table-update.jpeg)
+2) bellman - 
+   1) This branch uses the q-table update function that matches the temperal difference Q-learning update equation found in Artificial Intelligence A Modern Approach
+Third Edition by Stuart J. Russell and Peter Norvig ![q-table update book](q-table-update-ai-book.png)
+3) keepbest -
+   1) This branch starts each training by initializing the Q-table for the agent with the Q-table that had the best reward from the previous training attempt
+4) reward -
+   1) Finally, this branch changes the reward function.  It gives 0.5 for getting close to a winning hand, -0.5 for getting close to a losing hand,  1 for a win, -1 for a loss and zero for all other states.
 
 ### Unit tests
 To run tests use unittest from the tests directory
