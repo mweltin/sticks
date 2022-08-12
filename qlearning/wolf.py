@@ -24,8 +24,11 @@ def main(
         use_q_table_for_actions,
         skip_plot,
 ):
+    winning_learning_rate = 0.05
+    losing_learning_rate = 0.1
+
     wolf_a = Agent('wolf')
-    wolf_a.set_q_table(max_reward=True)
+    wolf_a.learning_rate = losing_learning_rate
 
     dummy = Player(name='dummy', strategy='random', player_index=1)
 
@@ -37,34 +40,39 @@ def main(
 
         for step in range(max_steps_per_episode):
             if agent_first:
-                dummy.player_index = 1
                 wolf_a.player_index = 0
+                dummy.player_index = 1
                 state_idx, done = wolf_a.take_turn(state_idx, episode)
                 if done:
                     finished_on = wolf_a.name
                     wolf_a.win_counter += 1
+                    wolf_a.learning_rate = winning_learning_rate
                     break
 
                 state_idx, reward, done, info = dummy.take_turn(state_idx)
                 if done:
                     finished_on = dummy.name
+                    wolf_a.learning_rate = losing_learning_rate
                     break
             else:
-                dummy.player_index = 0
                 wolf_a.player_index = 1
+                dummy.player_index = 0
                 state_idx, reward, done, info = dummy.take_turn(state_idx)
                 if done:
                     finished_on = dummy.name
+                    wolf_a.learning_rate = losing_learning_rate
                     break
 
                 state_idx, done = wolf_a.take_turn(state_idx, episode)
                 if done:
                     finished_on = wolf_a.name
                     wolf_a.win_counter += 1
+                    wolf_a.learning_rate = winning_learning_rate
                     break
 
         if finished_on == 'Draw':
             wolf_a.win_counter += 1
+            wolf_a.learning_rate = winning_learning_rate
 
         wolf_a.save_output(prefix='max_reward')
 
