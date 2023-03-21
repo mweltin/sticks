@@ -10,11 +10,12 @@ win / loss rate.
 class Wolf(Agent):
 
     def __init__(self, name='name not set'):
-        super().__init__(name)
+        super(Wolf,self).__init__(name)
         self._policy = None
         self._average_policy = None
         self._winning_learning_rate = 0.05
         self._losing_learning_rate = 0.1
+        self.counter = 0;
         self.init_policy_table()
         self.init_average_policy_table()
 
@@ -42,3 +43,16 @@ class Wolf(Agent):
         return self._losing_learning_rate
 
     losing_learning_rate = property(get_losing_learning_rate, set_losing_learning_rate)
+
+    def take_turn(self, state_index, episode):
+        new_state_idx, done = super(Wolf, self).take_turn(state_index, episode)
+        self.counter += 1
+        self.update_policy()
+        self.update_average_policy()
+        return new_state_idx, done
+
+    def update_policy(self):
+        return
+
+    def update_average_policy(self):
+        return
