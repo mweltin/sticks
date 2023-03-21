@@ -61,15 +61,15 @@ def get_reward(state):
     :return: How much the algorithm is rewarded for the the state that it is in.
     """
     if rules.has_winner(state) == Players.agent:
-        return 100
+        return 1
     if rules.has_winner(state) == Players.opponent:
-        return -100
+        return -1
     if will_lose_next_step(state):
-        return -50
+        return -0.5
     if will_win_in_two_steps(state):
-        return 50
+        return 0.5
 
-    return -1
+    return 0
 
 
 def will_lose_next_step(state):
@@ -117,7 +117,7 @@ def step(state_idx, player_idx, action_idx):
     :param state_idx: Index in the state_table for the current state of the game.
     :param player_idx: 0 = human, 1 = AI
     :param action_idx: The index in the action table the player will take
-    :return: a list containing the new sate index after the action was taken, the associated reward with that action,
+    :return: a list containing the new state index after the action was taken, the associated reward with that action,
     if the game has a winner, and an object called info which is not currently implemented.
     """
     done = False
