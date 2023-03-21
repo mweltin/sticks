@@ -50,7 +50,7 @@ class Wolf(Agent):
         self.counter += 1 # this needs to be called before update_average_policy
         self.update_policy(state_index)
         self.update_average_policy(state_index)
-        self.update_learning_rate()
+        self.update_learning_rate(state_index)
         return new_state_idx, done
 
     def update_policy(self, state_index):
@@ -74,9 +74,19 @@ class Wolf(Agent):
                 (self._policy[state_index][action]  - self._average_policy[state_index][action] )/self.counter
         return
 
-    def update_learning_rate(self):
+    def update_learning_rate(self, state_index):
+        pi_avg_total = 0
+        pi_total = 0
+        for action in range( len(env.action_table) ):
+            pi_avg_total += self._q_table[state_index][action] * self._average_policy[state_index][action]
+            pi_total += self._q_table[state_index][action] * self._policy[state_index][action]
+
         # if SUM( pi(s,a)*Q(s,a) ) for all a is greater than Sum( pi_avg(s,a)*Q(s,a))
         # we use the winning rate
         # otherwise we use the losing rate
-        self.learning_rate = self.winning_learning_rate
+        if pi_total > pi_avg_total:
+            self.learning_rate = self.winning_learning_rate
+        else:
+            self.learning_rate = self.losing_learning_rate
+
 
