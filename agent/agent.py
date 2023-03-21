@@ -7,7 +7,9 @@ from utilities.utility import Utility
 from agent.player import Player
 
 
-
+"""
+An Agent is a Player that can learn.  If is a Q-learning base class
+"""
 class Agent(Player):
 
     def __init__(self, name='name not set'):

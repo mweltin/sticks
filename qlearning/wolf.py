@@ -5,7 +5,7 @@ Author: Markus Weltin
 
 import argparse
 from agent.player import Player
-from agent.agent import Agent
+from agent.wolf_agent import Wolf as Agent
 from utilities.utility import Utility
 import environment.env as env
 import numpy as np
@@ -29,7 +29,11 @@ def main(
     losing_learning_rate = 0.1
 
     wolf_a = Agent('wolf')
-    wolf_a.learning_rate = losing_learning_rate
+    winning_learning_rate = 0.05
+    losing_learning_rate = 0.1
+
+    wolf_a.winning_learning_rate = winning_learning_rate
+    wolf_a.losing_learning_rate = losing_learning_rate
 
     dummy = Player(name='dummy', strategy='random', player_index=1)
 
