@@ -15,17 +15,18 @@ class Wolf(Agent):
         self._average_policy = None
         self._winning_learning_rate = 0.05
         self._losing_learning_rate = 0.1
-        self.counter = 0;
+        self.learning_rate = self._winning_learning_rate
+        self.counter = 0
         self.init_policy_table()
         self.init_average_policy_table()
 
     def init_policy_table(self):
-        self._average_policy =self.get_q_table().copy()
-        self._average_policy += 1/len(env.action_table)
+        self._policy =self.get_q_table().copy()
+        self._policy += 1/len(env.action_table)
         return
 
     def init_average_policy_table(self):
-        self._policy = self.get_q_table().copy()
+        self._average_policy =self.get_q_table().copy()
         return
 
     def set_winning_learning_rate(self, value):
@@ -46,13 +47,30 @@ class Wolf(Agent):
 
     def take_turn(self, state_index, episode):
         new_state_idx, done = super(Wolf, self).take_turn(state_index, episode)
-        self.counter += 1
-        self.update_policy()
-        self.update_average_policy()
+        self.counter += 1 # this needs to be called before update_average_policy
+        self.update_policy(state_index)
+        self.update_average_policy(state_index)
+        self.update_learning_rate()
         return new_state_idx, done
 
-    def update_policy(self):
+    def update_policy(self, state_index):
+        # pi(s,a') = pi(s,a') + learning_rate if a' = max of Q(s,:)
+        # pi(s,a') = pi(s,a') + -learning_rate/(A_i - 1) where A_i is the number of actions the agent can take
+
         return
 
-    def update_average_policy(self):
+    def update_average_policy(self, state_index):
+        # pi_avg(s,a') = pi_avg(s,a') + (pi(s,a') - pi_avg(s,a'))/counter
+        #where a' = for every a' that is an element of A_i
+        # A_i is the ith agent in a multi agent environment
+        for action in range(len(self._average_policy[state_index])):
+            self._average_policy[state_index][action] = self._average_policy[state_index][action] + \
+                (self._policy[state_index][action]  - self._average_policy[state_index][action] )/self.counter
         return
+
+    def update_learning_rate(self, state_index):
+        # if SUM( pi(s,a)*Q(s,a) ) for all a is greater than Sum( pi_avg(s,a)*Q(s,a))
+        # we use the winning rate
+        # otherwise we use the losing rate
+        self.learning_rate = self.winning_learning_rate
+
