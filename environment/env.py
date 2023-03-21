@@ -117,7 +117,7 @@ def step(state_idx, player_idx, action_idx):
     :param state_idx: Index in the state_table for the current state of the game.
     :param player_idx: 0 = human, 1 = AI
     :param action_idx: The index in the action table the player will take
-    :return: a list containing the new sate index after the action was taken, the associated reward with that action,
+    :return: a list containing the new state index after the action was taken, the associated reward with that action,
     if the game has a winner, and an object called info which is not currently implemented.
     """
     done = False

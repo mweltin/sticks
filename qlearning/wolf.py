@@ -2,6 +2,7 @@
 Implementation of a Q-Learning algorithm to learn to game of sticks
 Author: Markus Weltin
 """
+
 import argparse
 from agent.player import Player
 from agent.agent import Agent
