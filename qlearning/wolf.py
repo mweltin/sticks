@@ -5,7 +5,7 @@ Author: Markus Weltin
 
 import argparse
 from agent.player import Player
-from agent.agent import Agent
+from agent.wolf_agent import Wolf as Agent
 from utilities.utility import Utility
 import environment.env as env
 import numpy as np
@@ -25,11 +25,13 @@ def main(
         use_q_table_for_actions,
         skip_plot,
 ):
+
+    wolf_a = Agent('wolf')
     winning_learning_rate = 0.05
     losing_learning_rate = 0.1
 
-    wolf_a = Agent('wolf')
-    wolf_a.learning_rate = losing_learning_rate
+    wolf_a.winning_learning_rate = winning_learning_rate
+    wolf_a.losing_learning_rate = losing_learning_rate
 
     dummy = Player(name='dummy', strategy='random', player_index=1)
 
@@ -47,13 +49,11 @@ def main(
                 if done:
                     finished_on = wolf_a.name
                     wolf_a.win_counter += 1
-                    wolf_a.learning_rate = winning_learning_rate
                     break
 
                 state_idx, reward, done, info = dummy.take_turn(state_idx)
                 if done:
                     finished_on = dummy.name
-                    wolf_a.learning_rate = losing_learning_rate
                     break
             else:
                 wolf_a.player_index = 1
@@ -61,19 +61,16 @@ def main(
                 state_idx, reward, done, info = dummy.take_turn(state_idx)
                 if done:
                     finished_on = dummy.name
-                    wolf_a.learning_rate = losing_learning_rate
                     break
 
                 state_idx, done = wolf_a.take_turn(state_idx, episode)
                 if done:
                     finished_on = wolf_a.name
                     wolf_a.win_counter += 1
-                    wolf_a.learning_rate = winning_learning_rate
                     break
 
         if finished_on == 'Draw':
             wolf_a.win_counter += 1
-            wolf_a.learning_rate = winning_learning_rate
 
         wolf_a.save_output(prefix='max_reward')
 
