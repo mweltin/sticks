@@ -56,7 +56,13 @@ class Wolf(Agent):
     def update_policy(self, state_index):
         # pi(s,a') = pi(s,a') + learning_rate if a' = max of Q(s,:)
         # pi(s,a') = pi(s,a') + -learning_rate/(A_i - 1) where A_i is the number of actions the agent can take
-
+        q_arg_max = env.nanargmax_unbiased(self._q_table[state_index])
+        A_i = len(self._policy[state_index])
+        for action in range(len(self._policy[state_index])):
+            if action == q_arg_max:
+                self._policy[state_index][action] = self.learning_rate
+            else:
+                self._policy[state_index][action] = -self.learning_rate/(A_i-1) + self._policy[state_index][action]
         return
 
     def update_average_policy(self, state_index):
@@ -68,7 +74,7 @@ class Wolf(Agent):
                 (self._policy[state_index][action]  - self._average_policy[state_index][action] )/self.counter
         return
 
-    def update_learning_rate(self, state_index):
+    def update_learning_rate(self):
         # if SUM( pi(s,a)*Q(s,a) ) for all a is greater than Sum( pi_avg(s,a)*Q(s,a))
         # we use the winning rate
         # otherwise we use the losing rate
