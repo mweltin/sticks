@@ -35,7 +35,8 @@ LR = 1e-4
 # Get number of actions from gym action space
 n_actions = len(env.action_table)
 # Get the number of state observations
-state = env.flatten_state(env.reset())
+state_idx = env.reset()
+state = env.flatten_state(state_idx)
 n_observations = len(state)
 
 policy_net = DQN(n_observations, n_actions).to(device)
@@ -58,7 +59,8 @@ def select_action(state_idx, player_index=0):
             # t.max(1) will return the largest column value of each row.
             # second column on max result is index of where max element was
             # found, so we pick action with the larger expected reward.
-            return policy_net(env.state_table[state_idx]).max(1)[1].view(1, 1)
+            state_tensor = torch.tensor(env.flatten_state(state_idx), device=device, dtype=torch.long)
+            return policy_net(state_tensor).max(1)[1].view(1, 1)
     else:
         action = env.select_random_action(state_idx, player_index)
         return torch.tensor([[action]], device=device, dtype=torch.long)
@@ -85,12 +87,12 @@ def plot_durations(show_result=False):
         plt.plot(means.numpy())
 
     plt.pause(0.001)  # pause a bit so that plots are updated
-    if is_ipython:
-        if not show_result:
-            display.display(plt.gcf())
-            display.clear_output(wait=True)
-        else:
-            display.display(plt.gcf())
+    # if is_ipython:
+    #     if not show_result:
+    #         display.display(plt.gcf())
+    #         display.clear_output(wait=True)
+    #     else:
+    #         display.display(plt.gcf())
 
 
 def optimize_model():
@@ -147,11 +149,11 @@ else:
 
 for i_episode in range(num_episodes):
     # Initialize the environment and get it's state
-    state = env.reset()
-    state_flat = torch.tensor(env.flatten_state(state), dtype=torch.float32, device=device).unsqueeze(0)
+    state_idx = env.reset()
+    state_flat = torch.tensor(env.flatten_state(state_idx), dtype=torch.float32, device=device).unsqueeze(0)
     for t in count():
-        action = select_action(state)
-        observation, reward, terminated, _ = env.step(state, 0, action.item()) # @todo
+        action = select_action(state_idx)
+        observation, reward, terminated, _ = env.step(state_idx, 0, action.item()) # @todo
         reward = torch.tensor([reward], device=device)
         done = terminated # @todo or truncated SEE ORIGINAL CODE TRUNCATED IS?
 
@@ -165,6 +167,7 @@ for i_episode in range(num_episodes):
 
         # Move to the next state
         state = next_state
+        stat_id = observation
 
         # Perform one step of the optimization (on the policy network)
         optimize_model()
