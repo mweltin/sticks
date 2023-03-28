@@ -9,6 +9,7 @@ import random
 import matplotlib
 import matplotlib.pyplot as plt
 from itertools import count
+from collections import namedtuple, deque
 import numpy as np
 
 matplotlib.get_backend()
@@ -17,6 +18,9 @@ matplotlib.use('MacOSX')
 # @todo convert this to an actual "Agent" as in my code
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+Transition = namedtuple('Transition',
+                        ('state', 'action', 'next_state', 'reward'))
 
 # BATCH_SIZE is the number of transitions sampled from the replay buffer
 # GAMMA is the discount factor as mentioned in the previous section
@@ -38,7 +42,7 @@ n_actions = len(env.action_table)
 # Get the number of state observations
 state_idx = env.reset()
 state = env.state_to_tensor(state_idx)
-n_observations = len(state[0])
+n_observations = len(state)
 
 policy_net = DQN(n_observations, n_actions).to(device)
 target_net = DQN(n_observations, n_actions).to(device)
@@ -61,7 +65,7 @@ def select_action(state_idx, player_index=0):
             # t.max(1) will return the largest column value of each row.
             # second column on max result is index of where max element was
             # found, so we pick action with the larger expected reward.
-            state_tensor = torch.tensor(env.state_to_tensor(state_idx), device=device, dtype=torch.float32)
+            state_tensor = torch.tensor(np.array([env.state_to_tensor(state_idx)]), device=device, dtype=torch.float32)
             return policy_net(state_tensor).max(1)[1].view(1, 1)
     else:
         action = env.select_random_action(state_idx, player_index)
