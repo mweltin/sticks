@@ -15,10 +15,10 @@ def reset():
     return state_table.index([[1, 1], [1, 1]])
 
 
-def flatten_state(state_idx):
+def state_to_tensor(state_idx):
     """ used as an input into a DQN """
     flat_list = [num for sublist in state_table[state_idx] for num in sublist]
-    return np.array(flat_list)
+    return np.array([flat_list])
 
 
 def eliminate_invalid_actions(state, q_table):
