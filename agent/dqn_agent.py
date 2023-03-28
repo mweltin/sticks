@@ -61,7 +61,7 @@ def select_action(state_idx, player_index=0):
             # t.max(1) will return the largest column value of each row.
             # second column on max result is index of where max element was
             # found, so we pick action with the larger expected reward.
-            state_tensor = torch.tensor(env.state_to_tensor(state_idx), device=device, dtype=torch.long)
+            state_tensor = torch.tensor(env.state_to_tensor(state_idx), device=device, dtype=torch.float32)
             return policy_net(state_tensor).max(1)[1].view(1, 1)
     else:
         action = env.select_random_action(state_idx, player_index)
