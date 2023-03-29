@@ -160,9 +160,9 @@ for i_episode in range(num_episodes):
     state_flat = torch.tensor(env.state_to_tensor(state_idx), dtype=torch.float32, device=device).unsqueeze(0)
     for t in count():
         action = get_action(state_idx)
-        observation, reward, terminated, _ = env.step(state_idx, 0, action.item()) # @todo
+        observation, reward, terminated, _ = env.step(state_idx, 0, action.item())  # @todo
         reward = torch.tensor([reward], device=device)
-        done = terminated # @todo or truncated SEE ORIGINAL CODE TRUNCATED IS?
+        done = terminated  # @todo or truncated SEE ORIGINAL CODE TRUNCATED IS?
 
         if terminated:
             next_state = None
