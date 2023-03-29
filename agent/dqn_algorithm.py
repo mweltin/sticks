@@ -37,7 +37,7 @@ EPS_DECAY = 1000
 TAU = 0.005
 LR = 1e-4
 
-# Get number of actions from gym action space
+# Get number of actions
 n_actions = len(env.action_table)
 # Get the number of state observations
 state_idx = env.reset()

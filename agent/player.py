@@ -4,7 +4,18 @@ import random
 
 
 class Player:
-
+    """
+    Player: an object that is capable of playing against another player.
+    :arg q_table - policy used by the player
+    :arg strategy - defines how closely a player adheres to a policy
+        strict: follows the policy
+        threshold: follows the policy based on a percentage of the time
+        random: does not follow the policy at all and just picks actions at random
+    :arg name - name of the player (seen in performance output)
+    :arg player_index: 0 goes first, 1 goes second @todo allow for more than two players
+    :arg threshold the number below which a player will make a random action.  The number
+        compared against a normal distribution [0,1].  Only used when strategy is set to threshold
+    """
     def __init__(self, q_table=None, threshold=None, player_index=None, name=None, strategy=None):
         self._threshold = threshold
         self._q_table = q_table
