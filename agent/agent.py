@@ -8,7 +8,7 @@ from agent.player import Player
 
 
 """
-An Agent is a Player that can learn.  If is a Q-learning base class
+An Agent is a Player that can learn. 
 """
 class Agent(Player):
 
