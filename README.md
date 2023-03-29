@@ -31,7 +31,7 @@ If you are familiar with docker, and can run linux based images grab the latest 
 
 
 ### Q-learning
-To run the Q-Learning algorithm enter into sticks/qlearning directory.  Verify that the sticks root directory is in
+To run the Q-Learning algorithm enter into sticks/training directory.  Verify that the sticks root directory is in
 your PYTHONPATH environment variable.
 
 ```export PYTHONPATH={ABSOLUTE PATH TO}/sticks```

@@ -1,5 +1,5 @@
 import environment.env as env
-import qlearning.qlearning as qlearning
+import training.qlearning as qlearning
 import unittest
 from random import seed
 import numpy as np

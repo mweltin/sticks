@@ -45,9 +45,9 @@ results = {
 
 for i in range(number_of_training_runs):
     # train with the three different algorithms
-    os.system("python ../qlearning/qlearning.py --skip_plot=True")
-    os.system("python ../qlearning/wolf.py --skip_plot=True")
-    os.system("python ../qlearning/dual_agent.py --skip_plot=True")
+    os.system("python ../training/qlearning.py --skip_plot=True")
+    os.system("python ../training/wolf.py --skip_plot=True")
+    os.system("python ../training/dual_agent.py --skip_plot=True")
 
     qlearning_q_table = np.genfromtxt('../data/qlearning/q_table.csv', delimiter=',')
     wolf_q_table = np.genfromtxt('../data/wolf/q_table.csv', delimiter=',')
