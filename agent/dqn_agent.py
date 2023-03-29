@@ -54,7 +54,7 @@ memory = ReplayMemory(10000)
 steps_done = 0
 
 
-def select_action(state_idx, player_index=0):
+def get_action(state_idx, player_index=0):
     global steps_done
     sample = random.random()
     eps_threshold = EPS_END + (EPS_START - EPS_END) * \
@@ -66,7 +66,8 @@ def select_action(state_idx, player_index=0):
             # second column on max result is index of where max element was
             # found, so we pick action with the larger expected reward.
             state_tensor = torch.tensor(np.array([env.state_to_tensor(state_idx)]), device=device, dtype=torch.float32)
-            return policy_net(state_tensor).max(1)[1].view(1, 1)
+            action = policy_net(state_tensor).max(1)[1].view(1, 1)
+            return action
     else:
         action = env.select_random_action(state_idx, player_index)
         return torch.tensor([[action]], device=device, dtype=torch.long)
@@ -158,7 +159,7 @@ for i_episode in range(num_episodes):
     state_idx = env.reset()
     state_flat = torch.tensor(env.state_to_tensor(state_idx), dtype=torch.float32, device=device).unsqueeze(0)
     for t in count():
-        action = select_action(state_idx)
+        action = get_action(state_idx)
         observation, reward, terminated, _ = env.step(state_idx, 0, action.item()) # @todo
         reward = torch.tensor([reward], device=device)
         done = terminated # @todo or truncated SEE ORIGINAL CODE TRUNCATED IS?
@@ -173,7 +174,7 @@ for i_episode in range(num_episodes):
 
         # Move to the next state
         state = next_state
-        stat_id = observation
+        state_idx = observation
 
         # Perform one step of the optimization (on the policy network)
         optimize_model()
