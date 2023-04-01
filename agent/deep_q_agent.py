@@ -34,8 +34,8 @@ class DeepQ(Agent):
         self.batch_size = 128
         self.gamma = 0.99
         TAU = 0.005
-        LR = 1e-4
-        self.optimizer = optim.AdamW(self.policy_net.parameters(), lr=LR, amsgrad=True)
+        self.learning_rate = 1e-4
+        self.optimizer = optim.AdamW(self.policy_net.parameters(), lr=self.learning_rate, amsgrad=True)
         self.memory = ReplayMemory(10000)
 
         steps_done = 0
@@ -67,6 +67,7 @@ class DeepQ(Agent):
                 self.max_exploration_rate - self._min_exploration_rate) * np.exp(
             -self._exploration_decay_rate * episode)
         return new_state_idx, done
+
 
     def optimize_model(self):
         if len(self.memory) < self.batch_size:
