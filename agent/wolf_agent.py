@@ -1,6 +1,5 @@
 from agent.agent import Agent
 import environment.env as env
-from dqn import DQN
 
 """
 A Wolf Agent is a modified Q-learning algorithm. 

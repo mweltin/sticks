@@ -1,5 +1,5 @@
-from dqn import DQN
-from replay_memory import ReplayMemory
+from deep_q.dqn import DQN
+from deep_q.replay_memory import ReplayMemory
 import environment.env as env
 import torch
 import torch.nn as nn
@@ -9,7 +9,7 @@ import random
 import matplotlib
 import matplotlib.pyplot as plt
 from itertools import count
-from collections import namedtuple, deque
+from collections import namedtuple
 import numpy as np
 
 matplotlib.get_backend()

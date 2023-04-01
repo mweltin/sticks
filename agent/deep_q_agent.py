@@ -1,19 +1,20 @@
-from agent.agent import Agent
 import environment.env as env
 from collections import namedtuple
 import torch
 import torch.nn as nn
 import random
 import torch.optim as optim
-from dqn import DQN
-from replay_memory import ReplayMemory
 import numpy as np
+from deep_q.replay_memory import ReplayMemory
+from deep_q.deep_q_network import DQN
 
+from agent.agent import Agent
 """
 A Deep Q-Learning Agent is a modified Q-learning algorithm.
 It replaces the Q-Table with a neural network to 
 approximate an optimal policy. 
 """
+
 
 class DeepQ(Agent):
 
@@ -28,7 +29,7 @@ class DeepQ(Agent):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
         self.transition = namedtuple('Transition',
-                                ('state', 'action', 'next_state', 'reward'))
+                                     ('state', 'action', 'next_state', 'reward'))
         self.policy_net = DQN(n_observations, n_actions).to(self.device)
         self.target_net = DQN(n_observations, n_actions).to(self.device)
         self.batch_size = 128
@@ -67,7 +68,8 @@ class DeepQ(Agent):
         if terminated:
             next_state = None
         else:
-            next_state = torch.tensor(env.state_to_tensor(observation), dtype=torch.float32, device=self.device).unsqueeze(0)
+            next_state = torch.tensor(env.state_to_tensor(observation), dtype=torch.float32,
+                                      device=self.device).unsqueeze(0)
 
         # Store the transition in memory
         self.memory.push(state, action, next_state, reward)
@@ -84,7 +86,8 @@ class DeepQ(Agent):
         target_net_state_dict = self.target_net.state_dict()
         policy_net_state_dict = self.policy_net.state_dict()
         for key in policy_net_state_dict:
-            target_net_state_dict[key] = policy_net_state_dict[key] * self.tau + target_net_state_dict[key] * (1 - self.tau)
+            target_net_state_dict[key] = policy_net_state_dict[key] * self.tau + target_net_state_dict[key] * (
+                        1 - self.tau)
         self.target_net.load_state_dict(target_net_state_dict)
 
         self.exploration_rate = self._min_exploration_rate + (
@@ -92,7 +95,6 @@ class DeepQ(Agent):
             -self._exploration_decay_rate * episode)
 
         return self.state_idx, done
-
 
     def optimize_model(self):
         if len(self.memory) < self.batch_size:
@@ -156,7 +158,6 @@ class DeepQ(Agent):
                    delimiter=", ",
                    fmt='% s',
                    header='AI L, AI R, O L, O R, swap, L L, L R, R R, R L')
-
 
     def save_it(self):
         pass

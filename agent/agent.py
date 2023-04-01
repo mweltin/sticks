@@ -2,7 +2,6 @@ import numpy as np
 import random
 import environment.env as env
 import rules.rules as rules
-import matplotlib.pyplot as plt
 from utilities.utility import Utility
 from agent.player import Player
 

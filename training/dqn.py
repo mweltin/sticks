@@ -5,11 +5,9 @@ Author: Markus Weltin
 
 import argparse
 from agent.player import Player
-from agent.deep_q_agent import DeepQ as Agent
-from utilities.utility import Utility
 import environment.env as env
-import numpy as np
 import random
+from agent.deep_q_agent import DeepQ
 
 parser = argparse.ArgumentParser(description='Process some integers.')
 
@@ -23,8 +21,7 @@ def main(
         use_q_table_for_actions,
         skip_plot,
 ):
-
-    dqn_a = Agent('dqn')
+    dqn_a = DeepQ('dqn')
     dummy = Player(name='dummy', strategy='random', player_index=1)
 
     for episode in range(num_episodes):
