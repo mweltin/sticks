@@ -22,9 +22,9 @@ class DeepQ(Agent):
         # Get number of actions
         n_actions = len(env.action_table)
         # Get the number of state observations
-        state_idx = env.reset()
-        state = env.state_to_tensor(state_idx)
-        n_observations = len(state)
+        self.state_idx = env.reset()
+        self.state = env.state_to_tensor(self.state_idx)
+        n_observations = len(self.state)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
         self.transition = namedtuple('Transition',
@@ -33,7 +33,7 @@ class DeepQ(Agent):
         self.target_net = DQN(n_observations, n_actions).to(self.device)
         self.batch_size = 128
         self.gamma = 0.99
-        TAU = 0.005
+        self.tau = 0.005
         self.learning_rate = 1e-4
         self.optimizer = optim.AdamW(self.policy_net.parameters(), lr=self.learning_rate, amsgrad=True)
         self.memory = ReplayMemory(10000)
@@ -56,17 +56,42 @@ class DeepQ(Agent):
             return torch.tensor([[action]], device=self.device, dtype=torch.long)
 
     def take_turn(self, state_index, episode):
+        state = torch.tensor(env.state_to_tensor(state_index), dtype=torch.float32, device=self.device).unsqueeze(0)
+
         action = self.get_action(state_index)
-        new_state_idx, reward, done, info = env.step(state_index, self.player_index, action)
+        observation, reward, terminated, _ = env.step(state_index, self.player_index, action.item())
 
+        reward = torch.tensor([reward], device=self.device)
+        done = terminated  # @todo or truncated SEE ORIGINAL CODE TRUNCATED IS?
 
-        self.update_q_table(state_index, new_state_idx, reward, done, action)
+        if terminated:
+            next_state = None
+        else:
+            next_state = torch.tensor(env.state_to_tensor(observation), dtype=torch.float32, device=self.device).unsqueeze(0)
 
+        # Store the transition in memory
+        self.memory.push(state, action, next_state, reward)
+
+        # Move to the next state
+        self.state = next_state
+        self.state_idx = observation
+
+        # Perform one step of the optimization (on the policy network)
+        self.optimize_model()
+
+        # Soft update of the target network's weights
+        # θ′ ← τ θ + (1 −τ )θ′
+        target_net_state_dict = self.target_net.state_dict()
+        policy_net_state_dict = self.policy_net.state_dict()
+        for key in policy_net_state_dict:
+            target_net_state_dict[key] = policy_net_state_dict[key] * self.tau + target_net_state_dict[key] * (1 - self.tau)
+        self.target_net.load_state_dict(target_net_state_dict)
 
         self.exploration_rate = self._min_exploration_rate + (
                 self.max_exploration_rate - self._min_exploration_rate) * np.exp(
             -self._exploration_decay_rate * episode)
-        return new_state_idx, done
+
+        return self.state_idx, done
 
 
     def optimize_model(self):
@@ -115,6 +140,23 @@ class DeepQ(Agent):
         torch.nn.utils.clip_grad_value_(self.policy_net.parameters(), 100)
         self.optimizer.step()
 
-    def neural_net_to_q_table(self):
-        """output a newural net to be used by a Player class object """
+    def save_output(self, prefix=None):
+        file_name = "q_table"
+        if prefix:
+            file_name = file_name + "_" + str(prefix)
+
+        retval = []
+        for idx, value in enumerate(env.state_table):
+            network_input = env.state_to_tensor(idx)
+            temp = [*env.state_table[idx][0], *env.state_table[idx][1], self.policy_net.forward(network_input)]
+            retval.append(temp)
+
+        np.savetxt(self.base_directory + "/state_" + file_name + ".csv",
+                   retval,
+                   delimiter=", ",
+                   fmt='% s',
+                   header='AI L, AI R, O L, O R, swap, L L, L R, R R, R L')
+
+
+    def save_it(self):
         pass
