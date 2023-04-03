@@ -24,7 +24,7 @@ class DeepQ(Agent):
         n_actions = len(env.action_table)
         # Get the number of state observations
         self.state_idx = env.reset()
-        self.state = env.state_to_tensor(self.state_idx)
+        self.state = env.state_to_ndarray(self.state_idx)
         n_observations = len(self.state)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -48,7 +48,7 @@ class DeepQ(Agent):
                 # t.max(1) will return the largest column value of each row.
                 # second column on max result is index of where max element was
                 # found, so we pick action with the larger expected reward.
-                state_tensor = torch.tensor(np.array([env.state_to_tensor(state_idx)]), device=self.device,
+                state_tensor = torch.tensor(np.array([env.state_to_ndarray(state_idx)]), device=self.device,
                                             dtype=torch.float32)
                 action = self.policy_net(state_tensor).max(1)[1].view(1, 1)
                 return action
@@ -57,7 +57,7 @@ class DeepQ(Agent):
             return torch.tensor([[action]], device=self.device, dtype=torch.long)
 
     def take_turn(self, state_index, episode):
-        state = torch.tensor(env.state_to_tensor(state_index), dtype=torch.float32, device=self.device).unsqueeze(0)
+        state = torch.tensor(env.state_to_ndarray(state_index), dtype=torch.float32, device=self.device).unsqueeze(0)
 
         action = self.get_action(state_index)
         observation, reward, terminated, _ = env.step(state_index, self.player_index, action.item())
@@ -68,7 +68,7 @@ class DeepQ(Agent):
         if terminated:
             next_state = None
         else:
-            next_state = torch.tensor(env.state_to_tensor(observation), dtype=torch.float32,
+            next_state = torch.tensor(env.state_to_ndarray(observation), dtype=torch.float32,
                                       device=self.device).unsqueeze(0)
 
         # Store the transition in memory
@@ -149,11 +149,12 @@ class DeepQ(Agent):
 
         retval = []
         for idx, value in enumerate(env.state_table):
-            network_input = env.state_to_tensor(idx)
-            temp = [*env.state_table[idx][0], *env.state_table[idx][1], self.policy_net.forward(network_input)]
+            input_array = env.state_to_ndarray(idx)
+            network_input = torch.tensor(input_array, device=self.device, dtype=torch.float32)
+            temp = [*env.state_table[idx][0], *env.state_table[idx][1], *self.policy_net.forward(network_input).tolist()]
             retval.append(temp)
 
-        np.savetxt(self.base_directory + "/state_" + file_name + ".csv",
+        np.savetxt(self.utility.base_directory + "/state_" + file_name + ".csv",
                    retval,
                    delimiter=", ",
                    fmt='% s',

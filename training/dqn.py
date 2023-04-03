@@ -30,10 +30,16 @@ def main(
         rewards_current_episode = 0
         agent_first = True if random.uniform(0, 1) < 0.5 else False
 
+        if agent_first:
+            dqn_a.player_index = 0
+            dummy.player_index = 1
+        else:
+            dqn_a.player_index = 1
+            dummy.player_index = 0
+
         for step in range(max_steps_per_episode):
             if agent_first:
-                dqn_a.player_index = 0
-                dummy.player_index = 1
+
                 state_idx, done = dqn_a.take_turn(state_idx, episode)
                 if done:
                     finished_on = dqn_a.name
@@ -45,8 +51,6 @@ def main(
                     finished_on = dummy.name
                     break
             else:
-                dqn_a.player_index = 1
-                dummy.player_index = 0
                 state_idx, reward, done, info = dummy.take_turn(state_idx)
                 if done:
                     finished_on = dummy.name

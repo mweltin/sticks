@@ -15,7 +15,7 @@ def reset():
     return state_table.index([[1, 1], [1, 1]])
 
 
-def state_to_tensor(state_idx):
+def state_to_ndarray(state_idx):
     """ used as an input into a DQN """
     flat_list = [num for sublist in state_table[state_idx] for num in sublist]
     return np.array(flat_list)

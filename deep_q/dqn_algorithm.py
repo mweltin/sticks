@@ -41,7 +41,7 @@ LR = 1e-4
 n_actions = len(env.action_table)
 # Get the number of state observations
 state_idx = env.reset()
-state = env.state_to_tensor(state_idx)
+state = env.state_to_ndarray(state_idx)
 n_observations = len(state)
 
 policy_net = DQN(n_observations, n_actions).to(device)
@@ -65,7 +65,7 @@ def get_action(state_idx, player_index=0):
             # t.max(1) will return the largest column value of each row.
             # second column on max result is index of where max element was
             # found, so we pick action with the larger expected reward.
-            state_tensor = torch.tensor(np.array([env.state_to_tensor(state_idx)]), device=device, dtype=torch.float32)
+            state_tensor = torch.tensor(np.array([env.state_to_ndarray(state_idx)]), device=device, dtype=torch.float32)
             action = policy_net(state_tensor).max(1)[1].view(1, 1)
             return action
     else:
@@ -157,7 +157,7 @@ else:
 for i_episode in range(num_episodes):
     # Initialize the environment and get it's state
     state_idx = env.reset()
-    state_flat = torch.tensor(env.state_to_tensor(state_idx), dtype=torch.float32, device=device).unsqueeze(0)
+    state_flat = torch.tensor(env.state_to_ndarray(state_idx), dtype=torch.float32, device=device).unsqueeze(0)
     for t in count():
         action = get_action(state_idx)
         observation, reward, terminated, _ = env.step(state_idx, 0, action.item())  # @todo
@@ -167,7 +167,7 @@ for i_episode in range(num_episodes):
         if terminated:
             next_state = None
         else:
-            next_state = torch.tensor(env.state_to_tensor(observation), dtype=torch.float32, device=device).unsqueeze(0)
+            next_state = torch.tensor(env.state_to_ndarray(observation), dtype=torch.float32, device=device).unsqueeze(0)
 
         # Store the transition in memory
         memory.push(state_flat, action, next_state, reward)
