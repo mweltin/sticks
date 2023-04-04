@@ -10,6 +10,7 @@ results = {
         {
             'vs_qlearning': [],
             'vs_wolf': [],
+            'vs_dqn': [],
             'vs_dual_1': [],
             'vs_dual_2': []
         },
@@ -17,6 +18,7 @@ results = {
         {
             'vs_dummy': [],
             'vs_wolf': [],
+            'vs_dqn': [],
             'vs_dual_1': [],
             'vs_dual_2': []
         },
@@ -25,20 +27,30 @@ results = {
             'vs_dummy': [],
             'vs_qlearning': [],
             'vs_dual_1': [],
-            'vs_dual_2': []
+            'vs_dual_2': [],
+            'vs_dqn':[]
+        },
+    'dqn':
+        {
+            'vs_dummy': [],
+            'vs_qlearning': [],
+            'vs_dual_1': [],
+            'vs_dual_2': [],
+            'vs_wolf': []
         },
     'dual_1':
         {
             'vs_dummy': [],
             'vs_qlearning': [],
             'vs_wolf': [],
+            'vs_dqn': [],
             'vs_dual_2': []
         },
     'dual_2':
         {
             'vs_dummy': [],
             'vs_qlearning': [],
-            'vs_wolf': [],
+            'vs_dqn': [],
             'vs_dual_1': [],
         }
 }
@@ -47,15 +59,18 @@ for i in range(number_of_training_runs):
     # train with the three different algorithms
     os.system("python ../training/qlearning.py --skip_plot=True")
     os.system("python ../training/wolf.py --skip_plot=True")
+    os.system("python ../training/dqn.py --skip_plot=True")
     os.system("python ../training/dual_agent.py --skip_plot=True")
 
     qlearning_q_table = np.genfromtxt('../data/qlearning/q_table.csv', delimiter=',')
     wolf_q_table = np.genfromtxt('../data/wolf/q_table.csv', delimiter=',')
+    dqn_q_table = np.genfromtxt('../data/dqn/q_table.csv', delimiter=',')
     dual_1_q_table = np.genfromtxt('../data/dual/agent_1/q_table.csv', delimiter=',')
     dual_2_q_table = np.genfromtxt('../data/dual/agent_2/q_table.csv', delimiter=',')
 
     q_player = Player(q_table=qlearning_q_table, name='ql_player', strategy='strict')
     wolf_player = Player(q_table=wolf_q_table, name='wolf_player', strategy='strict')
+    dqn_player = Player(q_table=dqn_q_table, name='dqn_player', strategy='strict')
     dual_1_player = Player(q_table=dual_1_q_table, name='dual_1_player', strategy='strict')
     dual_2_player = Player(q_table=dual_2_q_table, name='dual_2_player', strategy='strict')
     dummy_player = Player(name='dummy', strategy='random')
