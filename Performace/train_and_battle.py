@@ -233,12 +233,17 @@ np.savetxt("../data/qlearning/battle_data/dummy_vs_qlearning_results.csv", resul
 np.savetxt("../data/wolf/battle_data/wolf_vs_dummy_results.csv", results['wolf']['vs_dummy'],
            delimiter=", ", fmt='% s', header='wolf_player vs dummy')
 
+# dqn_player vs dummy
+np.savetxt("../data/dqn/battle_data/dqn_vs_dummy_results.csv", results['dqn']['vs_dummy'],
+           delimiter=", ", fmt='% s', header='dqn_player vs dummy')
 
 # dummy vs wolf
 np.savetxt("../data/wolf/battle_data/dummy_vs_wolf_results.csv", results['dummy']['vs_wolf'],
            delimiter=", ", fmt='% s', header='dummy vs wolf_player')
 
-
+# dummy vs dqn
+np.savetxt("../data/dqn/battle_data/dummy_vs_dqn_results.csv", results['dummy']['vs_dqn'],
+           delimiter=", ", fmt='% s', header='dummy vs dqn_player')
 
 # dual_1 vs dummy
 np.savetxt("../data/dual/agent_1/battle_data/dual_1_vs_dummy_results.csv", results['dual_1']['vs_dummy'],
@@ -269,6 +274,14 @@ np.savetxt("../data/qlearning/battle_data/ql_vs_wolf_results.csv", results['qlea
 np.savetxt("../data/qlearning/battle_data/wolf_vs_ql_results.csv", results['wolf']['vs_qlearning'],
            delimiter=", ", fmt='% s', header='wolf_player vs ql_player')
 
+# qlearning vs dqn_player
+np.savetxt("../data/qlearning/battle_data/ql_vs_dqn_results.csv", results['qlearning']['vs_dqn'],
+           delimiter=", ", fmt='% s', header='ql_player vs dqn_player')
+
+
+# dqn_player vs qlearning
+np.savetxt("../data/qlearning/battle_data/dqn_vs_ql_results.csv", results['dqn']['vs_qlearning'],
+           delimiter=", ", fmt='% s', header='dqn_player vs ql_player')
 
 # qlearning vs dual_1
 np.savetxt("../data/qlearning/battle_data/ql_vs_dual_1_results.csv", results['qlearning']['vs_dual_1'],
@@ -309,13 +322,32 @@ np.savetxt("../data/wolf/battle_data/wolf_vs_dual_2_results.csv", results['wolf'
 np.savetxt("../data/wolf/battle_data/dual_2_vs_wolf_results.csv", results['dual_2']['vs_wolf'],
            delimiter=", ", fmt='% s', header='dual_2_player vs wolf_player')
 
+# dqn vs dual_1
+np.savetxt("../data/dqn/battle_data/dqn_vs_dual_1_results.csv", results['dqn']['vs_dual_1'],
+           delimiter=", ", fmt='% s', header='dqn_player vs dual_1_player')
+
+
+# dual_1 vs dqn
+np.savetxt("../data/dqn/battle_data/dual_1_vs_dqn_results.csv", results['dual_1']['vs_dqn'],
+           delimiter=", ", fmt='% s', header='dual_1_player vs dqn_player')
+
+
+# dqn vs dual_2
+np.savetxt("../data/dqn/battle_data/dqn_vs_dual_2_results.csv", results['dqn']['vs_dual_2'],
+           delimiter=", ", fmt='% s', header='dqn_player vs dual_2_player')
+
+
+# dual_2 vs dqn
+np.savetxt("../data/dqn/battle_data/dual_2_vs_dqn_results.csv", results['dual_2']['vs_dqn'],
+           delimiter=", ", fmt='% s', header='dual_2_player vs dqn_player')
 
 # dual 1 vs dual 2
 np.savetxt("../data/dual/agent_1/battle_data/dual_1_vs_dual_2.csv", results['dual_1']['vs_dual_2'],
            delimiter=", ", fmt='% s', header='dual_1_player vs dual_2_player')
 
-# dual_2 vs wolf
+# dual_2 vs dual  1
 np.savetxt("../data/dual/agent_2/battle_data/dual_2_vs_dual_1_results.csv", results['dual_2']['vs_dual_1'],
            delimiter=", ", fmt='% s', header='dual_2_player vs dual_1_player')
+
 
 print("train battle done")
