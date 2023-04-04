@@ -154,7 +154,7 @@ class DeepQ(Agent):
             temp = [*env.state_table[idx][0], *env.state_table[idx][1], *self.policy_net.forward(network_input).tolist()]
             retval.append(temp)
 
-        np.savetxt(self.utility.base_directory + "/state_" + file_name + ".csv",
+        np.savetxt(self.utility.base_directory + "/" + file_name + ".csv",
                    retval,
                    delimiter=", ",
                    fmt='% s',
