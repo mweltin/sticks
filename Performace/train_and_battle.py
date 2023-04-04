@@ -90,10 +90,20 @@ for i in range(number_of_training_runs):
     winner = battle.battle()
     results['wolf']['vs_dummy'].append(winner)
 
+    # dqn vs dummy
+    battle = Battle(dqn_player, dummy_player)
+    winner = battle.battle()
+    results['dqn']['vs_dummy'].append(winner)
+
     # dummy vs wolf
     battle = Battle(dummy_player, wolf_player)
     winner = battle.battle()
     results['dummy']['vs_wolf'].append(winner)
+
+    # dummy vs dqn
+    battle = Battle(dummy_player, dqn_player)
+    winner = battle.battle()
+    results['dummy']['vs_dqn'].append(winner)
 
     # dual 1 vs dummy
     battle = Battle(dual_1_player, dummy_player)
@@ -120,10 +130,20 @@ for i in range(number_of_training_runs):
     winner = battle.battle()
     results['qlearning']['vs_wolf'].append(winner)
 
+    # qlearning vs dqn
+    battle = Battle(q_player, dqn_player)
+    winner = battle.battle()
+    results['qlearning']['vs_dqn'].append(winner)
+
     # wolf vs qlearning
     battle = Battle(wolf_player, q_player)
     winner = battle.battle()
     results['wolf']['vs_qlearning'].append(winner)
+
+    # dqn vs qlearning
+    battle = Battle(dqn_player, q_player)
+    winner = battle.battle()
+    results['dqn']['vs_qlearning'].append(winner)
 
     # qlearning vs dual_1
     battle = Battle(q_player, dual_1_player)
@@ -150,20 +170,40 @@ for i in range(number_of_training_runs):
     winner = battle.battle()
     results['wolf']['vs_dual_1'].append(winner)
 
+    # dqn vs dual_1
+    battle = Battle(dqn_player, dual_1_player)
+    winner = battle.battle()
+    results['dqn']['vs_dual_1'].append(winner)
+
     # dual 1 vs wolf
     battle = Battle(dual_1_player, wolf_player)
     winner = battle.battle()
     results['dual_1']['vs_wolf'].append(winner)
+
+    # dual 1 vs dqn
+    battle = Battle(dual_1_player, dqn_player)
+    winner = battle.battle()
+    results['dual_1']['vs_dqn'].append(winner)
 
     # wolf vs dual_2
     battle = Battle(wolf_player, dual_2_player)
     winner = battle.battle()
     results['wolf']['vs_dual_2'].append(winner)
 
+    # dqn vs dual_2
+    battle = Battle(dqn_player, dual_2_player)
+    winner = battle.battle()
+    results['dqn']['vs_dual_2'].append(winner)
+
     # dual 2 vs wolf
     battle = Battle(dual_2_player, wolf_player)
     winner = battle.battle()
     results['dual_2']['vs_wolf'].append(winner)
+
+    # dual 2 vs dqn
+    battle = Battle(dual_2_player, dqn_player)
+    winner = battle.battle()
+    results['dual_2']['vs_dqn'].append(winner)
 
     # dual 1 vs dual 2
     battle = Battle(dual_1_player, dual_2_player)
