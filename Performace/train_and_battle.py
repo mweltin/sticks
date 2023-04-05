@@ -26,17 +26,18 @@ results = {
         {
             'vs_dummy': [],
             'vs_qlearning': [],
+            'vs_dqn':[],
             'vs_dual_1': [],
             'vs_dual_2': [],
-            'vs_dqn':[]
         },
     'dqn':
         {
             'vs_dummy': [],
             'vs_qlearning': [],
+            'vs_wolf': [],
             'vs_dual_1': [],
             'vs_dual_2': [],
-            'vs_wolf': []
+
         },
     'dual_1':
         {

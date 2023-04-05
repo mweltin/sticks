@@ -72,8 +72,6 @@ def main(
         if finished_on == 'Draw':
             wolf_a.win_counter += 1
 
-        wolf_a.save_output(prefix='max_reward')
-
     wolf_a.save_output()
     wolf_a.save_it()
 

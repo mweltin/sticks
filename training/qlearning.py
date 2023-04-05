@@ -65,8 +65,6 @@ def main(
         if finished_on == 'Draw':
             qlearning.win_counter += 1
 
-        qlearning.save_output(prefix='max_reward')
-
     qlearning.save_output()
     qlearning.save_it()
 

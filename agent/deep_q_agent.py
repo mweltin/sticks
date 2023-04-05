@@ -155,7 +155,7 @@ class DeepQ(Agent):
             network_input = torch.tensor(input_array, device=self.device, dtype=torch.float32)
             temp = [*env.state_table[idx][0], *env.state_table[idx][1], *self.policy_net.forward(network_input).tolist()]
             q_table_with_state.append(temp)
-            q_table.append(*self.policy_net.forward(network_input).tolist())
+            q_table.append(self.policy_net.forward(network_input).tolist())
 
         np.savetxt(self.utility.base_directory + "/state_" + file_name + ".csv",
                    q_table_with_state,
@@ -163,7 +163,7 @@ class DeepQ(Agent):
                    fmt='% s',
                    header='AI L, AI R, O L, O R, swap, L L, L R, R R, R L')
 
-        np.savetxt(self.base_directory + "/" + file_name + ".csv",
+        np.savetxt(self.utility.base_directory + "/" + file_name + ".csv",
                    q_table,
                    delimiter=", ",
                    fmt='% s')
