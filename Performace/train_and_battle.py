@@ -50,6 +50,7 @@ results = {
         {
             'vs_dummy': [],
             'vs_qlearning': [],
+            'vs_wolf': [],
             'vs_dqn': [],
             'vs_dual_1': [],
         }
