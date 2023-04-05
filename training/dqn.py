@@ -65,10 +65,7 @@ def main(
         if finished_on == 'Draw':
             dqn_a.win_counter += 1
 
-        dqn_a.save_output(prefix='max_reward')
-
     dqn_a.save_output()
-    dqn_a.save_it()
 
 
 if __name__ == '__main__':

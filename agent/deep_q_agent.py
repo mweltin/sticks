@@ -39,7 +39,6 @@ class DeepQ(Agent):
         self.optimizer = optim.AdamW(self.policy_net.parameters(), lr=self.learning_rate, amsgrad=True)
         self.memory = ReplayMemory(10000)
 
-        steps_done = 0
 
     def get_action(self, state_idx):
         exploration_rate_threshold = random.uniform(0, 1)
