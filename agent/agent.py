@@ -27,6 +27,7 @@ class Agent(Player):
         self.max_exploration_rate = 1
         self.win_counter = 0
         self.wins_per_freq = []
+        self.episode_data = []
         self.win_record_freq = 500
         self._utility = Utility("../data/" + self._name)
 

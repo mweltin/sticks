@@ -70,11 +70,11 @@ class Utility:
         # plt.show()
 
     def save_it(self, squashed):
-        np.savetxt(self.base_directory + '/reward_vs_episode.csv',
+        np.savetxt(self.base_directory + '/reward_and_turns_per_episode.csv',
                    squashed,
                    delimiter=", ",
                    fmt='% s',
-                   header='reward vs episode raw data')
+                   header='episode, # turns, reward')
 
     def calc_performance(self, performance_data):
         wins = 0

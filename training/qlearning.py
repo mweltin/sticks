@@ -67,8 +67,10 @@ def main(
         if finished_on == 'Draw':
             qlearning.win_counter += 1
 
+        qlearning.episode_data.push(episode, qlearning.turn_counter, qlearning.rewards_current_episode)
+
     qlearning.save_output()
-    qlearning.save_it()
+    qlearning.save_it(qlearning.episode_data)
 
 
 if __name__ == '__main__':
