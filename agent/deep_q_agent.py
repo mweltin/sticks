@@ -167,6 +167,3 @@ class DeepQ(Agent):
                    q_table,
                    delimiter=", ",
                    fmt='% s')
-
-    def save_it(self):
-        pass

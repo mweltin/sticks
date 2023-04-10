@@ -124,5 +124,5 @@ class Agent(Player):
     def plot_it(self):
         self._utility.plot_it(self.wins_per_freq, self.win_record_freq)
 
-    def save_it(self):
-        self._utility.save_it(self.wins_per_freq)
+    def save_it(self, data):
+        self._utility.save_it(data)

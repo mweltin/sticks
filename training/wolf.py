@@ -74,7 +74,7 @@ def main(
         if finished_on == 'Draw':
             wolf_a.win_counter += 1
 
-        wolf_a.episode_data.push(episode, wolf_a.turn_counter, wolf_a.rewards_current_episode)
+        wolf_a.episode_data.append([episode, wolf_a.turn_counter, wolf_a.rewards_current_episode])
 
     wolf_a.save_output()
     wolf_a.save_it(wolf_a.episode_data)

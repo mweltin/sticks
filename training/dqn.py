@@ -67,7 +67,7 @@ def main(
         if finished_on == 'Draw':
             dqn_a.win_counter += 1
 
-        dqn_a.episode_data.push(episode, dqn_a.turn_counter, dqn_a.rewards_current_episode)
+        dqn_a.episode_data.append([episode, dqn_a.turn_counter, dqn_a.rewards_current_episode])
 
     dqn_a.save_output()
     dqn_a.save_it(dqn_a.episode_data)
