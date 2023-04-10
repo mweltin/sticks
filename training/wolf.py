@@ -36,6 +36,8 @@ def main(
     dummy = Player(name='dummy', strategy='random', player_index=1)
 
     for episode in range(num_episodes):
+        wolf_a.turn_counter = 0
+        wolf_a.rewards_current_episode = 0
         finished_on = 'Draw'
         state_idx = env.reset()
         rewards_current_episode = 0

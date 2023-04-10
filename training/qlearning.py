@@ -29,6 +29,8 @@ def main(
 
     # Q-learning algorithm
     for episode in range(num_episodes):
+        qlearning.turn_counter = 0
+        qlearning.rewards_current_episode = 0
         finished_on = 'Draw'
         state_idx = env.reset()
         rewards_current_episode = 0

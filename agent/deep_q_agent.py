@@ -56,11 +56,12 @@ class DeepQ(Agent):
             return torch.tensor([[action]], device=self.device, dtype=torch.long)
 
     def take_turn(self, state_index, episode):
+        self.turn_counter += 1
         state = torch.tensor(env.state_to_ndarray(state_index), dtype=torch.float32, device=self.device).unsqueeze(0)
 
         action = self.get_action(state_index)
         observation, reward, terminated, _ = env.step(state_index, self.player_index, action.item())
-
+        self.rewards_current_episode += reward
         reward = torch.tensor([reward], device=self.device)
         done = terminated  # @todo or truncated SEE ORIGINAL CODE TRUNCATED IS?
 

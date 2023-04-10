@@ -23,6 +23,7 @@ class Agent(Player):
         self._name = name
         self.player_index = 0
         self.rewards_current_episode = 0
+        self.turn_counter = 0
         self.max_exploration_rate = 1
         self.win_counter = 0
         self.wins_per_freq = []
@@ -102,12 +103,14 @@ class Agent(Player):
         self.rewards_current_episode += reward
 
     def take_turn(self, state_index, episode):
+        self.turn_counter += 1
         action = self.get_action(state_index)
         new_state_idx, reward, done, info = env.step(state_index, self.player_index, action)
         self.update_q_table(state_index, new_state_idx, reward, done, action)
         self.exploration_rate = self._min_exploration_rate + (
                 self.max_exploration_rate - self._min_exploration_rate) * np.exp(
             -self._exploration_decay_rate * episode)
+        self.rewards_current_episode += reward
         return new_state_idx, done
 
     def save_output(self, prefix=None):

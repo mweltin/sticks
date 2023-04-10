@@ -38,6 +38,8 @@ def main(
             dummy.player_index = 0
 
         for step in range(max_steps_per_episode):
+            dqn_a.turn_counter = 0
+            dqn_a.rewards_current_episode = 0
             if agent_first:
 
                 state_idx, done = dqn_a.take_turn(state_idx, episode)

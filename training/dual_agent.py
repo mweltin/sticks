@@ -11,6 +11,10 @@ def main(num_episodes, max_steps_per_episode, skip_plot):
     agent_2.utility = "../data/dual/agent_2"
 
     for episode in range(num_episodes):
+        agent_1.turn_counter = 0
+        agent_2.turn_counter = 0
+        agent_1.rewards_current_episode = 0
+        agent_2.rewards_current_episode = 0
         finished_on = 'Draw'
         # initialize new episode params
         state_idx = env.reset()  # state is the index in the state_table
