@@ -24,7 +24,11 @@ def main(
     dqn_a = DeepQ('dqn')
     dummy = Player(name='dummy', strategy='random', player_index=1)
 
+    # random.seed(100)
+
     for episode in range(num_episodes):
+        dqn_a.turn_counter = 0
+        dqn_a.rewards_current_episode = 0
         finished_on = 'Draw'
         state_idx = env.reset()
         rewards_current_episode = 0
@@ -38,8 +42,6 @@ def main(
             dummy.player_index = 0
 
         for step in range(max_steps_per_episode):
-            dqn_a.turn_counter = 0
-            dqn_a.rewards_current_episode = 0
             if agent_first:
 
                 state_idx, done = dqn_a.take_turn(state_idx, episode)
@@ -71,7 +73,7 @@ def main(
 
     dqn_a.save_output()
     dqn_a.save_it(dqn_a.episode_data)
-
+    exit()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Q-algorithm arguments')
