@@ -47,7 +47,7 @@ def main(
             if agent_first:
                 wolf_a.player_index = 0
                 dummy.player_index = 1
-                state_idx, done = wolf_a.take_turn(state_idx, episode)
+                state_idx, reward, done, info  = wolf_a.take_turn(state_idx, episode)
                 if done:
                     finished_on = wolf_a.name
                     wolf_a.win_counter += 1
@@ -65,7 +65,7 @@ def main(
                     finished_on = dummy.name
                     break
 
-                state_idx, done = wolf_a.take_turn(state_idx, episode)
+                state_idx, reward, done, info = wolf_a.take_turn(state_idx, episode)
                 if done:
                     finished_on = wolf_a.name
                     wolf_a.win_counter += 1

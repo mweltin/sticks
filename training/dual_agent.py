@@ -30,13 +30,13 @@ def main(num_episodes, max_steps_per_episode, skip_plot):
             agent_2.player_index = 0
 
         for step in range(max_steps_per_episode):
-            state_idx, done = current_agent.take_turn(state_idx, episode)
+            state_idx, reward, done, info  = current_agent.take_turn(state_idx, episode)
             if done:
                 finished_on = current_agent.name
                 current_agent.win_counter += 1
                 break
             current_agent = agent_1 if current_agent == agent_2 else agent_2
-            state_idx, done = current_agent.take_turn(state_idx, episode)
+            state_idx, reward, done, info  = current_agent.take_turn(state_idx, episode)
             if done:
                 finished_on = current_agent.name
                 current_agent.win_counter += 1

@@ -112,7 +112,7 @@ class Agent(Player):
                 self.max_exploration_rate - self._min_exploration_rate) * np.exp(
             -self._exploration_decay_rate * episode)
         self.rewards_current_episode += reward
-        return new_state_idx, done
+        return new_state_idx, reward, done, info
 
     def save_output(self, prefix=None):
         self._utility.save_output(self._q_table, prefix)

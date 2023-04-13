@@ -40,7 +40,7 @@ def main(
             if agent_first:
                 qlearning.player_index = 0
                 dummy.player_index = 1
-                state_idx, done = qlearning.take_turn(state_idx, episode)
+                state_idx, reward, done, info = qlearning.take_turn(state_idx, episode)
                 if done:
                     finished_on = qlearning.name
                     qlearning.win_counter += 1
@@ -58,7 +58,7 @@ def main(
                     finished_on = dummy.name
                     break
 
-                state_idx, done = qlearning.take_turn(state_idx, episode)
+                state_idx, reward, done, info  = qlearning.take_turn(state_idx, episode)
                 if done:
                     finished_on = qlearning.name
                     qlearning.win_counter += 1

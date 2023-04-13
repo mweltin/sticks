@@ -60,7 +60,7 @@ class DeepQ(Agent):
         state = torch.tensor(env.state_to_ndarray(state_index), dtype=torch.float32, device=self.device).unsqueeze(0)
 
         action = self.get_action(state_index)
-        observation, reward, terminated, _ = env.step(state_index, self.player_index, action.item())
+        observation, reward, terminated, info = env.step(state_index, self.player_index, action.item())
         self.rewards_current_episode += reward
         reward = torch.tensor([reward], device=self.device)
         done = terminated  # @todo or truncated SEE ORIGINAL CODE TRUNCATED IS?
@@ -94,7 +94,7 @@ class DeepQ(Agent):
                 self.max_exploration_rate - self._min_exploration_rate) * np.exp(
             -self._exploration_decay_rate * episode)
 
-        return self.state_idx, done
+        return self.state_idx, reward, done, info
 
     def optimize_model(self):
         if len(self.memory) < self.batch_size:

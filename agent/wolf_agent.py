@@ -46,12 +46,12 @@ class Wolf(Agent):
     losing_learning_rate = property(get_losing_learning_rate, set_losing_learning_rate)
 
     def take_turn(self, state_index, episode):
-        new_state_idx, done = super(Wolf, self).take_turn(state_index, episode)
+        new_state_idx, reward, done, info = super(Wolf, self).take_turn(state_index, episode)
         self.counter += 1 # this needs to be called before update_average_policy
         self.update_policy(state_index)
         self.update_average_policy(state_index)
         self.update_learning_rate(state_index)
-        return new_state_idx, done
+        return new_state_idx, reward, done, info
 
     def update_policy(self, state_index):
         # pi(s,a') = pi(s,a') + learning_rate if a' = max of Q(s,:)
