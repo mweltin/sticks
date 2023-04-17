@@ -70,10 +70,6 @@ def get_reward(state):
         return 1
     if rules.has_winner(state) == Players.opponent:
         return -1
-    if will_lose_next_step(state):
-        return -0.5
-    if will_win_in_two_steps(state):
-        return 0.5
 
     return 0
 
