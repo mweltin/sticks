@@ -44,7 +44,7 @@ def main(
         for step in range(max_steps_per_episode):
             if agent_first:
 
-                state_idx, reward, done, info = dqn_a.take_turn(state_idx, episode)
+                state_idx, reward, done, info = dqn_a.take_turn(state_idx, episode, step)
                 if done:
                     finished_on = dqn_a.name
                     dqn_a.win_counter += 1
@@ -60,7 +60,7 @@ def main(
                     finished_on = dummy.name
                     break
 
-                state_idx, reward, done, info = dqn_a.take_turn(state_idx, episode)
+                state_idx, reward, done, info = dqn_a.take_turn(state_idx, episode, step)
                 if done:
                     finished_on = dqn_a.name
                     dqn_a.win_counter += 1
