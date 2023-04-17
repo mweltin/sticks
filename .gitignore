@@ -136,3 +136,4 @@ sticksvenv
 *.code-workspace
 .DS_Store
 .idea/*
+.idea
