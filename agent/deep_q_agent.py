@@ -32,7 +32,7 @@ class DeepQ(Agent):
                                      ('state', 'action', 'next_state', 'reward'))
         self.policy_net = DQN(n_observations, n_actions).to(self.device)
         self.target_net = DQN(n_observations, n_actions).to(self.device)
-        self.batch_size = 128
+        self.batch_size = 8
         self.gamma = 0.99
         self.tau = 0.005
         self.learning_rate = 1e-4
