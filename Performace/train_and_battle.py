@@ -148,7 +148,7 @@ def main(num_episodes):
         results['wolf']['vs_qlearning'].append(winner)
 
         # wolf vs dqn
-        battle = Battle(qlearning, dqn)
+        battle = Battle(wolf, dqn)
         winner = battle.battle()
         results['wolf']['vs_dqn'].append(winner)
 
