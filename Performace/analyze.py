@@ -6,7 +6,7 @@ from pathlib import Path
 def main():
     # save results  naming convention player 1 vs player 2,  player 1 always went first
     # qlearning vs dummy
-    root_dir = Path('/Users/mweltin/AI-801/project/sticks/data/')
+    root_dir = Path('/home/mweltin/sticks/data/')
     datafiles = [
         root_dir / 'dummy' / 'battle_data' / 'dummy_vs_qlearning_results.csv',
         root_dir / 'dummy' / 'battle_data' / 'dummy_vs_wolf_results.csv',
