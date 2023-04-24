@@ -346,7 +346,7 @@ def main(num_episodes):
 
     # dual_1 vs qlearning
     np.savetxt("../data/dual/agent_1/battle_data/dual_1_vs_ql_results.csv", results['dual_1']['vs_qlearning'],
-               delimiter=", ", fmt='% s', header='dual_1 vs ql_player')
+               delimiter=", ", fmt='% s', header='dual_1 vs qlearning')
 
     # dual_1 vs wolf
     np.savetxt("../data/dual/agent_1/battle_data/dual_1_vs_wolf_results.csv", results['dual_1']['vs_wolf'],
